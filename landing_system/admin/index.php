@@ -30,6 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $custom_key = trim($_POST['custom_key'] ?? '');
             $duration= $_POST['duration'] ?? '1year';
             $send_mail = isset($_POST['send_email']);
+            $email_lang = $_POST['email_lang'] ?? 'es';
 
             $key = !empty($custom_key) ? $custom_key : generate_license_key();
 
@@ -47,7 +48,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute([$key, $name, $email, $plan, $expires_at]);
 
                 if ($send_mail && !empty($email)) {
-                    send_license_email_brevo($email, $name, $key, $plan, $expires_at);
+                    send_template_email_brevo($email, $name, 'recibo', $email_lang, [
+                        '{license_key}' => $key,
+                        '{plan_name}'   => $plan,
+                        '{expires_at}'  => $expires_at
+                    ]);
                 }
 
                 $msg = "Licencia <strong>$key</strong> creada exitosamente.";
@@ -105,21 +110,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $msg = 'Dominio desvinculado. El cliente puede activarla en otro sitio.';
         }
 
-        // 5. Reenviar Email con Brevo
-        elseif ($action === 'resend_email') {
-            $id = (int)($_POST['id'] ?? 0);
-            $stmt = $pdo->prepare('SELECT * FROM licenses WHERE id = ?');
-            $stmt->execute([$id]);
-            $lic = $stmt->fetch();
+        // 5. Enviar Email Específico vía Brevo
+        elseif ($action === 'send_custom_email') {
+            $email         = trim($_POST['target_email'] ?? '');
+            $name          = trim($_POST['target_name'] ?? 'Cliente');
+            $template_type = $_POST['template_type'] ?? 'recibo';
+            $lang          = $_POST['email_lang'] ?? 'es';
+            $license_key   = trim($_POST['license_key'] ?? '');
+            $plan_name     = trim($_POST['plan_name'] ?? 'AutoWhats Pro');
 
-            if ($lic) {
-                $sent = send_license_email_brevo($lic['client_email'], $lic['client_name'], $lic['license_key'], $lic['plan_name'], $lic['expires_at']);
+            if (!empty($email)) {
+                $sent = send_template_email_brevo($email, $name, $template_type, $lang, [
+                    '{license_key}' => $license_key,
+                    '{plan_name}'   => $plan_name,
+                    '{subscription_name}' => $plan_name
+                ]);
+
                 if ($sent) {
-                    $msg = "Correo reenviado exitosamente a <strong>{$lic['client_email']}</strong>.";
+                    $msg = "Correo (<strong>$template_type [$lang]</strong>) enviado exitosamente a <strong>$email</strong> vía Brevo.";
                 } else {
-                    $msg = "No se pudo enviar el correo. Revisa la clave API de Brevo en config.php.";
+                    $msg = "No se pudo enviar el correo. Revisa tu clave API de Brevo en config.php.";
                     $msg_type = 'warning';
                 }
+            } else {
+                $msg = "El email de destino no puede estar vacío.";
+                $msg_type = 'danger';
             }
         }
 
@@ -205,8 +220,8 @@ $csrf_token = generate_csrf_token();
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
     <div class="container">
         <a class="navbar-brand" href="index.php"><i class="bi bi-whatsapp"></i> AutoWhats <span class="text-white fw-light fs-6">| License Manager</span></a>
-        <div class="d-flex align-items-center gap-3">
-            <span class="text-light"><i class="bi bi-person-circle"></i> <?= htmlspecialchars($_SESSION['admin_username'], ENT_QUOTES, 'UTF-8') ?></span>
+        <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#modalEmailCenter"><i class="bi bi-envelope-paper"></i> Centro de Emails</button>
             <button class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#modalPassword"><i class="bi bi-key"></i> Clave</button>
             <a href="logout.php" class="btn btn-sm btn-danger"><i class="bi bi-box-arrow-right"></i> Salir</a>
         </div>
@@ -336,6 +351,15 @@ $csrf_token = generate_csrf_token();
                                     <div class="dropdown">
                                         <button class="btn btn-sm btn-light border" data-bs-toggle="dropdown"><i class="bi bi-three-dots-vertical"></i></button>
                                         <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                            <!-- Enviar Email Brevo con Plantilla -->
+                                            <li><h6 class="dropdown-header">Comunicación (Brevo)</h6></li>
+                                            <li>
+                                                <button class="dropdown-item text-primary" data-bs-toggle="modal" data-bs-target="#modalSendEmailDirect"
+                                                    onclick="prepareEmailModal('<?= htmlspecialchars($row['client_email'], ENT_QUOTES, 'UTF-8') ?>', '<?= htmlspecialchars($row['client_name'], ENT_QUOTES, 'UTF-8') ?>', '<?= htmlspecialchars($row['license_key'], ENT_QUOTES, 'UTF-8') ?>', '<?= htmlspecialchars($row['plan_name'], ENT_QUOTES, 'UTF-8') ?>')">
+                                                    <i class="bi bi-envelope-paper"></i> Enviar Email (Plantilla)
+                                                </button>
+                                            </li>
+                                            <li><hr class="dropdown-divider"></li>
                                             <!-- Cambiar Estado -->
                                             <li><h6 class="dropdown-header">Estado</h6></li>
                                             <li>
@@ -378,15 +402,7 @@ $csrf_token = generate_csrf_token();
                                                 </form>
                                             </li>
                                             <li><hr class="dropdown-divider"></li>
-                                            <!-- Email y Eliminar -->
-                                            <li>
-                                                <form method="POST" action="index.php" onsubmit="return confirm('¿Reenviar correo de activación al cliente?');">
-                                                    <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
-                                                    <input type="hidden" name="action" value="resend_email">
-                                                    <input type="hidden" name="id" value="<?= $row['id'] ?>">
-                                                    <button type="submit" class="dropdown-item text-primary"><i class="bi bi-envelope"></i> Reenviar Correo</button>
-                                                </form>
-                                            </li>
+                                            <!-- Eliminar -->
                                             <li>
                                                 <form method="POST" action="index.php" onsubmit="return confirm('¿Eliminar permanentemente esta licencia?');">
                                                     <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
@@ -445,16 +461,128 @@ $csrf_token = generate_csrf_token();
                         <label class="form-label">Clave Personalizada (Opcional, en blanco para auto-generar)</label>
                         <input type="text" name="custom_key" class="form-control" placeholder="AW-XXXX-XXXX-XXXX">
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="send_email" id="sendEmailCheck" checked>
-                        <label class="form-check-label" for="sendEmailCheck">
-                            Enviar correo al cliente con Brevo
-                        </label>
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-7">
+                            <div class="form-check pt-2">
+                                <input class="form-check-input" type="checkbox" name="send_email" id="sendEmailCheck" checked>
+                                <label class="form-check-label" for="sendEmailCheck">
+                                    Enviar email por Brevo
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <select name="email_lang" class="form-select form-select-sm">
+                                <option value="es" selected>Español (ES)</option>
+                                <option value="en">Inglés (EN)</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-brand">Crear y Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Enviar Email Específico / Plantilla -->
+<div class="modal fade" id="modalSendEmailDirect" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" action="index.php">
+                <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
+                <input type="hidden" name="action" value="send_custom_email">
+                <input type="hidden" name="license_key" id="modal_email_key">
+                <input type="hidden" name="plan_name" id="modal_email_plan">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-send"></i> Enviar Email con Brevo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Destinatario</label>
+                        <input type="text" name="target_name" id="modal_email_name" class="form-control mb-2" placeholder="Nombre">
+                        <input type="email" name="target_email" id="modal_email_addr" class="form-control" required placeholder="correo@ejemplo.com">
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-7">
+                            <label class="form-label">Plantilla</label>
+                            <select name="template_type" class="form-select" required>
+                                <option value="recibo">🚀 Recibo de Compra / Licencia</option>
+                                <option value="falla_cobro">⚠️ Falla en el Cobro / Recordatorio</option>
+                                <option value="cancelacion">🛑 Suscripción Cancelada</option>
+                                <option value="promocional">🎉 Anuncio Promocional / Novedades</option>
+                            </select>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label">Idioma</label>
+                            <select name="email_lang" class="form-select">
+                                <option value="es" selected>Español (ES)</option>
+                                <option value="en">Inglés (EN)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="alert alert-light border small text-muted">
+                        El correo será enviado a través de la API oficial de Brevo con diseño responsivo y las variables del cliente ({name}, {license_key}, enlaces de descarga) insertadas automáticamente.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-send"></i> Enviar Ahora</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Centro de Emails General -->
+<div class="modal fade" id="modalEmailCenter" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" action="index.php">
+                <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
+                <input type="hidden" name="action" value="send_custom_email">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-envelope-paper"></i> Centro de Comunicaciones Brevo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre del Destinatario</label>
+                        <input type="text" name="target_name" class="form-control" placeholder="Nombre completo" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Correo Electrónico</label>
+                        <input type="email" name="target_email" class="form-control" placeholder="cliente@ejemplo.com" required>
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-7">
+                            <label class="form-label">Seleccionar Plantilla</label>
+                            <select name="template_type" class="form-select" required>
+                                <option value="promocional">🎉 Anuncio Promocional / Novedades</option>
+                                <option value="recibo">🚀 Recibo de Compra / Entrega Licencia</option>
+                                <option value="falla_cobro">⚠️ Falla en el Cobro / Recordatorio</option>
+                                <option value="cancelacion">🛑 Suscripción Cancelada</option>
+                            </select>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label">Idioma</label>
+                            <select name="email_lang" class="form-select">
+                                <option value="es" selected>Español (ES)</option>
+                                <option value="en">Inglés (EN)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Clave de Licencia Asociada (Opcional)</label>
+                        <input type="text" name="license_key" class="form-control" placeholder="AW-XXXX-XXXX-XXXX">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-send-fill"></i> Despachar Email</button>
                 </div>
             </form>
         </div>
@@ -487,5 +615,13 @@ $csrf_token = generate_csrf_token();
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function prepareEmailModal(email, name, key, plan) {
+    document.getElementById('modal_email_addr').value = email;
+    document.getElementById('modal_email_name').value = name;
+    document.getElementById('modal_email_key').value = key;
+    document.getElementById('modal_email_plan').value = plan;
+}
+</script>
 </body>
 </html>

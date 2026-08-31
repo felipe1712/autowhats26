@@ -278,22 +278,15 @@
         }
       }
       
-      // Update toggle prices and links according to language and plan
+      // Update toggle prices according to language
       const priceDisplay = document.getElementById('price-display');
       const periodDisplay = document.getElementById('period-display');
-      const btnBuy = document.getElementById('btn-buy');
-      
-      const STRIPE_LINK_YEARLY = 'https://buy.stripe.com/TU_LINK_ANUAL';
-      const STRIPE_LINK_MONTHLY = 'https://buy.stripe.com/TU_LINK_MENSUAL';
-
       if(document.getElementById('billing-toggle').checked) {
         priceDisplay.innerText = '$199';
         periodDisplay.innerText = t['period-y'];
-        if(btnBuy) btnBuy.href = STRIPE_LINK_YEARLY;
       } else {
         priceDisplay.innerText = '$19';
         periodDisplay.innerText = t['period-m'];
-        if(btnBuy) btnBuy.href = STRIPE_LINK_MONTHLY;
       }
     }
 
@@ -305,23 +298,17 @@
     toggle.addEventListener('change', function() {
       const priceDisplay = document.getElementById('price-display');
       const periodDisplay = document.getElementById('period-display');
-      const btnBuy = document.getElementById('btn-buy');
-      
-      const STRIPE_LINK_YEARLY = 'https://buy.stripe.com/TU_LINK_ANUAL';
-      const STRIPE_LINK_MONTHLY = 'https://buy.stripe.com/TU_LINK_MENSUAL';
       
       if(this.checked) {
         priceDisplay.innerText = '$199';
         periodDisplay.innerText = translations[currentLang]['period-y'];
         labelYearly.classList.add('active');
         labelMonthly.classList.remove('active');
-        if(btnBuy) btnBuy.href = STRIPE_LINK_YEARLY;
       } else {
         priceDisplay.innerText = '$19';
         periodDisplay.innerText = translations[currentLang]['period-m'];
         labelMonthly.classList.add('active');
         labelYearly.classList.remove('active');
-        if(btnBuy) btnBuy.href = STRIPE_LINK_MONTHLY;
       }
     });
 

@@ -1,75 +1,87 @@
 <?php
 /**
  * Helper para envío de correos transaccionales con la API v3 de Brevo
+ * Utiliza las plantillas HTML ubicadas en admin/emails/
  */
 
 require_once __DIR__ . '/config.php';
 
-function send_license_email_brevo($to_email, $to_name, $license_key, $plan_name, $expires_at) {
+/**
+ * Función principal para enviar un correo vía Brevo utilizando una plantilla HTML
+ *
+ * @param string $to_email      Email del destinatario
+ * @param string $to_name       Nombre del destinatario
+ * @param string $template_type 'recibo', 'falla_cobro', 'cancelacion', 'promocional'
+ * @param string $lang          'es' o 'en'
+ * @param array  $custom_vars   Variables dinámicas para reemplazar en la plantilla
+ * @return bool
+ */
+function send_template_email_brevo($to_email, $to_name, $template_type = 'recibo', $lang = 'es', $custom_vars = []) {
     if (empty(BREVO_API_KEY) || strpos(BREVO_API_KEY, 'TU_CLAVE') !== false) {
-        error_log('Brevo API Key no configurada.');
+        error_log('Brevo API Key no configurada en config.php.');
         return false;
     }
 
-    $expires_text = $expires_at ? date('d/m/Y', strtotime($expires_at)) : 'De por vida (Lifetime)';
-    $download_url = PLUGIN_DOWNLOAD_URL;
+    $lang_suffix = ($lang === 'en') ? '-en.html' : '.html';
+    
+    $template_files = [
+        'recibo'       => 'email-recibo-edd' . $lang_suffix,
+        'falla_cobro'  => 'email-falla-cobro' . $lang_suffix,
+        'cancelacion'  => 'email-cancelacion' . $lang_suffix,
+        'promocional'  => 'email-promocional' . $lang_suffix,
+    ];
 
-    $subject = "¡Tu licencia de AutoWhats ($plan_name) está lista!";
+    $subjects = [
+        'recibo' => [
+            'es' => '¡Tu compra de AutoWhats está lista! 🚀 (Licencia y Descarga)',
+            'en' => 'Your AutoWhats purchase is ready! 🚀 (License & Download)'
+        ],
+        'falla_cobro' => [
+            'es' => 'Acción Requerida: Problema procesando el pago de tu suscripción ⚠️',
+            'en' => 'Action Required: Problem processing your subscription payment ⚠️'
+        ],
+        'cancelacion' => [
+            'es' => 'Confirmación de Cancelación de Suscripción - AutoWhats',
+            'en' => 'Subscription Cancellation Confirmation - AutoWhats'
+        ],
+        'promocional' => [
+            'es' => '¡Nuevas funciones y eventos disponibles en AutoWhats! 🎉',
+            'en' => 'New features and events available in AutoWhats! 🎉'
+        ]
+    ];
 
-    $html_content = "
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset='utf-8'>
-        <style>
-            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f6f9fc; margin: 0; padding: 20px; }
-            .card { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; padding: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-            .header { text-align: center; margin-bottom: 25px; }
-            .header h1 { color: #25d366; margin: 0; font-size: 24px; }
-            .license-box { background: #f0fdf4; border: 2px dashed #22c55e; border-radius: 6px; padding: 15px; text-align: center; margin: 20px 0; }
-            .license-key { font-family: monospace; font-size: 20px; font-weight: bold; color: #15803d; letter-spacing: 1px; }
-            .btn { display: inline-block; background-color: #25d366; color: #ffffff !important; text-decoration: none; padding: 12px 25px; border-radius: 5px; font-weight: bold; margin-top: 15px; }
-            .footer { margin-top: 30px; text-align: center; color: #64748b; font-size: 13px; }
-        </style>
-    </head>
-    <body>
-        <div class='card'>
-            <div class='header'>
-                <h1>¡Gracias por tu compra en AutoWhats!</h1>
-            </div>
-            <p>Hola <strong>" . htmlspecialchars($to_name, ENT_QUOTES, 'UTF-8') . "</strong>,</p>
-            <p>Tu orden ha sido procesada con éxito. A continuación encontrarás tu clave de licencia para activar el plugin en tu sitio web de WordPress:</p>
-            
-            <div class='license-box'>
-                <div>Tu Clave de Licencia:</div>
-                <div class='license-key'>" . htmlspecialchars($license_key, ENT_QUOTES, 'UTF-8') . "</div>
-                <small style='color:#166534;'>Plan: <strong>" . htmlspecialchars($plan_name, ENT_QUOTES, 'UTF-8') . "</strong> | Vencimiento: <strong>$expires_text</strong></small>
-            </div>
+    $filename = $template_files[$template_type] ?? 'email-recibo-edd.html';
+    $filepath = __DIR__ . '/emails/' . $filename;
 
-            <p><strong>Pasos para activar:</strong></p>
-            <ol>
-                <li>Descarga el plugin desde el siguiente enlace.</li>
-                <li>Súbelo a tu WordPress en <em>Plugins > Añadir nuevo > Subir plugin</em> y actívalo.</li>
-                <li>Ve al menú <strong>AutoWhats > Licencia</strong>, ingresa tu clave y haz clic en Guardar.</li>
-            </ol>
+    if (!file_exists($filepath)) {
+        error_log("Plantilla de email no encontrada: $filepath");
+        return false;
+    }
 
-            <div style='text-align: center;'>
-                <a href='" . htmlspecialchars($download_url, ENT_QUOTES, 'UTF-8') . "' class='btn'>Descargar Plugin AutoWhats</a>
-            </div>
+    $html_content = file_get_contents($filepath);
 
-            <div class='footer'>
-                <p>¿Tienes dudas o necesitas ayuda? Responde directamente a este correo.</p>
-                <p>&copy; " . date('Y') . " AutoWhats. Todos los derechos reservados.</p>
-            </div>
-        </div>
-    </body>
-    </html>
-    ";
+    // Variables por defecto
+    $defaults = [
+        '{name}'                       => !empty($to_name) ? htmlspecialchars($to_name, ENT_QUOTES, 'UTF-8') : 'Cliente',
+        '{{ contact.FIRSTNAME }}'      => !empty($to_name) ? htmlspecialchars($to_name, ENT_QUOTES, 'UTF-8') : 'Cliente',
+        '{license_key}'                => $custom_vars['license_key'] ?? 'AW-DEMO-0000-0000',
+        '{download_link}'              => defined('PLUGIN_DOWNLOAD_URL') ? PLUGIN_DOWNLOAD_URL : 'https://landing.autowhats.com.mx/downloads/autowhats.zip',
+        '{subscription_name}'          => $custom_vars['plan_name'] ?? 'AutoWhats Pro Anual',
+        '{plan_name}'                  => $custom_vars['plan_name'] ?? 'AutoWhats Pro Anual',
+        '{update_payment_method_url}'  => $custom_vars['portal_url'] ?? 'https://billing.stripe.com/p/login/test',
+        '{{ unsubscribe }}'            => 'https://landing.autowhats.com.mx/unsubscribe',
+        '{site_url}'                   => 'https://landing.autowhats.com.mx'
+    ];
+
+    $vars = array_merge($defaults, $custom_vars);
+    $html_content = str_replace(array_keys($vars), array_values($vars), $html_content);
+
+    $subject = $subjects[$template_type][$lang] ?? 'Notificación de AutoWhats';
 
     $payload = [
         'sender' => [
-            'name'  => BREVO_SENDER_NAME,
-            'email' => BREVO_SENDER_EMAIL
+            'name'  => defined('BREVO_SENDER_NAME') ? BREVO_SENDER_NAME : 'AutoWhats Soporte',
+            'email' => defined('BREVO_SENDER_EMAIL') ? BREVO_SENDER_EMAIL : 'soporte@autowhats.com.mx'
         ],
         'to' => [
             [
@@ -108,4 +120,13 @@ function send_license_email_brevo($to_email, $to_name, $license_key, $plan_name,
         error_log("Brevo API error ($http_code): " . $response);
         return false;
     }
+}
+
+// Wrapper retrocompatible para la creación de licencias
+function send_license_email_brevo($to_email, $to_name, $license_key, $plan_name, $expires_at) {
+    return send_template_email_brevo($to_email, $to_name, 'recibo', 'es', [
+        '{license_key}' => $license_key,
+        '{plan_name}'   => $plan_name,
+        '{expires_at}'  => $expires_at
+    ]);
 }
