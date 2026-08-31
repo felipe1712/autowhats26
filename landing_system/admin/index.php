@@ -12,6 +12,7 @@ require_login();
 $pdo = get_db_connection();
 $msg = '';
 $msg_type = 'success';
+$active_tab = $_GET['tab'] ?? 'licenses';
 
 // Procesar Acciones POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -199,12 +200,12 @@ $csrf_token = generate_csrf_token();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoWhats - Administrador de Licencias</title>
+    <title>AutoWhats - Panel de Administración</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         body { background-color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 14px; }
-        .navbar-brand { font-weight: 700; color: #25d366 !important; }
+        .navbar-brand { font-weight: 800; color: #25d366 !important; font-size: 18px; }
         .card { border: none; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
         .badge-active { background-color: #22c55e; color: white; }
         .badge-expired { background-color: #f59e0b; color: white; }
@@ -212,18 +213,68 @@ $csrf_token = generate_csrf_token();
         .key-text { font-family: monospace; font-weight: 600; font-size: 13px; color: #0f172a; }
         .btn-brand { background-color: #25d366; color: white; font-weight: 600; }
         .btn-brand:hover { background-color: #1eb954; color: white; }
+        .nav-link.active-tab { color: #25d366 !important; font-weight: 600; border-bottom: 2px solid #25d366; }
+        .nav-sub-menu { background: #1e293b; }
+        .nav-sub-menu .nav-link { color: #cbd5e1; padding: 12px 18px; font-weight: 500; font-size: 14px; }
+        .nav-sub-menu .nav-link:hover { color: #ffffff; }
+        .nav-sub-menu .nav-link.active { color: #25d366; background: rgba(37, 211, 102, 0.1); border-radius: 6px; }
     </style>
 </head>
 <body>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
+<!-- 1. Header / Navbar Superior Principal -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark py-2 border-bottom border-secondary">
     <div class="container">
-        <a class="navbar-brand" href="index.php"><i class="bi bi-whatsapp"></i> AutoWhats <span class="text-white fw-light fs-6">| License Manager</span></a>
-        <div class="d-flex align-items-center gap-2">
-            <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#modalEmailCenter"><i class="bi bi-envelope-paper"></i> Centro de Emails</button>
-            <button class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#modalPassword"><i class="bi bi-key"></i> Clave</button>
-            <a href="logout.php" class="btn btn-sm btn-danger"><i class="bi bi-box-arrow-right"></i> Salir</a>
+        <a class="navbar-brand d-flex align-items-center gap-2" href="index.php">
+            <i class="bi bi-whatsapp fs-4"></i> auto<span class="text-white">whats</span> <span class="badge bg-secondary fw-normal fs-6">Admin v1.5</span>
+        </a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAdminContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarAdminContent">
+            <!-- Menú Horizontal de Opciones -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3">
+                <li class="nav-item">
+                    <a class="nav-link <?= $active_tab === 'licenses' ? 'text-success fw-bold' : 'text-light' ?>" href="index.php?tab=licenses">
+                        <i class="bi bi-key-fill"></i> Licencias
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?= $active_tab === 'emails' ? 'text-success fw-bold' : 'text-light' ?>" href="index.php?tab=emails">
+                        <i class="bi bi-envelope-paper-fill"></i> Plantillas Brevo
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?= $active_tab === 'system' ? 'text-success fw-bold' : 'text-light' ?>" href="index.php?tab=system">
+                        <i class="bi bi-hdd-network-fill"></i> Conexiones & API
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="../index.html" target="_blank">
+                        <i class="bi bi-box-arrow-up-right"></i> Ver Landing
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Acciones de Usuario a la Derecha -->
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-sm btn-brand" data-bs-toggle="modal" data-bs-target="#modalCreateLicense">
+                    <i class="bi bi-plus-circle-fill"></i> Nueva Licencia
+                </button>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-light dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle"></i> <?= htmlspecialchars($_SESSION['admin_username'], ENT_QUOTES, 'UTF-8') ?>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                        <li><span class="dropdown-header">Administrador</span></li>
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalPassword"><i class="bi bi-shield-lock"></i> Cambiar Contraseña</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="logout.php"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </nav>
@@ -231,203 +282,376 @@ $csrf_token = generate_csrf_token();
 <div class="container my-4">
 
     <?php if (!empty($msg)): ?>
-        <div class="alert alert-<?= $msg_type ?> alert-dismissible fade show" role="alert">
+        <div class="alert alert-<?= $msg_type ?> alert-dismissible fade show shadow-sm" role="alert">
             <?= $msg ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     <?php endif; ?>
 
-    <!-- Métricas -->
-    <div class="row g-3 mb-4">
-        <div class="col-md-3">
-            <div class="card p-3 bg-white">
-                <div class="text-muted small">Total Licencias</div>
-                <div class="fs-3 fw-bold"><?= $total_count ?></div>
+    <!-- SECCIÓN 1: GESTIÓN DE LICENCIAS -->
+    <?php if ($active_tab === 'licenses'): ?>
+        <!-- Métricas -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="card p-3 bg-white">
+                    <div class="text-muted small">Total Licencias</div>
+                    <div class="fs-3 fw-bold"><?= $total_count ?></div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card p-3 bg-white border-start border-success border-4">
+                    <div class="text-muted small">Activas</div>
+                    <div class="fs-3 fw-bold text-success"><?= $active_count ?></div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card p-3 bg-white border-start border-warning border-4">
+                    <div class="text-muted small">Expiradas</div>
+                    <div class="fs-3 fw-bold text-warning"><?= $exp_count ?></div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card p-3 bg-white border-start border-danger border-4">
+                    <div class="text-muted small">Suspendidas</div>
+                    <div class="fs-3 fw-bold text-danger"><?= $susp_count ?></div>
+                </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card p-3 bg-white border-start border-success border-4">
-                <div class="text-muted small">Activas</div>
-                <div class="fs-3 fw-bold text-success"><?= $active_count ?></div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card p-3 bg-white border-start border-warning border-4">
-                <div class="text-muted small">Expiradas</div>
-                <div class="fs-3 fw-bold text-warning"><?= $exp_count ?></div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card p-3 bg-white border-start border-danger border-4">
-                <div class="text-muted small">Suspendidas</div>
-                <div class="fs-3 fw-bold text-danger"><?= $susp_count ?></div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Barra de Búsqueda y Botón Crear -->
-    <div class="card p-3 mb-4">
-        <div class="row g-3 align-items-center">
-            <div class="col-md-6">
-                <form method="GET" action="index.php" class="d-flex gap-2">
-                    <input type="text" name="search" class="form-control form-control-sm" placeholder="Buscar por clave, cliente, email o dominio..." value="<?= htmlspecialchars($search, ENT_QUOTES, 'UTF-8') ?>">
-                    <select name="status" class="form-select form-select-sm" style="width: 140px;">
-                        <option value="">Todos</option>
-                        <option value="active" <?= $filter_status === 'active' ? 'selected' : '' ?>>Activas</option>
-                        <option value="expired" <?= $filter_status === 'expired' ? 'selected' : '' ?>>Expiradas</option>
-                        <option value="suspended" <?= $filter_status === 'suspended' ? 'selected' : '' ?>>Suspendidas</option>
-                    </select>
-                    <button type="submit" class="btn btn-sm btn-dark"><i class="bi bi-search"></i></button>
-                    <?php if (!empty($search) || !empty($filter_status)): ?>
-                        <a href="index.php" class="btn btn-sm btn-outline-secondary">Limpiar</a>
-                    <?php endif; ?>
-                </form>
-            </div>
-            <div class="col-md-6 text-md-end">
-                <button class="btn btn-brand btn-sm" data-bs-toggle="modal" data-bs-target="#modalCreateLicense">
-                    <i class="bi bi-plus-circle"></i> Nueva Licencia
-                </button>
+        <!-- Barra de Búsqueda y Filtros -->
+        <div class="card p-3 mb-4">
+            <div class="row g-3 align-items-center">
+                <div class="col-md-8">
+                    <form method="GET" action="index.php" class="d-flex gap-2">
+                        <input type="hidden" name="tab" value="licenses">
+                        <input type="text" name="search" class="form-control form-control-sm" placeholder="Buscar por clave, cliente, email o dominio..." value="<?= htmlspecialchars($search, ENT_QUOTES, 'UTF-8') ?>">
+                        <select name="status" class="form-select form-select-sm" style="width: 140px;">
+                            <option value="">Todos</option>
+                            <option value="active" <?= $filter_status === 'active' ? 'selected' : '' ?>>Activas</option>
+                            <option value="expired" <?= $filter_status === 'expired' ? 'selected' : '' ?>>Expiradas</option>
+                            <option value="suspended" <?= $filter_status === 'suspended' ? 'selected' : '' ?>>Suspendidas</option>
+                        </select>
+                        <button type="submit" class="btn btn-sm btn-dark"><i class="bi bi-search"></i> Buscar</button>
+                        <?php if (!empty($search) || !empty($filter_status)): ?>
+                            <a href="index.php?tab=licenses" class="btn btn-sm btn-outline-secondary">Limpiar</a>
+                        <?php endif; ?>
+                    </form>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <button class="btn btn-brand btn-sm" data-bs-toggle="modal" data-bs-target="#modalCreateLicense">
+                        <i class="bi bi-plus-circle"></i> Nueva Licencia
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Tabla de Licencias -->
-    <div class="card p-0 overflow-hidden">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th>Clave</th>
-                        <th>Cliente</th>
-                        <th>Email</th>
-                        <th>Plan</th>
-                        <th>Dominio Vinculado</th>
-                        <th>Vencimiento</th>
-                        <th>Estado</th>
-                        <th class="text-end">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (empty($licenses)): ?>
+        <!-- Tabla de Licencias -->
+        <div class="card p-0 overflow-hidden shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
                         <tr>
-                            <td colspan="8" class="text-center py-4 text-muted">No se encontraron licencias registradas.</td>
+                            <th>Clave</th>
+                            <th>Cliente</th>
+                            <th>Email</th>
+                            <th>Plan</th>
+                            <th>Dominio Vinculado</th>
+                            <th>Vencimiento</th>
+                            <th>Estado</th>
+                            <th class="text-end">Acciones</th>
                         </tr>
-                    <?php else: ?>
-                        <?php foreach ($licenses as $row): ?>
+                    </thead>
+                    <tbody>
+                        <?php if (empty($licenses)): ?>
                             <tr>
-                                <td><span class="key-text"><?= htmlspecialchars($row['license_key'], ENT_QUOTES, 'UTF-8') ?></span></td>
-                                <td><strong><?= htmlspecialchars($row['client_name'], ENT_QUOTES, 'UTF-8') ?></strong></td>
-                                <td><small><?= htmlspecialchars($row['client_email'], ENT_QUOTES, 'UTF-8') ?></small></td>
-                                <td><span class="badge bg-secondary"><?= htmlspecialchars($row['plan_name'], ENT_QUOTES, 'UTF-8') ?></span></td>
-                                <td>
-                                    <?php if (!empty($row['site_url'])): ?>
-                                        <code><?= htmlspecialchars($row['site_url'], ENT_QUOTES, 'UTF-8') ?></code>
-                                        <form method="POST" action="index.php" class="d-inline" onsubmit="return confirm('¿Desvincular dominio para permitir activar en otro sitio?');">
-                                            <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
-                                            <input type="hidden" name="action" value="reset_domain">
-                                            <input type="hidden" name="id" value="<?= $row['id'] ?>">
-                                            <button type="submit" class="btn btn-link btn-sm p-0 text-danger" title="Desvincular"><i class="bi bi-x-circle"></i></button>
-                                        </form>
-                                    <?php else: ?>
-                                        <span class="text-muted small">Sin vincular</span>
-                                    <?php endif; ?>
-                                </td>
-                                <td>
-                                    <?php if ($row['expires_at']): ?>
-                                        <?= date('d/m/Y', strtotime($row['expires_at'])) ?>
-                                        <?php if (strtotime($row['expires_at']) < time() && $row['status'] === 'active'): ?>
-                                            <span class="badge bg-warning text-dark">Vencida</span>
-                                        <?php endif; ?>
-                                    <?php else: ?>
-                                        <span class="text-success fw-bold">De por vida</span>
-                                    <?php endif; ?>
-                                </td>
-                                <td>
-                                    <span class="badge badge-<?= $row['status'] ?>">
-                                        <?= strtoupper($row['status']) ?>
-                                    </span>
-                                </td>
-                                <td class="text-end">
-                                    <div class="dropdown">
-                                        <button class="btn btn-sm btn-light border" data-bs-toggle="dropdown"><i class="bi bi-three-dots-vertical"></i></button>
-                                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                                            <!-- Enviar Email Brevo con Plantilla -->
-                                            <li><h6 class="dropdown-header">Comunicación (Brevo)</h6></li>
-                                            <li>
-                                                <button class="dropdown-item text-primary" data-bs-toggle="modal" data-bs-target="#modalSendEmailDirect"
-                                                    onclick="prepareEmailModal('<?= htmlspecialchars($row['client_email'], ENT_QUOTES, 'UTF-8') ?>', '<?= htmlspecialchars($row['client_name'], ENT_QUOTES, 'UTF-8') ?>', '<?= htmlspecialchars($row['license_key'], ENT_QUOTES, 'UTF-8') ?>', '<?= htmlspecialchars($row['plan_name'], ENT_QUOTES, 'UTF-8') ?>')">
-                                                    <i class="bi bi-envelope-paper"></i> Enviar Email (Plantilla)
-                                                </button>
-                                            </li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <!-- Cambiar Estado -->
-                                            <li><h6 class="dropdown-header">Estado</h6></li>
-                                            <li>
-                                                <form method="POST" action="index.php">
-                                                    <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
-                                                    <input type="hidden" name="action" value="change_status">
-                                                    <input type="hidden" name="id" value="<?= $row['id'] ?>">
-                                                    <input type="hidden" name="status" value="active">
-                                                    <button type="submit" class="dropdown-item text-success"><i class="bi bi-check-circle"></i> Activar</button>
-                                                </form>
-                                            </li>
-                                            <li>
-                                                <form method="POST" action="index.php">
-                                                    <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
-                                                    <input type="hidden" name="action" value="change_status">
-                                                    <input type="hidden" name="id" value="<?= $row['id'] ?>">
-                                                    <input type="hidden" name="status" value="suspended">
-                                                    <button type="submit" class="dropdown-item text-danger"><i class="bi bi-slash-circle"></i> Suspender</button>
-                                                </form>
-                                            </li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <!-- Renovar -->
-                                            <li><h6 class="dropdown-header">Renovar</h6></li>
-                                            <li>
-                                                <form method="POST" action="index.php">
-                                                    <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
-                                                    <input type="hidden" name="action" value="extend_license">
-                                                    <input type="hidden" name="id" value="<?= $row['id'] ?>">
-                                                    <input type="hidden" name="extend_type" value="1year">
-                                                    <button type="submit" class="dropdown-item"><i class="bi bi-calendar-plus"></i> +1 Año</button>
-                                                </form>
-                                            </li>
-                                            <li>
-                                                <form method="POST" action="index.php">
-                                                    <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
-                                                    <input type="hidden" name="action" value="extend_license">
-                                                    <input type="hidden" name="id" value="<?= $row['id'] ?>">
-                                                    <input type="hidden" name="extend_type" value="lifetime">
-                                                    <button type="submit" class="dropdown-item"><i class="bi bi-infinity"></i> Hacer Lifetime</button>
-                                                </form>
-                                            </li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <!-- Eliminar -->
-                                            <li>
-                                                <form method="POST" action="index.php" onsubmit="return confirm('¿Eliminar permanentemente esta licencia?');">
-                                                    <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
-                                                    <input type="hidden" name="action" value="delete_license">
-                                                    <input type="hidden" name="id" value="<?= $row['id'] ?>">
-                                                    <button type="submit" class="dropdown-item text-danger"><i class="bi bi-trash"></i> Eliminar</button>
-                                                </form>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </td>
+                                <td colspan="8" class="text-center py-4 text-muted">No se encontraron licencias registradas.</td>
                             </tr>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </tbody>
-            </table>
+                        <?php else: ?>
+                            <?php foreach ($licenses as $row): ?>
+                                <tr>
+                                    <td><span class="key-text"><?= htmlspecialchars($row['license_key'], ENT_QUOTES, 'UTF-8') ?></span></td>
+                                    <td><strong><?= htmlspecialchars($row['client_name'], ENT_QUOTES, 'UTF-8') ?></strong></td>
+                                    <td><small><?= htmlspecialchars($row['client_email'], ENT_QUOTES, 'UTF-8') ?></small></td>
+                                    <td><span class="badge bg-secondary"><?= htmlspecialchars($row['plan_name'], ENT_QUOTES, 'UTF-8') ?></span></td>
+                                    <td>
+                                        <?php if (!empty($row['site_url'])): ?>
+                                            <code><?= htmlspecialchars($row['site_url'], ENT_QUOTES, 'UTF-8') ?></code>
+                                            <form method="POST" action="index.php?tab=licenses" class="d-inline" onsubmit="return confirm('¿Desvincular dominio para permitir activar en otro sitio?');">
+                                                <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
+                                                <input type="hidden" name="action" value="reset_domain">
+                                                <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                                                <button type="submit" class="btn btn-link btn-sm p-0 text-danger" title="Desvincular Dominio"><i class="bi bi-x-circle"></i></button>
+                                            </form>
+                                        <?php else: ?>
+                                            <span class="text-muted small">Sin vincular</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <?php if ($row['expires_at']): ?>
+                                            <?= date('d/m/Y', strtotime($row['expires_at'])) ?>
+                                            <?php if (strtotime($row['expires_at']) < time() && $row['status'] === 'active'): ?>
+                                                <span class="badge bg-warning text-dark">Vencida</span>
+                                            <?php endif; ?>
+                                        <?php else: ?>
+                                            <span class="text-success fw-bold">De por vida</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-<?= $row['status'] ?>">
+                                            <?= strtoupper($row['status']) ?>
+                                        </span>
+                                    </td>
+                                    <td class="text-end">
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-light border" data-bs-toggle="dropdown"><i class="bi bi-three-dots-vertical"></i></button>
+                                            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                                <!-- Enviar Email Brevo con Plantilla -->
+                                                <li><h6 class="dropdown-header">Comunicación (Brevo)</h6></li>
+                                                <li>
+                                                    <button class="dropdown-item text-primary" data-bs-toggle="modal" data-bs-target="#modalSendEmailDirect"
+                                                        onclick="prepareEmailModal('<?= htmlspecialchars($row['client_email'], ENT_QUOTES, 'UTF-8') ?>', '<?= htmlspecialchars($row['client_name'], ENT_QUOTES, 'UTF-8') ?>', '<?= htmlspecialchars($row['license_key'], ENT_QUOTES, 'UTF-8') ?>', '<?= htmlspecialchars($row['plan_name'], ENT_QUOTES, 'UTF-8') ?>')">
+                                                        <i class="bi bi-envelope-paper"></i> Enviar Email (Plantilla)
+                                                    </button>
+                                                </li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <!-- Cambiar Estado -->
+                                                <li><h6 class="dropdown-header">Estado</h6></li>
+                                                <li>
+                                                    <form method="POST" action="index.php?tab=licenses">
+                                                        <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
+                                                        <input type="hidden" name="action" value="change_status">
+                                                        <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                                                        <input type="hidden" name="status" value="active">
+                                                        <button type="submit" class="dropdown-item text-success"><i class="bi bi-check-circle"></i> Activar</button>
+                                                    </form>
+                                                </li>
+                                                <li>
+                                                    <form method="POST" action="index.php?tab=licenses">
+                                                        <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
+                                                        <input type="hidden" name="action" value="change_status">
+                                                        <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                                                        <input type="hidden" name="status" value="suspended">
+                                                        <button type="submit" class="dropdown-item text-danger"><i class="bi bi-slash-circle"></i> Suspender</button>
+                                                    </form>
+                                                </li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <!-- Renovar -->
+                                                <li><h6 class="dropdown-header">Renovar</h6></li>
+                                                <li>
+                                                    <form method="POST" action="index.php?tab=licenses">
+                                                        <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
+                                                        <input type="hidden" name="action" value="extend_license">
+                                                        <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                                                        <input type="hidden" name="extend_type" value="1year">
+                                                        <button type="submit" class="dropdown-item"><i class="bi bi-calendar-plus"></i> +1 Año</button>
+                                                    </form>
+                                                </li>
+                                                <li>
+                                                    <form method="POST" action="index.php?tab=licenses">
+                                                        <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
+                                                        <input type="hidden" name="action" value="extend_license">
+                                                        <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                                                        <input type="hidden" name="extend_type" value="lifetime">
+                                                        <button type="submit" class="dropdown-item"><i class="bi bi-infinity"></i> Hacer Lifetime</button>
+                                                    </form>
+                                                </li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <!-- Eliminar -->
+                                                <li>
+                                                    <form method="POST" action="index.php?tab=licenses" onsubmit="return confirm('¿Eliminar permanentemente esta licencia?');">
+                                                        <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
+                                                        <input type="hidden" name="action" value="delete_license">
+                                                        <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                                                        <button type="submit" class="dropdown-item text-danger"><i class="bi bi-trash"></i> Eliminar</button>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
+    <?php endif; ?>
+
+    <!-- SECCIÓN 2: CENTRO DE PLANTILLAS Y ENVÍOS BREVO -->
+    <?php if ($active_tab === 'emails'): ?>
+        <div class="row g-4">
+            <div class="col-md-5">
+                <div class="card p-4 bg-white shadow-sm">
+                    <h5 class="mb-3 text-primary"><i class="bi bi-send-fill"></i> Despachar Correo</h5>
+                    <form method="POST" action="index.php?tab=emails">
+                        <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
+                        <input type="hidden" name="action" value="send_custom_email">
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Nombre del Cliente *</label>
+                            <input type="text" name="target_name" class="form-control" placeholder="Juan Pérez" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Email de Destino *</label>
+                            <input type="email" name="target_email" class="form-control" placeholder="cliente@dominio.com" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Seleccionar Plantilla</label>
+                            <select name="template_type" id="select_preview_template" class="form-select" onchange="updateEmailPreview()">
+                                <option value="recibo">🚀 Recibo de Compra / Entrega de Licencia</option>
+                                <option value="falla_cobro">⚠️ Falla en el Cobro / Recordatorio</option>
+                                <option value="cancelacion">🛑 Suscripción Cancelada</option>
+                                <option value="promocional">🎉 Anuncio Promocional / Novedades</option>
+                            </select>
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Idioma</label>
+                                <select name="email_lang" id="select_preview_lang" class="form-select" onchange="updateEmailPreview()">
+                                    <option value="es" selected>Español (ES)</option>
+                                    <option value="en">Inglés (EN)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Plan Asociado</label>
+                                <input type="text" name="plan_name" class="form-control" value="AutoWhats Pro Anual">
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Clave de Licencia (Opcional)</label>
+                            <input type="text" name="license_key" class="form-control" placeholder="AW-XXXX-XXXX-XXXX">
+                        </div>
+
+                        <button type="submit" class="btn btn-brand w-100 py-2">
+                            <i class="bi bi-send"></i> Enviar Correo con Brevo
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Vista Previa de Plantilla -->
+            <div class="col-md-7">
+                <div class="card p-4 bg-white shadow-sm h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="m-0 text-secondary"><i class="bi bi-eye"></i> Plantillas HTML Disponibles</h5>
+                        <span class="badge bg-dark">Brevo Transactional API</span>
+                    </div>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-6">
+                            <div class="border rounded p-2 text-center bg-light">
+                                <strong class="d-block text-primary">email-recibo-edd.html</strong>
+                                <small class="text-muted">Entrega de licencia y bienvenida</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="border rounded p-2 text-center bg-light">
+                                <strong class="d-block text-warning text-dark">email-falla-cobro.html</strong>
+                                <small class="text-muted">Aviso de tarjeta o pago rechazado</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="border rounded p-2 text-center bg-light">
+                                <strong class="d-block text-secondary">email-cancelacion.html</strong>
+                                <small class="text-muted">Confirmación de baja de servicio</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="border rounded p-2 text-center bg-light">
+                                <strong class="d-block text-success">email-promocional.html</strong>
+                                <small class="text-muted">Lanzamientos y nuevas funciones</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info py-2 small mb-0">
+                        <i class="bi bi-info-circle-fill"></i> Todas las plantillas cuentan con su versión equivalente en inglés (<code>-en.html</code>) con diseño responsive listo para clientes internacionales.
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <!-- SECCIÓN 3: CONEXIONES Y ESTADO DEL SISTEMA -->
+    <?php if ($active_tab === 'system'): ?>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card p-4 bg-white shadow-sm">
+                    <h5 class="mb-3 text-dark"><i class="bi bi-diagram-3-fill text-success"></i> Endpoints Activos</h5>
+                    
+                    <div class="mb-3 border-bottom pb-3">
+                        <label class="text-muted small fw-bold">API DE VALIDACIÓN DE LICENCIAS (n8n / WordPress):</label>
+                        <div class="input-group input-group-sm mt-1">
+                            <input type="text" class="form-control" value="https://landing.autowhats.com.mx/api/check-license.php" readonly id="apiCheckUrl">
+                            <button class="btn btn-outline-secondary" onclick="navigator.clipboard.writeText(document.getElementById('apiCheckUrl').value); alert('Copiado');"><i class="bi bi-clipboard"></i></button>
+                        </div>
+                        <small class="text-muted">Método POST: <code>{"license_key": "AW-XXXX-XXXX-XXXX", "site_url": "https://cliente.com"}</code></small>
+                    </div>
+
+                    <div class="mb-3 border-bottom pb-3">
+                        <label class="text-muted small fw-bold">WEBHOOK DE PAGOS (Stripe):</label>
+                        <div class="input-group input-group-sm mt-1">
+                            <input type="text" class="form-control" value="https://landing.autowhats.com.mx/api/stripe-webhook.php" readonly id="apiStripeUrl">
+                            <button class="btn btn-outline-secondary" onclick="navigator.clipboard.writeText(document.getElementById('apiStripeUrl').value); alert('Copiado');"><i class="bi bi-clipboard"></i></button>
+                        </div>
+                        <small class="text-muted">Evento a escuchar: <code>checkout.session.completed</code></small>
+                    </div>
+
+                    <div>
+                        <label class="text-muted small fw-bold">DESCARGA DIRECTA DEL PLUGIN:</label>
+                        <div class="input-group input-group-sm mt-1">
+                            <input type="text" class="form-control" value="<?= htmlspecialchars(PLUGIN_DOWNLOAD_URL, ENT_QUOTES, 'UTF-8') ?>" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card p-4 bg-white shadow-sm">
+                    <h5 class="mb-3 text-dark"><i class="bi bi-shield-check text-primary"></i> Estado de Configuración</h5>
+                    
+                    <ul class="list-group list-group-flush small">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-database text-success me-2"></i> Base de Datos MySQL (PDO):</span>
+                            <span class="badge bg-success">Conectado (<?= DB_NAME ?>)</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-envelope text-primary me-2"></i> Servicio Brevo Email:</span>
+                            <?php if (strpos(BREVO_API_KEY, 'TU_CLAVE') === false && !empty(BREVO_API_KEY)): ?>
+                                <span class="badge bg-success">Configurado</span>
+                            <?php else: ?>
+                                <span class="badge bg-warning text-dark">Pendiente API Key</span>
+                            <?php endif; ?>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-send text-info me-2"></i> Remitente de Correo:</span>
+                            <span class="fw-bold"><?= BREVO_SENDER_EMAIL ?></span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-stripe text-primary me-2"></i> Webhook Secret Stripe:</span>
+                            <?php if (strpos(STRIPE_WEBHOOK_SECRET, 'TU_SECRETO') === false && !empty(STRIPE_WEBHOOK_SECRET)): ?>
+                                <span class="badge bg-success">Activo</span>
+                            <?php else: ?>
+                                <span class="badge bg-secondary">Opcional</span>
+                            <?php endif; ?>
+                        </li>
+                    </ul>
+
+                    <div class="alert alert-light border mt-3 small text-muted mb-0">
+                        Para modificar cualquiera de estas credenciales, edita el archivo <code>admin/config.php</code> en tu servidor.
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+
 </div>
 
 <!-- Modal Crear Licencia -->
 <div class="modal fade" id="modalCreateLicense" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" action="index.php">
+            <form method="POST" action="index.php?tab=licenses">
                 <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
                 <input type="hidden" name="action" value="create_license">
                 <div class="modal-header">
@@ -491,7 +715,7 @@ $csrf_token = generate_csrf_token();
 <div class="modal fade" id="modalSendEmailDirect" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" action="index.php">
+            <form method="POST" action="index.php?tab=licenses">
                 <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
                 <input type="hidden" name="action" value="send_custom_email">
                 <input type="hidden" name="license_key" id="modal_email_key">
@@ -537,63 +761,11 @@ $csrf_token = generate_csrf_token();
     </div>
 </div>
 
-<!-- Modal Centro de Emails General -->
-<div class="modal fade" id="modalEmailCenter" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form method="POST" action="index.php">
-                <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
-                <input type="hidden" name="action" value="send_custom_email">
-                <div class="modal-header">
-                    <h5 class="modal-title"><i class="bi bi-envelope-paper"></i> Centro de Comunicaciones Brevo</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Nombre del Destinatario</label>
-                        <input type="text" name="target_name" class="form-control" placeholder="Nombre completo" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Correo Electrónico</label>
-                        <input type="email" name="target_email" class="form-control" placeholder="cliente@ejemplo.com" required>
-                    </div>
-                    <div class="row g-2 mb-3">
-                        <div class="col-md-7">
-                            <label class="form-label">Seleccionar Plantilla</label>
-                            <select name="template_type" class="form-select" required>
-                                <option value="promocional">🎉 Anuncio Promocional / Novedades</option>
-                                <option value="recibo">🚀 Recibo de Compra / Entrega Licencia</option>
-                                <option value="falla_cobro">⚠️ Falla en el Cobro / Recordatorio</option>
-                                <option value="cancelacion">🛑 Suscripción Cancelada</option>
-                            </select>
-                        </div>
-                        <div class="col-md-5">
-                            <label class="form-label">Idioma</label>
-                            <select name="email_lang" class="form-select">
-                                <option value="es" selected>Español (ES)</option>
-                                <option value="en">Inglés (EN)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Clave de Licencia Asociada (Opcional)</label>
-                        <input type="text" name="license_key" class="form-control" placeholder="AW-XXXX-XXXX-XXXX">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary"><i class="bi bi-send-fill"></i> Despachar Email</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <!-- Modal Cambiar Contraseña Admin -->
 <div class="modal fade" id="modalPassword" tabindex="-1">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
-            <form method="POST" action="index.php">
+            <form method="POST" action="index.php?tab=<?= htmlspecialchars($active_tab, ENT_QUOTES, 'UTF-8') ?>">
                 <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
                 <input type="hidden" name="action" value="change_password">
                 <div class="modal-header">
