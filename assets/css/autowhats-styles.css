@@ -1,0 +1,1472 @@
+/* --- Global Rules & Best Practices --- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box; /* Prevents padding and border from affecting the final element size */
+}
+
+/* General styles for plugin pages */
+.autwa-wrap .autwa-container {
+    display: flex;
+    /* gap: 20px; -- Replaced with margin for better compatibility */
+    margin-top: 20px;
+    height: calc(100vh - 200px);
+}
+.autwa-wrap .autwa-container-full { margin-top: 20px; }
+
+/* Loader / Spinner */
+.autwa-loader-overlay { position: fixed; top: 0; left: 160px; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.7); z-index: 9999; display: flex; justify-content: center; align-items: center; }
+.autwa-spinner { border: 5px solid #f3f3f3; border-top: 5px solid #3498db; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; }
+.autwa-spinner-small { border: 3px solid #f3f3f3; border-top: 3px solid #3498db; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 0 auto; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* Placeholders for images */
+.autwa-image-container {
+    position: relative;
+    min-height: 100px;
+}
+
+.autwa-image-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f0f0;
+    border-radius: 7px;
+    min-height: 150px;
+    min-width: 150px;
+}
+
+/* --- Styles for IMPROVED CHATS page --- */
+.autwa-sidebar { 
+    width: 320px; 
+    flex-shrink: 0; 
+    background: #fff; 
+    border: 1px solid #ddd; 
+    border-radius: 4px; 
+    display: flex; 
+    flex-direction: column; 
+    margin-right: 20px; /* Replaced 'gap' for spacing */
+}
+.autwa-sidebar-header { padding: 15px; border-bottom: 1px solid #e9ecef; display: flex; justify-content: space-between; align-items: center; background: #f8f9fa; }
+.autwa-sidebar-header h2 { margin: 0; font-size: 18px; color: #2d3748; font-weight: 600; }
+#refresh-chats-btn { padding: 8px 12px; height: auto; border-radius: 6px; }
+.autwa-list { overflow-y: auto; flex-grow: 1; }
+.autwa-sidebar-footer { padding: 10px; border-top: 1px solid #e9ecef; background: #f8f9fa; }
+
+/* Improved chat list */
+.autwa-list-item { 
+    display: flex; 
+    align-items: center; 
+    padding: 12px 15px; 
+    border-bottom: 1px solid #f0f0f0; 
+    cursor: pointer; 
+    transition: all 0.2s ease; 
+    position: relative;
+}
+.autwa-list-item:hover { background-color: #f8f9fa; }
+.autwa-list-item.active { background-color: #e3f2fd; border-left: 4px solid #2196F3; }
+.autwa-list-item.unread { background-color: #fff; }
+.autwa-list-item.unread .autwa-chat-name { font-weight: 600; color: #000; }
+
+.autwa-avatar { 
+    width: 48px; 
+    height: 48px; 
+    border-radius: 50%; 
+    margin-right: 12px; 
+    background-color: #e0e0e0; 
+    object-fit: cover; /* Maintains image aspect ratio, cropping if necessary. Modern and safe property. */
+    flex-shrink: 0;
+}
+
+.autwa-item-content { 
+    flex-grow: 1; 
+    overflow: hidden; 
+    min-width: 0;
+}
+
+.autwa-chat-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.autwa-chat-name {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #2d3748;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+}
+
+.autwa-chat-time {
+    font-size: 12px;
+    color: #718096;
+    margin-left: 8px;
+    flex-shrink: 0;
+}
+
+.autwa-chat-message-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.autwa-last-message {
+    margin: 0;
+    font-size: 14px;
+    color: #718096;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    line-height: 1.3;
+}
+
+.unread-badge {
+    background: #25D366;
+    color: white;
+    border-radius: 12px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 8px;
+    min-width: 18px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* Main content (chat view) */
+.autwa-main-content { flex-grow: 1; background: #fff; border: 1px solid #ddd; border-radius: 4px; display: flex; flex-direction: column; }
+
+.autwa-welcome-panel { 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    height: 100%; 
+    text-align: center; 
+    color: #888; 
+    background: #f8f9fa;
+}
+.autwa-welcome-panel .dashicons { font-size: 80px; width: 80px; height: 80px; color: #e0e0e0; }
+
+.autwa-chat-view { display: flex; flex-direction: column; height: 100%; }
+
+.autwa-chat-header { 
+    display: flex; 
+    align-items: center; 
+    padding: 16px 20px; 
+    border-bottom: 1px solid #e9ecef; 
+    background: #f8f9fa; 
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+.autwa-chat-header h3 { margin: 0; font-size: 18px; font-weight: 500; color: #2d3748; }
+
+.autwa-messages-list { 
+    flex-grow: 1; 
+    overflow-y: auto; 
+    padding: 20px; 
+    background-color: #e5ddd5;
+}
+
+.autwa-date-separator {
+    text-align: center;
+    margin: 20px 0 15px;
+}
+
+.autwa-date-text {
+    background: rgba(212, 227, 231, 0.9);
+    padding: 6px 12px;
+    border-radius: 7px;
+    font-size: 12px;
+    color: #59676c;
+    font-weight: 500;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    display: inline-block;
+}
+
+.autwa-message { 
+    display: flex; 
+    flex-direction: column; 
+    margin-bottom: 8px; 
+    max-width: 65%; 
+    word-wrap: break-word; 
+    animation: fadeInMessage 0.3s ease-out;
+}
+
+@keyframes fadeInMessage {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.autwa-message.from-me { margin-left: auto; align-items: flex-end; }
+.autwa-message.from-them { margin-right: auto; align-items: flex-start; }
+
+.autwa-message-content {
+    background: #fff;
+    border-radius: 7px;
+    padding: 8px 12px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    max-width: 100%;
+}
+
+.autwa-message.from-me .autwa-message-content { background: #dcf8c6; }
+
+.autwa-message-text { 
+    margin: 0; 
+    line-height: 1.4;
+    font-size: 14px;
+    color: #2d3748;
+    word-break: break-word;
+}
+
+.autwa-message-text a { color: #0066cc; text-decoration: none; }
+.autwa-message-text a:hover { text-decoration: underline; }
+
+.autwa-message-meta {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 4px;
+}
+.autwa-message-timestamp { font-size: 11px; color: #667781; margin-left: 8px; }
+.autwa-message-status { font-size: 12px; color: #4fc3f7; }
+.autwa-message-status.sending { color: #999; }
+
+.autwa-message-media {
+    margin: 0;
+    border-radius: 7px;
+    overflow: hidden;
+    max-width: 250px;
+    background-color: #f0f0f0;
+}
+
+.autwa-message-image, .autwa-message-video { 
+    display: flex; 
+    max-width: 100%; 
+    height: auto; 
+    border-radius: 3px; 
+}
+.autwa-message-image { 
+    cursor: pointer; 
+    transition: opacity 0.2s;
+}
+.autwa-message-image:hover {
+    opacity: 0.9;
+}
+.autwa-message-sticker { max-width: 150px; height: auto; border-radius: 7px; }
+
+.autwa-message-caption {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #2d3748;
+    line-height: 1.4;
+}
+
+.autwa-message-document { 
+    display: flex; 
+    align-items: center; 
+    background: rgba(255,255,255,0.8); 
+    padding: 12px; 
+    border-radius: 7px; 
+    border: 1px solid #e0e0e0;
+    max-width: 300px;
+    min-width: 200px;
+}
+
+.autwa-doc-icon { font-size: 24px; margin-right: 12px; }
+.autwa-doc-info { flex: 1; min-width: 0; }
+.autwa-doc-name {
+    font-weight: 500;
+    color: #2d3748;
+    margin-bottom: 4px;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.autwa-doc-actions { margin-top: 8px; }
+.autwa-doc-actions a {
+    font-size: 13px;
+    color: #0066cc;
+    text-decoration: none;
+    font-weight: 500;
+    margin-right: 15px;
+}
+.autwa-doc-actions a:hover { text-decoration: underline; }
+.autwa-doc-unavailable { font-size: 13px; color: #999; font-style: italic; }
+
+.autwa-message-audio {
+    display: flex;
+    align-items: center;
+    min-width: 200px;
+}
+.autwa-audio-icon { font-size: 20px; flex-shrink: 0; margin-right: 10px; }
+.autwa-message-audio audio { flex: 1; max-width: 250px; }
+
+
+/* --- Message Input Area --- */
+.autwa-message-input-area { 
+    padding: 16px 20px; 
+    border-top: 1px solid #e9ecef; 
+    display: flex; 
+    background: #f8f9fa;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+.autwa-input-wrapper {
+    flex-grow: 1;
+}
+
+.autwa-input-wrapper textarea { 
+    width: 100%;
+    resize: none; 
+    min-height: 40px;
+    max-height: 120px;
+    padding: 10px 15px; 
+    border: 1px solid #d0d7de;
+    border-radius: 20px;
+    line-height: 1.4;
+}
+
+.autwa-send-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+#attach-file-btn { 
+    background: transparent; 
+    border: none; 
+    border-radius: 50%; 
+    width: 40px; 
+    height: 30px; /* Reduced height to fit better */
+    padding: 0; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    cursor: pointer; 
+}
+#attach-file-btn:hover { 
+    background: #e9ecef; 
+}
+#attach-file-btn .dashicons { 
+    font-size: 24px; 
+    color: #656d76; 
+}
+
+#send-message-btn.button {
+    border-radius: 20px;
+    padding: 10px 20px;
+    height: 40px;
+    min-width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- Styles for Settings Tabs --- */
+.nav-tab-wrapper {
+    margin-bottom: 20px;
+}
+
+.tab-content {
+    display: none;
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-top: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* --- Styles for CONTACTS page --- */
+
+
+.autwa-full-header { display: flex; align-items: center; margin-bottom: 20px; gap: 10px; }
+#contact-search { flex-grow: 1; max-width: 400px; }
+
+/* Using Flexbox for better compatibility instead of Grid */
+.autwa-grid-list { 
+    display: flex; 
+    flex-wrap: wrap;
+    margin: -7.5px; /* Used to offset card margins */
+}
+.autwa-contact-card { 
+    background: #fff; 
+    border: 1px solid #ddd; 
+    border-radius: 8px; 
+    padding: 15px; 
+    display: flex; 
+    align-items: center;
+    gap: 12px;
+    transition: box-shadow 0.2s ease-in-out;
+    margin: 7.5px; /* Replaces 'gap' for better support */
+    flex: 1 1 300px; /* Controls card size to be responsive */
+}
+.autwa-contact-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+.autwa-contact-card .autwa-item-content h4 { font-size: 15px; margin: 0 0 4px 0; display: flex; align-items: center; gap: 8px; }
+.autwa-contact-card .autwa-item-content p { font-size: 13px; color: #555; margin: 0; word-break: break-all; }
+
+.autwa-contact-card { cursor: pointer; }
+.autwa-contact-card:hover { transform: translateY(-2px); }
+.autwa-contact-status { 
+    font-size: 12px; 
+    color: #888; 
+    margin-top: 2px; 
+    font-style: italic; 
+}
+
+/* New badges for contacts */
+.autwa-business-badge {
+    background-color: #e2f5ea;
+    color: #1e874f;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+}
+.autwa-enterprise-badge {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.autwa-total-count { margin-top: 20px; color: #666; font-style: italic; }
+
+/* --- Tabs --- */
+.nav-tab-wrapper { margin-bottom: 20px; border-bottom: 1px solid #ccc; }
+.nav-tab { background: #f1f1f1; border: 1px solid #ccc; border-bottom: none; padding: 8px 15px; text-decoration: none; color: #555; display: inline-block; margin: 0 5px -1px 0; border-radius: 4px 4px 0 0; }
+.nav-tab:hover { background: #f9f9f9; color: #000; }
+.nav-tab.nav-tab-active { background: #fff; border-bottom-color: #fff; font-weight: 600; color: #000; }
+.tab-content { display: none; animation: fadeInTab 0.4s; }
+.tab-content.active { display: block; }
+@keyframes fadeInTab { from { opacity: 0; } to { opacity: 1; } }
+
+/* --- Pagination --- */
+.autwa-pagination-container { margin: 20px 0; text-align: center; }
+.autwa-pagination .page-numbers { display: inline-block; padding: 8px 12px; margin: 0 2px; border: 1px solid #ccc; background: #f7f7f7; color: #0073aa; text-decoration: none; border-radius: 4px; }
+.autwa-pagination .page-numbers:hover { background-color: #0073aa; color: #fff; border-color: #0073aa; }
+.autwa-pagination .page-numbers.current { background-color: #0073aa; color: #fff; border-color: #0073aa; cursor: default; }
+.autwa-pagination .page-numbers.disabled { color: #a0a5aa; background-color: #e2e4e7; border-color: #d6d9dc; cursor: not-allowed; }
+
+/* --- File Handling --- */
+#file-preview-area { padding: 10px 20px; background: #f6f8fa; border-top: 1px solid #e9ecef; }
+.file-preview-content { display: flex; align-items: center; justify-content: space-between; background: #fff; padding: 8px 12px; border-radius: 8px; border: 1px solid #d0d7de; margin-bottom: 10px; }
+.file-preview-name { font-size: 14px; color: #24292f; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+.remove-file-btn { background: transparent; border: none; font-size: 20px; color: #cf222e; cursor: pointer; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
+#file-caption { width: 100%; padding: 8px 12px; border: 1px solid #d0d7de; border-radius: 6px; }
+
+/* --- Modal for viewing --- */
+.autwa-modal-overlay { 
+    display: none; /* Controlado por JavaScript */
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0; 
+    background: rgba(0, 0, 0, 0.85); 
+    z-index: 10000; 
+    align-items: center; 
+    justify-content: center; 
+    padding: 20px; 
+}
+
+/* Cuando el modal est¨¢ visible */
+.autwa-modal-overlay:not([style*="display: none"]) {
+    display: flex !important;
+}
+
+.autwa-modal-content { 
+    background: #fff; 
+    padding: 15px; 
+    border-radius: 8px; 
+    width: 90%; 
+    height: 90%; 
+    max-width: 1200px; 
+    position: relative; 
+    display: flex; 
+    flex-direction: column;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.4);
+}
+
+.autwa-modal-close { 
+    position: absolute; 
+    top: -15px; 
+    right: -15px; 
+    background: #333; 
+    color: #fff; 
+    border-radius: 50%; 
+    width: 32px; 
+    height: 32px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: 22px; 
+    cursor: pointer; 
+    line-height: 1; 
+    border: 2px solid #fff;
+    z-index: 10;
+}
+
+#autwa-doc-iframe { 
+    width: 100%; 
+    border: 1px solid #ddd; 
+    flex-grow: 1; 
+}
+
+/* Image Modal Specific Styles */
+.autwa-image-modal-content {
+    padding: 40px 20px 20px;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    width: auto;
+    height: auto;
+    max-width: 90vw;
+    max-height: 90vh;
+}
+
+#autwa-modal-image {
+    max-width: 100%;
+    max-height: calc(100% - 60px); /* Leave space for download button */
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+}
+
+.autwa-modal-download-link {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #25D366;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s;
+    font-weight: 500;
+}
+
+.autwa-modal-download-link:hover {
+    background: #128C7E;
+    color: #fff;
+}
+
+
+/* Responsive */
+@media (max-width: 768px) {
+    .autwa-wrap .autwa-container { flex-direction: column; height: auto; }
+    .autwa-sidebar { width: 100%; height: 300px; margin-right: 0; margin-bottom: 20px; }
+    .autwa-message { max-width: 85%; }
+    .autwa-contact-card { flex: 1 0 calc(50% - 15px); }
+}
+@media (max-width: 480px) {
+    .autwa-contact-card { flex: 1 0 100%; margin: 7.5px 0; }
+}
+
+/* ---SCHEDULER page --- */
+#autwa-scheduler-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+.autwa-scheduler-lists-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+.autwa-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+.autwa-card h2 {
+    margin-top: 0;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.form-group {
+    margin-bottom: 20px;
+}
+.form-group > label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+.form-group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.form-group-inline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.form-group-inline > label {
+    flex-shrink: 0;
+    margin-right: 15px;
+    margin-bottom: 0;
+}
+.form-group-inline .form-group-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+#message-text {
+    width: 100%;
+    display: block;
+}
+
+/* Styles for the new recipient selector */
+.recipient-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.recipient-available-row {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+.recipient-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.recipient-box.full-width {
+    width: calc(100% - 48px);
+}
+.recipient-box label {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 5px;
+}
+.recipient-box select {
+    height: 150px;
+    width: 100%;
+    border: 1px solid #ddd;
+    padding: 5px;
+}
+.recipient-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 5px 0;
+}
+.autwa-recipient-search {
+    width: 100%;
+    padding: 6px;
+    margin-bottom: 5px;
+    border: 1px solid #ddd;
+}
+
+#attachment-preview {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f0f0f0;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+}
+.autwa-remove-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #a00;
+    font-weight: bold;
+}
+
+.autwa-scheduled-list {
+    max-height: 450px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+.autwa-schedule-card {
+    background: #f9f9f9;
+    border: 1px solid #e5e5e5;
+    border-left: 4px solid #0073aa;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.autwa-schedule-card p {
+    margin: 0 0 8px;
+    font-size: 13px;
+    color: #333;
+}
+.autwa-schedule-card p:last-child { margin-bottom: 0; }
+.autwa-card-actions {
+    text-align: right;
+    flex-shrink: 0;
+    padding-left: 15px;
+}
+
+.autwa-status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 8px;
+}
+.autwa-status-badge.status-sent { background-color: #28a745; }
+.autwa-status-badge.status-failed { background-color: #dc3545; }
+
+/* Responsive */
+@media (max-width: 960px) {
+    .autwa-scheduler-lists-wrapper {
+        grid-template-columns: 60%;
+    }
+    .recipient-available-row {
+        flex-direction: column;
+    }
+}
+
+/* --- Styles for Settings Page (moved from autowhats-admin-pages.php) --- */
+.autwa-session-control {
+    margin-top: 30px;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+}
+.session-buttons {
+    margin: 15px 0;
+}
+.session-buttons button {
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+#qr-container {
+    margin-top: 20px;
+    animation: fadeIn .3s ease-in;
+}
+.qr-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,.1);
+}
+.qr-section h3 {
+    margin: 0 0 20px;
+    font-size: 24px;
+    font-weight: 600;
+}
+.qr-instructions {
+    background: rgba(255,255,255,.1);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+}
+.qr-instructions ol {
+    text-align: left;
+    display: inline-block;
+    margin: 10px 0 0;
+}
+.qr-instructions li {
+    margin: 5px 0;
+    font-size: 14px;
+}
+.qr-code-wrapper {
+    position: relative;
+    display: inline-block;
+    margin: 20px 0;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.1);
+}
+#qr-image {
+    max-width: 280px;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+}
+.qr-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    color: #333;
+}
+.qr-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px;
+}
+.qr-actions {
+    margin: 20px 0 10px;
+}
+.qr-actions button {
+    margin: 0 10px;
+    background: rgba(255,255,255,.2);
+    border: 1px solid rgba(255,255,255,.3);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+.qr-actions button:hover {
+    background: rgba(255,255,255,.3);
+    transform: translateY(-2px);
+}
+.qr-status {
+    font-size: 14px;
+    margin-top: 10px;
+}
+#qr-countdown {
+    font-weight: 700;
+    font-size: 16px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: rgba(255,255,255,.1);
+    display: inline-block;
+    min-width: 200px;
+    text-align: center;
+    transition: all .3s ease;
+}
+@keyframes fadeIn {
+    from { opacity:0; transform: translateY(20px); }
+    to { opacity:1; transform: translateY(0); }
+}
+@keyframes spin {
+    0% { transform: rotate(0); }
+    100% { transform: rotate(360deg); }
+}
+.notice.success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+.notice.error {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+.notice.info {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    color: #0c5460;
+}
+.autwa-tools-container {
+    max-width: 800px;
+}
+.autwa-cleanup-section,
+.autwa-advanced-section,
+.autwa-card {
+    background: #fff;
+    padding: 20px;
+    margin: 0 0 20px 0;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+}
+.autwa-tool-group {
+    margin: 20px 0;
+    padding: 15px;
+    border-left: 4px solid #0073aa;
+    background: #f9f9f9;
+}
+.autwa-tool-group h3 {
+    margin-top: 0;
+    color: #23282d;
+}
+.autwa-warning-box {
+    padding: 15px;
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 4px;
+    color: #856404;
+    margin-bottom: 20px;
+}
+.button-delete {
+    background: #dc3545;
+    border-color: #dc3545;
+    color: #fff;
+}
+.button-delete:hover {
+    background: #c82333;
+    border-color: #bd2130;
+    color: #fff;
+}
+#tools-messages .notice {
+    margin: 15px 0;
+}
+.autwa-cron-highlight {
+    background-color: #e3f2fd !important;
+}
+
+/* --- Styles for SCHEDULER page --- */
+#autwa-scheduler-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+.autwa-scheduler-lists-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+.autwa-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+.autwa-card h2 {
+    margin-top: 0;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.form-group {
+    margin-bottom: 20px;
+}
+.form-group > label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+.form-group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.form-group-inline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.form-group-inline > label {
+    flex-shrink: 0;
+    margin-right: 15px;
+    margin-bottom: 0;
+}
+.form-group-inline .form-group-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+#message-text {
+    width: 100%;
+    display: block;
+}
+
+.recipient-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.recipient-available-row {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+.recipient-available-row.three-columns .recipient-box {
+    flex: 1 1 33%;
+}
+.recipient-available-row.two-columns .recipient-box {
+    flex: 1 1 50%;
+}
+.recipient-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.recipient-box label {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 5px;
+}
+.recipient-box select {
+    height: 150px;
+    width: 100%;
+    border: 1px solid #ddd;
+    padding: 5px;
+}
+.recipient-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 5px 0;
+}
+.autwa-recipient-search {
+    width: 100%;
+    padding: 6px;
+    margin-bottom: 5px;
+    border: 1px solid #ddd;
+}
+.recipient-box select option {
+    color: #000;
+    background: #fff;
+}
+
+#attachment-preview {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f0f0f0;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+}
+.autwa-remove-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #a00;
+    font-weight: bold;
+}
+
+.autwa-scheduled-list {
+    max-height: 450px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+.autwa-schedule-card {
+    background: #f9f9f9;
+    border: 1px solid #e5e5e5;
+    border-left: 4px solid #0073aa;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.autwa-schedule-card p {
+    margin: 0 0 8px;
+    font-size: 13px;
+    color: #333;
+}
+.autwa-schedule-card p:last-child { margin-bottom: 0; }
+.autwa-card-actions {
+    text-align: right;
+    flex-shrink: 0;
+    padding-left: 15px;
+}
+
+.autwa-status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 8px;
+}
+.autwa-status-badge.status-sent { background-color: #28a745; }
+.autwa-status-badge.status-failed { background-color: #dc3545; }
+
+/* --- Styles for Broadcast List Management Tab --- */
+.autwa-broadcast-top-bar {
+    display: flex;
+    gap: 20px;
+    align-items: flex-end;
+    margin-bottom: 20px;
+}
+.autwa-broadcast-list-new {
+    display: flex;
+    gap: 8px;
+    flex-grow: 1;
+    max-width: 400px;
+}
+.autwa-broadcast-list-new input {
+    flex-grow: 1;
+}
+.autwa-broadcast-list-selector {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    max-width: 400px;
+}
+.autwa-broadcast-list-selector label {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+#broadcast-editor-panel h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+#delete-list-btn {
+    float: right;
+    color: #d63638;
+}
+#delete-list-btn:hover {
+    color: #a02123;
+}
+
+/* --- Styles for Card Headers with Buttons --- */
+.autwa-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 15px; /* Add margin to separate from content */
+}
+
+.autwa-card-header h2 {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+/* --- Styles for Modals --- */
+.autwa-modal-overlay { 
+    display: none;
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0; 
+    background: rgba(0, 0, 0, 0.85); 
+    z-index: 99999;
+    align-items: center; 
+    justify-content: center; 
+    padding: 20px;
+}
+
+/* Cuando visible via jQuery */
+.autwa-modal-overlay:not([style*="display: none"]):not([style*="display:none"]) {
+    display: flex !important;
+}
+
+/* Contenedor base del modal */
+.autwa-modal-content { 
+    background: #fff; 
+    padding: 15px; 
+    border-radius: 8px; 
+    width: 90%; 
+    height: 90%; 
+    max-width: 1200px; 
+    position: relative; 
+    display: flex; 
+    flex-direction: column;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.4);
+}
+
+/* Modal específico para documentos */
+.autwa-doc-modal-content {
+    height: 85vh;
+    max-height: 900px;
+    padding: 0;
+}
+
+/* Header del visor de documentos */
+.autwa-doc-visualize {
+    cursor: pointer;
+    color: #0066cc;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.autwa-doc-visualize:hover {
+    text-decoration: underline;
+    color: #0052a3;
+}
+.autwa-doc-viewer-header {
+    padding: 10px 15px;
+    border-bottom: 1px solid #ddd;
+    background: #f8f9fa;
+    flex-shrink: 0;
+}
+
+.autwa-doc-viewer-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+/* Contenedor del documento */
+.autwa-doc-viewer-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+}
+
+/* Contenido del documento */
+#autwa-doc-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+/* Contenedor del PDF */
+.autwa-pdf-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.autwa-pdf-object {
+    flex: 1;
+    width: 100%;
+    min-height: 400px;
+}
+
+.autwa-pdf-embed {
+    width: 100%;
+    height: 100%;
+    min-height: 400px;
+}
+
+.autwa-pdf-fallback {
+    padding: 40px;
+    text-align: center;
+}
+
+/* Toolbar del PDF */
+.autwa-pdf-toolbar {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    background: #f5f5f5;
+    flex-shrink: 0;
+}
+
+.autwa-pdf-toolbar .dashicons {
+    vertical-align: middle;
+    margin-right: 3px;
+}
+
+/* Loading state */
+.autwa-doc-viewer-loading {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+/* Fallback para archivos no visualizables */
+.autwa-doc-viewer-fallback {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    text-align: center;
+}
+
+/* iFrame para documentos */
+#autwa-doc-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    flex: 1;
+}
+
+/* Botón de cerrar */
+.autwa-modal-close { 
+    position: absolute; 
+    top: -15px; 
+    right: -15px; 
+    background: #333; 
+    color: #fff; 
+    border-radius: 50%; 
+    width: 32px; 
+    height: 32px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: 22px; 
+    cursor: pointer; 
+    line-height: 1; 
+    border: 2px solid #fff;
+    z-index: 10;
+}
+
+.autwa-modal-close:hover {
+    background: #555;
+    transform: scale(1.1);
+}
+
+/* Modal de imagen específico */
+.autwa-image-modal-content {
+    padding: 40px 20px 20px;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    width: auto;
+    height: auto;
+    max-width: 90vw;
+    max-height: 90vh;
+}
+
+#autwa-modal-image {
+    max-width: 100%;
+    max-height: calc(100% - 60px);
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+}
+
+.autwa-modal-download-link {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #25D366;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s;
+    font-weight: 500;
+}
+
+.autwa-modal-download-link:hover {
+    background: #128C7E;
+    color: #fff;
+}
+
+#attachment-preview-area {
+    animation: slideDown 0.2s ease-out;
+    border-left: 4px solid #0073aa;
+}
+
+#attachment-preview-area button#remove-attachment-btn:hover {
+    color: #a00;
+    transform: scale(1.1);
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* CSS básico (agrega a tu archivo CSS o en <style> inline) */
+.message-toolbar {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.format-btn {
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 6px 10px;
+    margin-right: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.format-btn:hover {
+    background: #e0e0e0;
+}
+
+.emoji-btn {
+    font-size: 18px;
+}
+
+/* Estilos para el picker avanzado de emojis */
+.emoji-picker {
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    max-width: 320px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.emoji-picker input[type="search"] {
+    width: 100%;
+    padding: 6px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.emoji-picker .category {
+    margin-bottom: 10px;
+}
+
+.emoji-picker .category h4 {
+    font-size: 14px;
+    margin: 0 0 5px;
+    color: #666;
+}
+
+.emoji-picker .emojis {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 6px;
+}
+
+.emoji-picker .emoji {
+    cursor: pointer;
+    font-size: 20px;
+    text-align: center;
+}
+
+.emoji-picker .emoji:hover {
+    background: #f0f0f0;
+    border-radius: 4px;
+}
+

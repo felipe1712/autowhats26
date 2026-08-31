@@ -1,0 +1,1214 @@
+# Spanish translation for AutoWA WhatsApp Integration
+# Copyright (C) 2024 AutoWA
+msgid ""
+msgstr ""
+"Project-Id-Version: AutoWA WhatsApp Integration 1.5.1\n"
+"Report-Msgid-Bugs-To: https://autowhats.com.mx\n"
+"POT-Creation-Date: 2024-12-18 12:00:00+00:00\n"
+"PO-Revision-Date: 2025-08-20 20:10:00+00:00\n"
+"Last-Translator: Gemini Assistant\n"
+"Language-Team: Spanish\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Domain: autowa-whatsapp\n"
+"X-Generator: Manual\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: autowhats-admin-pages.php:347 autowhats-admin-pages.php:404
+#: autowhats-scheduler.js:235
+msgid "Available Contacts"
+msgstr "Contactos Disponibles"
+
+#: autowhats-admin-pages.php:352 autowhats-admin-pages.php:409
+#: autowhats-scheduler.js:241
+msgid "Available Groups"
+msgstr "Grupos Disponibles"
+
+#: autowhats-admin-pages.php:358 autowhats-scheduler.js:154
+msgid "Add selected"
+msgstr "Añadir seleccionados"
+
+#: autowhats-admin-pages.php:359 autowhats-scheduler.js:161
+msgid "Remove selected"
+msgstr "Quitar seleccionados"
+
+#: autowhats-admin-pages.php:362 autowhats-scheduler.js:167
+msgid "Selected for sending"
+msgstr "Seleccionados para envío"
+
+#: autowhats-admin-pages.php:373
+msgid "Attach File (Optional)"
+msgstr "Adjuntar Archivo (Opcional)"
+
+#: autowhats-admin-pages.php:385
+msgid "Choose Date and Time"
+msgstr "Elegir Fecha y Hora"
+
+#: autowhats-admin-pages.php:387
+msgid "Schedule Message"
+msgstr "Programar Mensaje"
+
+#: autowhats-admin-pages.php:394
+msgid "Pending Sends"
+msgstr "Envíos Pendientes"
+
+#: autowhats-admin-pages.php:398
+msgid "Sending History"
+msgstr "Historial de Envíos"
+
+#: autowhats-admin-pages.php:418
+msgid "Recipients in this List"
+msgstr "Destinatarios en esta Lista"
+
+#: autowhats-admin-pages.php:422
+msgid "Save Changes"
+msgstr "Guardar Cambios"
+
+#: autowhats-admin-pages.php:423
+msgid "Delete List"
+msgstr "Eliminar Lista"
+
+#: autowhats-admin-pages.php:465
+msgid "Groups"
+msgstr "Grupos"
+
+#: autowhats-admin-pages.php:25
+msgid "AutoWA - General Settings"
+msgstr "AutoWA - Configuración General"
+
+#: autowhats-admin-pages.php:29
+msgid "Settings saved successfully."
+msgstr "Configuración guardada correctamente."
+
+#: autowhats-admin-pages.php:32
+msgid "New security key generated. Remember to update the URL in your cron service."
+msgstr "Nueva clave de seguridad generada. Recuerda actualizar la URL en tu servicio de cron."
+
+#: autowhats-admin-pages.php:37
+msgid "Session"
+msgstr "Sesión"
+
+#: autowhats-admin-pages.php:38
+msgid "Automation"
+msgstr "Automatización"
+
+#: autowhats-admin-pages.php:39
+msgid "Tools"
+msgstr "Herramientas"
+
+#: autowhats-admin-pages.php:79
+msgid "API URL"
+msgstr "URL de la API"
+
+#: autowhats-admin-pages.php:79
+msgid "Base URL of your AutoWA API."
+msgstr "URL base de tu API de AutoWA."
+
+#: autowhats-admin-pages.php:80
+msgid "API Key"
+msgstr "API Key"
+
+#: autowhats-admin-pages.php:80
+msgid "API Key if required (X-Api-Key Header)."
+msgstr "Clave de API si es requerida (Encabezado X-Api-Key)."
+
+#: autowhats-admin-pages.php:81
+msgid "Webhook URL"
+msgstr "URL del Webhook"
+
+#: autowhats-admin-pages.php:81
+msgid "URL to receive webhooks."
+msgstr "URL para recibir webhooks."
+
+#: autowhats-admin-pages.php:82
+msgid "Session Name"
+msgstr "Nombre de Sesión"
+
+#: autowhats-admin-pages.php:82
+msgid "Unique name for your session."
+msgstr "Nombre único para tu sesión."
+
+#: autowhats-admin-pages.php:84
+msgid "Save Settings"
+msgstr "Guardar Configuración"
+
+#: autowhats-admin-pages.php:87
+msgid "Session Control"
+msgstr "Control de Sesión"
+
+#: autowhats-admin-pages.php:89
+msgid "Current status:"
+msgstr "Estado actual:"
+
+#: autowhats-admin-pages.php:89 autowhats-config-page.js:23
+msgid "Initializing..."
+msgstr "Inicializando..."
+
+#: autowhats-admin-pages.php:90
+msgid "Session name:"
+msgstr "Nombre de sesión:"
+
+#: autowhats-admin-pages.php:93
+msgid "Test Connection"
+msgstr "Probar Conexión"
+
+#: autowhats-admin-pages.php:94
+msgid "Verify Configuration"
+msgstr "Verificar Configuración"
+
+#: autowhats-admin-pages.php:95
+msgid "Create & Start Session"
+msgstr "Crear e Iniciar Sesión"
+
+#: autowhats-admin-pages.php:96
+msgid "Restart Session"
+msgstr "Reiniciar Sesión"
+
+#: autowhats-admin-pages.php:97
+msgid "Get QR"
+msgstr "Obtener QR"
+
+#: autowhats-admin-pages.php:98
+msgid "Check Status"
+msgstr "Verificar Estado"
+
+#: autowhats-admin-pages.php:102
+msgid "Connect WhatsApp"
+msgstr "Conectar WhatsApp"
+
+#: autowhats-admin-pages.php:103
+msgid "Steps to connect:"
+msgstr "Pasos para conectar:"
+
+#: autowhats-admin-pages.php:104
+msgid "Open WhatsApp on your phone"
+msgstr "Abre WhatsApp en tu teléfono"
+
+#: autowhats-admin-pages.php:105
+msgid "Go to Settings ⚙️ → Linked devices"
+msgstr "Ve a Configuraciones ⚙️ → Dispositivos vinculados"
+
+#: autowhats-admin-pages.php:106
+msgid "Tap \"Link a device\""
+msgstr "Toca \"Vincular un dispositivo\""
+
+#: autowhats-admin-pages.php:107
+msgid "Scan the QR code"
+msgstr "Escanea el código QR"
+
+#: autowhats-admin-pages.php:108
+msgid "QR Code"
+msgstr "Código QR"
+
+#: autowhats-admin-pages.php:109 autowhats-config-page.js:24
+msgid "Generating QR..."
+msgstr "Generando QR..."
+
+#: autowhats-admin-pages.php:111
+msgid "Refresh QR"
+msgstr "Actualizar QR"
+
+#: autowhats-admin-pages.php:111 autowhats-scheduler.js:338
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: autowhats-admin-pages.php:113
+msgid "The QR code expires automatically."
+msgstr "El código QR expira automáticamente."
+
+#: autowhats-admin-pages.php:121
+msgid "Scheduled Sending (Cron Job)"
+msgstr "Envío Programado (Cron Job)"
+
+#: autowhats-admin-pages.php:122
+msgid "To ensure scheduled messages are sent on time, you must use an external cron service to trigger this plugin's sending system."
+msgstr "Para asegurar que los mensajes programados se envíen puntualmente, debes usar un servicio de cron externo que active el sistema de envío de este plugin."
+
+#: autowhats-admin-pages.php:125
+msgid "Cron Status"
+msgstr "Estado del Cron"
+
+#: autowhats-admin-pages.php:131
+msgid "Error:"
+msgstr "Error:"
+
+#: autowhats-admin-pages.php:131
+msgid "Your server's time seems to be out of sync. The last recorded execution is in the future. Please contact your hosting provider."
+msgstr "La hora de tu servidor parece estar desincronizada. La última ejecución registrada es en el futuro. Por favor, contacta a tu proveedor de hosting."
+
+#: autowhats-admin-pages.php:139
+msgid "ago"
+msgstr "hace"
+
+#: autowhats-admin-pages.php:141
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d día"
+msgstr[1] "%d días"
+
+#: autowhats-admin-pages.php:143
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d hora"
+msgstr[1] "%d horas"
+
+#: autowhats-admin-pages.php:145
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d minuto"
+msgstr[1] "%d minutos"
+
+#: autowhats-admin-pages.php:147
+msgid "%d second"
+msgid_plural "%d seconds"
+msgstr[0] "%d segundo"
+msgstr[1] "%d segundos"
+
+#: autowhats-admin-pages.php:151
+msgid "Alert:"
+msgstr "Alerta:"
+
+#: autowhats-admin-pages.php:151
+msgid "The last execution was %s. This is too long. Please verify that your external cron job is configured to run every 1-2 minutes."
+msgstr "La última ejecución fue hace %s. Esto es demasiado tiempo. Por favor, verifica que tu cron job externo esté configurado para ejecutarse cada 1-2 minutos."
+
+#: autowhats-admin-pages.php:153
+msgid "Last successful execution: %s."
+msgstr "Última ejecución exitosa: hace %s."
+
+#: autowhats-admin-pages.php:158
+msgid "The external cron has not run yet. Follow the instructions below to set it up."
+msgstr "El cron externo aún no se ha ejecutado. Sigue las instrucciones a continuación para configurarlo."
+
+#: autowhats-admin-pages.php:163
+msgid "Cron Job Setup"
+msgstr "Configuración del Cron Job"
+
+#: autowhats-admin-pages.php:164
+msgid "Follow these steps to set up your cron job:"
+msgstr "Sigue estos pasos para configurar tu cron job:"
+
+#: autowhats-admin-pages.php:166
+msgid "Copy the URL below. This URL is unique and secure for your website."
+msgstr "Copia la URL a continuación. Esta URL es única y segura para tu sitio web."
+
+#: autowhats-admin-pages.php:167
+msgid "Go to your cron job provider (e.g., %s) and create a new task."
+msgstr "Ve a tu proveedor de cron jobs (ej., %s) y crea una nueva tarea."
+
+#: autowhats-admin-pages.php:168
+msgid "In the \"URL\" or \"Address\" field, paste the URL you copied."
+msgstr "En el campo \"URL\" o \"Dirección\", pega la URL que copiaste."
+
+#: autowhats-admin-pages.php:169
+msgid "Set the execution schedule to be every 1 minute. This ensures maximum punctuality for sends."
+msgstr "Establece el horario de ejecución para que sea cada 1 minuto. Esto asegura la máxima puntualidad para los envíos."
+
+#: autowhats-admin-pages.php:170
+msgid "Save the cron job. That's it!"
+msgstr "Guarda el cron job. ¡Eso es todo!"
+
+#: autowhats-admin-pages.php:173
+msgid "Your Cron Job URL:"
+msgstr "Tu URL de Cron Job:"
+
+#: autowhats-admin-pages.php:175
+msgid "Copy"
+msgstr "Copiar"
+
+#: autowhats-admin-pages.php:177
+msgid "Copied!"
+msgstr "¡Copiado!"
+
+#: autowhats-admin-pages.php:181
+msgid "Security"
+msgstr "Seguridad"
+
+#: autowhats-admin-pages.php:182
+msgid "If you believe your cron URL has been compromised, you can generate a new security key. Remember that doing so will require you to update the URL in your cron service."
+msgstr "Si crees que tu URL de cron ha sido comprometida, puedes generar una nueva clave de seguridad. Recuerda que al hacerlo deberás actualizar la URL en tu servicio de cron."
+
+#: autowhats-admin-pages.php:183
+msgid "Generate New Security Key"
+msgstr "Generar Nueva Clave de Seguridad"
+
+#: autowhats-admin-pages.php:187
+msgid "Scheduler Debug (Cron Job)"
+msgstr "Depuración del Programador (Cron Job)"
+
+#: autowhats-admin-pages.php:188
+msgid "This section helps you diagnose the status of the WordPress scheduled task system."
+msgstr "Esta sección te ayuda a diagnosticar el estado del sistema de tareas programadas de WordPress."
+
+#: autowhats-admin-pages.php:192
+msgid "Attention:"
+msgstr "Atención:"
+
+#: autowhats-admin-pages.php:192
+msgid "You have the default WP-Cron system disabled in your `wp-config.php` file. This is normal if you have set up a real cron job on your server. Make sure your server cron is configured to run frequently (every 1-5 minutes is ideal)."
+msgstr "Tienes el sistema WP-Cron por defecto desactivado en tu archivo `wp-config.php`. Esto es normal si has configurado un cron job real en tu servidor. Asegúrate de que el cron de tu servidor esté configurado para ejecutarse con frecuencia (cada 1-5 minutos es ideal)."
+
+#: autowhats-admin-pages.php:197
+msgid "Time Check"
+msgstr "Verificación de Hora"
+
+#: autowhats-admin-pages.php:199
+msgid "Server Time (UTC)"
+msgstr "Hora del Servidor (UTC)"
+
+#: autowhats-admin-pages.php:200
+msgid "WordPress Timezone"
+msgstr "Zona Horaria de WordPress"
+
+#: autowhats-admin-pages.php:201
+msgid "WordPress Time (Server Local)"
+msgstr "Hora de WordPress (Local del Servidor)"
+
+#: autowhats-admin-pages.php:202
+msgid "WordPress Time (UTC)"
+msgstr "Hora de WordPress (UTC)"
+
+#: autowhats-admin-pages.php:207
+msgid "AutoWA Scheduled Tasks"
+msgstr "Tareas Programadas de AutoWA"
+
+#: autowhats-admin-pages.php:209
+msgid "Task Name (Hook)"
+msgstr "Nombre de la Tarea (Hook)"
+
+#: autowhats-admin-pages.php:209
+msgid "Next Run (Browser Time)"
+msgstr "Próxima Ejecución (Hora del Navegador)"
+
+#: autowhats-admin-pages.php:209
+msgid "Interval"
+msgstr "Intervalo"
+
+#: autowhats-admin-pages.php:217
+msgid "Unknown"
+msgstr "Desconocido"
+
+#: autowhats-admin-pages.php:218 autowhats-admin-pages.php:273
+#: autowhats-scheduler.js:283 autowhats-scheduler.js:284
+msgid "Loading..."
+msgstr "Cargando..."
+
+#: autowhats-admin-pages.php:220
+msgid "Error: The message sending task is not scheduled."
+msgstr "Error: La tarea de envío de mensajes no está programada."
+
+#: autowhats-admin-pages.php:225
+msgid "Run Task Manually"
+msgstr "Ejecutar Tarea Manualmente"
+
+#: autowhats-admin-pages.php:226
+msgid "Force Reschedule Task"
+msgstr "Forzar Re-agendamiento de Tarea"
+
+#: autowhats-admin-pages.php:227
+msgid "Use \"Force Reschedule\" if you see the error that the task is not scheduled. Use \"Run Manually\" to test sending."
+msgstr "Usa \"Forzar Re-agendamiento\" si ves el error de que la tarea no está programada. Usa \"Ejecutar Manualmente\" para probar el envío."
+
+#: autowhats-admin-pages.php:235
+msgid "Time Diagnostics"
+msgstr "Diagnóstico de Hora"
+
+#: autowhats-admin-pages.php:236
+msgid "Use this section to check the different time settings. For scheduled sends to work correctly, the \"WordPress Time\" should match your local time zone."
+msgstr "Usa esta sección para verificar las diferentes configuraciones de hora. Para que los envíos programados funcionen correctamente, la \"Hora de WordPress\" debe coincidir con tu zona horaria local."
+
+#: autowhats-admin-pages.php:239
+msgid "Server Time (UTC/GMT)"
+msgstr "Hora del Servidor (UTC/GMT)"
+
+#: autowhats-admin-pages.php:240
+msgid "Server Timezone (PHP)"
+msgstr "Zona Horaria del Servidor (PHP)"
+
+#: autowhats-admin-pages.php:241
+msgid "WordPress Time (Configured)"
+msgstr "Hora de WordPress (Configurada)"
+
+#: autowhats-admin-pages.php:241
+msgid "This is the time the plugin uses for sending."
+msgstr "Esta es la hora que el plugin utiliza para los envíos."
+
+#: autowhats-admin-pages.php:243
+msgid "Not configured (using UTC offset)"
+msgstr "No configurada (usando desplazamiento UTC)"
+
+#: autowhats-admin-pages.php:243
+msgid "You can change it in %s."
+msgstr "Puedes cambiarla en %s."
+
+#: autowhats-admin-pages.php:243
+msgid "Settings > General"
+msgstr "Ajustes > Generales"
+
+#: autowhats-admin-pages.php:244
+msgid "Your Browser Time (Local)"
+msgstr "Hora de tu Navegador (Local)"
+
+#: autowhats-admin-pages.php:250
+msgid "Cleanup Tools"
+msgstr "Herramientas de Limpieza"
+
+#: autowhats-admin-pages.php:251
+msgid "Clear Logs"
+msgstr "Limpiar Registros"
+
+#: autowhats-admin-pages.php:251
+msgid "Deletes all log records."
+msgstr "Elimina todos los registros de logs."
+
+#: autowhats-admin-pages.php:252
+msgid "Clear Inactive Sessions"
+msgstr "Limpiar Sesiones Inactivas"
+
+#: autowhats-admin-pages.php:252
+msgid "Deletes sessions that are not in WORKING state."
+msgstr "Elimina sesiones que no están en estado WORKING."
+
+#: autowhats-admin-pages.php:253
+msgid "Clear Temporary Files"
+msgstr "Limpiar Archivos Temporales"
+
+#: autowhats-admin-pages.php:253
+msgid "Deletes plugin cache."
+msgstr "Elimina la caché del plugin."
+
+#: autowhats-admin-pages.php:254
+msgid "Clear Data Cache"
+msgstr "Limpiar Caché de Datos"
+
+#: autowhats-admin-pages.php:254
+msgid "Deletes all cached data (chats, contacts, transients)."
+msgstr "Elimina todos los datos en caché (chats, contactos, transients)."
+
+#: autowhats-admin-pages.php:258
+msgid "Advanced Tools"
+msgstr "Herramientas Avanzadas"
+
+#: autowhats-admin-pages.php:259
+msgid "WARNING: The following actions are irreversible."
+msgstr "ADVERTENCIA: Las siguientes acciones son irreversibles."
+
+#: autowhats-admin-pages.php:260
+msgid "Reset Plugin Completely"
+msgstr "Reiniciar Plugin Completamente"
+
+#: autowhats-admin-pages.php:260
+msgid "Deletes all settings, sessions, and logs."
+msgstr "Elimina todas las configuraciones, sesiones y registros."
+
+#: autowhats-admin-pages.php:261
+msgid "Delete All Data"
+msgstr "Eliminar Todos los Datos"
+
+#: autowhats-admin-pages.php:261
+msgid "Completely deletes all plugin data."
+msgstr "Elimina por completo todos los datos del plugin."
+
+#: autowhats-admin-pages.php:278
+msgid "AutoWA - Manage Chats"
+msgstr "AutoWA - Gestionar Chats"
+
+#: autowhats-admin-pages.php:283
+msgid "Recent Chats"
+msgstr "Chats Recientes"
+
+#: autowhats-admin-pages.php:284 autowhats-admin-pages.php:319
+msgid "Refresh (Force)"
+msgstr "Actualizar (Forzar)"
+
+#: autowhats-admin-pages.php:290
+msgid "Select a chat to view messages"
+msgstr "Selecciona un chat para ver los mensajes"
+
+#: autowhats-admin-pages.php:291
+msgid "Chats will load automatically. If you don't see any, make sure your WhatsApp session is connected."
+msgstr "Los chats se cargarán automáticamente. Si no ves ninguno, asegúrate de que tu sesión de WhatsApp esté conectada."
+
+#: autowhats-admin-pages.php:298
+msgid "Write a message..."
+msgstr "Escribe un mensaje..."
+
+#: autowhats-admin-pages.php:301
+msgid "Send"
+msgstr "Enviar"
+
+#: autowhats-admin-pages.php:309
+msgid "AutoWA - Contacts"
+msgstr "AutoWA - Contactos"
+
+#: autowhats-admin-pages.php:318
+msgid "Search by name or number..."
+msgstr "Buscar por nombre o número..."
+
+#: autowhats-admin-pages.php:324
+msgid "contacts found."
+msgstr "contactos encontrados."
+
+#: autowhats-admin-pages.php:328
+msgid "groups found."
+msgstr "grupos encontrados."
+
+#: autowhats-admin-pages.php:337
+msgid "AutoWA - Message Scheduler"
+msgstr "AutoWA - Programador de Mensajes"
+
+#: autowhats-admin-pages.php:340
+msgid "Programming Sends"
+msgstr "Programación de Envíos"
+
+#: autowhats-admin-pages.php:341
+msgid "Manage Broadcast Lists"
+msgstr "Gestionar Listas de Difusión"
+
+#: autowhats-admin-pages.php:348
+msgid "Schedule New Send"
+msgstr "Programar Nuevo Envío"
+
+#: autowhats-admin-pages.php:351
+msgid "Select Recipients"
+msgstr "Seleccionar Destinatarios"
+
+#: autowhats-admin-pages.php:352
+msgid "Load Contacts"
+msgstr "Cargar Contactos"
+
+#: autowhats-admin-pages.php:357 autowhats-admin-pages.php:405
+#: autowhats-admin-pages.php:410
+msgid "Search..."
+msgstr "Buscar..."
+
+#: autowhats-admin-pages.php:367 autowhats-admin-pages.php:402
+msgid "Broadcast Lists"
+msgstr "Listas de Difusión"
+
+#: autowhats-admin-pages.php:376
+msgid "Write your Message"
+msgstr "Escribe tu Mensaje"
+
+#: autowhats-admin-pages.php:377
+msgid "Your message here... (optional if attaching a file)"
+msgstr "Tu mensaje aquí... (opcional si adjuntas un archivo)"
+
+#: autowhats-admin-pages.php:383 autowhats-scheduler.js:201
+msgid "Select File"
+msgstr "Seleccionar Archivo"
+
+#: autowhats-admin-pages.php:397
+msgid "New list name..."
+msgstr "Nombre de nueva lista..."
+
+#: autowhats-admin-pages.php:398
+msgid "Create"
+msgstr "Crear"
+
+#: autowhats-admin-pages.php:408
+msgid "Select a list to manage its recipients or create a new one to get started."
+msgstr "Selecciona una lista para gestionar sus destinatarios o crea una nueva para empezar."
+
+#: autowhats-admin-pages.php:413
+msgid "Add or remove contacts and groups from this broadcast list."
+msgstr "Añade o elimina contactos y grupos de esta lista de difusión."
+
+#: autowhats-cronservice.php:30
+msgid "AutoWA Cron Job executed successfully."
+msgstr "Cron Job de AutoWA ejecutado exitosamente."
+
+#: autowhats-cronservice.php:40
+msgid "You do not have permission to perform this action."
+msgstr "No tienes permiso para realizar esta acción."
+
+#: autowhats-cronservice.php:44
+msgid "New key generated successfully."
+msgstr "Nueva clave generada exitosamente."
+
+#: autowhats.php:127
+msgid "Invalid type"
+msgstr "Tipo inválido"
+
+#: autowhats.php:129
+msgid "Error during cleanup."
+msgstr "Error durante la limpieza."
+
+#: autowhats.php:137
+msgid "Cache cleared successfully."
+msgstr "Caché borrado exitosamente."
+
+#: autowhats.php:143
+msgid "API URL not configured."
+msgstr "URL de la API no configurada."
+
+#: autowhats.php:146
+msgid "Connection error: %s"
+msgstr "Error de conexión: %s"
+
+#: autowhats.php:150
+msgid "✅ Connection successful. Found %d sessions."
+msgstr "✅ Conexión exitosa. Se encontraron %d sesiones."
+
+#: autowhats.php:151
+msgid "❌ Authentication error. Check your API Key."
+msgstr "❌ Error de autenticación. Revisa tu Clave de API."
+
+#: autowhats.php:152
+msgid "❌ API not found. Check the URL: %s"
+msgstr "❌ API no encontrada. Revisa la URL: %s"
+
+#: autowhats.php:153
+msgid "❌ Connection error. HTTP Code: %1$s. Response: %2$s"
+msgstr "❌ Error de conexión. Código HTTP: %1$s. Respuesta: %2$s"
+
+#: autowhats.php:155
+msgid "Database error: %s"
+msgstr "Error de base de datos: %s"
+
+#: autowhats.php:168
+msgid "%d log record deleted."
+msgid_plural "%d log records deleted."
+msgstr[0] "%d registro de log eliminado."
+msgstr[1] "%d registros de log eliminados."
+
+#: autowhats.php:169
+msgid "%d inactive session deleted."
+msgid_plural "%d inactive sessions deleted."
+msgstr[0] "%d sesión inactiva eliminada."
+msgstr[1] "%d sesiones inactivas eliminadas."
+
+#: autowhats.php:170
+msgid "Temporary files deleted."
+msgstr "Archivos temporales eliminados."
+
+#: autowhats.php:171
+msgid "Plugin completely reset."
+msgstr "Plugin reiniciado completamente."
+
+#: autowhats.php:172
+msgid "All plugin data has been deleted."
+msgstr "Todos los datos del plugin han sido eliminados."
+
+#: autowhats.php:181
+msgid "Missing table: %s"
+msgstr "Tabla faltante: %s"
+
+#: autowhats.php:187
+msgid "File directory does not exist: %s"
+msgstr "El directorio de archivos no existe: %s"
+
+#: autowhats.php:190
+msgid "API URL not configured"
+msgstr "URL de la API no configurada"
+
+#: autowhats.php:196
+msgid "Plugin automatically repaired"
+msgstr "Plugin reparado automáticamente"
+
+#: autowhats.php:205
+msgid "Plugin updated from %1$s to %2$s"
+msgstr "Plugin actualizado de %1$s a %2$s"
+
+#: autowhats.php:567 autowhats.php:568
+msgid "AutoWA WhatsApp"
+msgstr "AutoWA WhatsApp"
+
+#: autowhats.php:574
+msgid "Settings"
+msgstr "Configuración"
+
+#: autowhats.php:575
+msgid "Settings"
+msgstr "Configuración"
+
+#: autowhats.php:582
+msgid "Manage Chats"
+msgstr "Gestionar Chats"
+
+#: autowhats.php:589
+msgid "Contacts"
+msgstr "Contactos"
+
+#: autowhats.php:596
+msgid "Scheduler"
+msgstr "Programador"
+
+#: autowhats.php:630
+msgid "Incomplete configuration. URL: %1$s, Session: %2$s"
+msgstr "Configuración incompleta. URL: %1$s, Sesión: %2$s"
+
+#: autowhats.php:650
+msgid "Session \"%s\" created successfully."
+msgstr "Sesión \"%s\" creada exitosamente."
+
+#: autowhats.php:652
+msgid "Session \"%s\" already exists."
+msgstr "La sesión \"%s\" ya existe."
+
+#: autowhats.php:654 autowhats.php:679 autowhats.php:701
+msgid "Unknown error"
+msgstr "Error desconocido"
+
+#: autowhats.php:655
+msgid "API Error (%1$s): %2$s"
+msgstr "Error de API (%1$s): %2$s"
+
+#: autowhats.php:676
+msgid "Session \"%s\" started successfully."
+msgstr "Sesión \"%s\" iniciada exitosamente."
+
+#: autowhats.php:680
+msgid "Error starting session '%1$s' (%2$s): %3$s"
+msgstr "Error al iniciar la sesión '%1$s' (%2$s): %3$s"
+
+#: autowhats.php:698
+msgid "Session restarted."
+msgstr "Sesión reiniciada."
+
+#: autowhats.php:702
+msgid "Error restarting (%1$s): %2$s"
+msgstr "Error al reiniciar (%1$s): %2$s"
+
+#: autowhats.php:712
+msgid "Incomplete configuration."
+msgstr "Configuración incompleta."
+
+#: autowhats.php:752
+msgid "No QR data found."
+msgstr "No se encontraron datos de QR."
+
+#: autowhats.php:755
+msgid "Unrecognized response format."
+msgstr "Formato de respuesta no reconocido."
+
+#: autowhats.php:758
+msgid "Error"
+msgstr "Error"
+
+#: autowhats.php:759
+msgid "QR Error (%1$s): %2$s"
+msgstr "Error de QR (%1$s): %2$s"
+
+#: autowhats.php:769
+msgid "API URL or session name not configured"
+msgstr "URL de API o nombre de sesión no configurados"
+
+#: autowhats.php:788
+msgid "API Error (%1$s) for session '%2$s'"
+msgstr "Error de API (%1$s) para la sesión '%2$s'"
+
+#: autowhats.php:821
+msgid "Error processing API response (invalid JSON)."
+msgstr "Error al procesar la respuesta de la API (JSON inválido)."
+
+#: autowhats.php:839
+msgid "Error fetching contacts (%s)"
+msgstr "Error al obtener contactos (%s)"
+
+#: autowhats.php:882 autowhats-contacts.js:156 autowhats-scheduler.js:98
+msgid "Unnamed Group"
+msgstr "Grupo sin nombre"
+
+#: autowhats.php:891
+msgid "Error fetching groups (%s)"
+msgstr "Error al obtener grupos (%s)"
+
+#: autowhats.php:945
+msgid "Unnamed Chat"
+msgstr "Chat sin nombre"
+
+#: autowhats.php:961
+msgid "Error fetching chats (%s)"
+msgstr "Error al obtener chats (%s)"
+
+#: autowhats.php:971
+msgid "Invalid chat ID: %s"
+msgstr "ID de chat inválido: %s"
+
+#: autowhats.php:987
+msgid "Message sent."
+msgstr "Mensaje enviado."
+
+#: autowhats.php:989
+msgid "Error sending message (%s)"
+msgstr "Error al enviar mensaje (%s)"
+
+#: autowhats.php:997
+msgid "Invalid chat ID for messages: %s"
+msgstr "ID de chat inválido para mensajes: %s"
+
+#: autowhats.php:1018
+msgid "Error fetching messages (%s)"
+msgstr "Error al obtener mensajes (%s)"
+
+#: autowhats.php:1071
+msgid "Access denied."
+msgstr "Acceso denegado."
+
+#: autowhats.php:1077
+msgid "File URL not provided."
+msgstr "URL del archivo no proporcionada."
+
+#: autowhats.php:1089
+msgid "Error contacting file server: %s"
+msgstr "Error al contactar el servidor de archivos: %s"
+
+#: autowhats.php:1124
+msgid "File server error: %1$s - %2$s"
+msgstr "Error del servidor de archivos: %1$s - %2$s"
+
+#: autowhats.php:1135
+msgid "Chat ID not provided."
+msgstr "ID de chat no proporcionado."
+
+#: autowhats.php:1189 autowhats.php:1372 autowhats.php:1385
+#: autowhats.php:1401 autowhats.php:1416 autowhats.php:1451
+#: autowhats.php:1462 autowhats.php:1502
+msgid "Permission denied."
+msgstr "Permiso denegado."
+
+#: autowhats.php:1196
+msgid "Required data is missing."
+msgstr "Faltan datos requeridos."
+
+#: autowhats.php:1232
+msgid "Message(s) scheduled successfully."
+msgstr "Mensaje(s) programado(s) exitosamente."
+
+#: autowhats.php:1234
+msgid "Error saving to database: %s"
+msgstr "Error al guardar en la base de datos: %s"
+
+#: autowhats.php:1255
+msgid "Dispatch canceled successfully."
+msgstr "Envío cancelado exitosamente."
+
+#: autowhats.php:1257
+msgid "Invalid dispatch ID."
+msgstr "ID de envío inválido."
+
+#: autowhats.php:1330
+msgid "Sending task executed. Check the history on the Scheduler page to see the results."
+msgstr "Tarea de envío ejecutada. Revisa el historial en la página del Programador para ver los resultados."
+
+#: autowhats.php:1336
+msgid "Task rescheduled successfully! Refresh the page to see the new status."
+msgstr "¡Tarea reprogramada exitosamente! Refresca la página para ver el nuevo estado."
+
+#: autowhats.php:1342
+msgid "Every Minute"
+msgstr "Cada Minuto"
+
+#: autowhats.php:1387
+msgid "List name cannot be empty."
+msgstr "El nombre de la lista no puede estar vacío."
+
+#: autowhats.php:1394
+msgid "List created successfully."
+msgstr "Lista creada exitosamente."
+
+#: autowhats.php:1396
+msgid "A list with this name already exists."
+msgstr "Ya existe una lista con este nombre."
+
+#: autowhats.php:1407
+msgid "List deleted successfully."
+msgstr "Lista eliminada exitosamente."
+
+#: autowhats.php:1409 autowhats.php:1425 autowhats.php:1434
+msgid "Invalid list ID."
+msgstr "ID de lista inválido."
+
+#: autowhats.php:1458
+msgid "Recipient list updated successfully."
+msgstr "Lista de destinatarios actualizada exitosamente."
+
+#: autowhats.php:1480
+msgid "Broadcast canceled successfully."
+msgstr "Difusión cancelada exitosamente."
+
+#: autowhats.php:1482
+msgid "Invalid broadcast ID."
+msgstr "ID de difusión inválido."
+
+#: autowhats-chats.js:35
+msgid "TODAY"
+msgstr "HOY"
+
+#: autowhats-chats.js:36
+msgid "YESTERDAY"
+msgstr "AYER"
+
+#: autowhats-chats.js:47
+msgid "Yesterday"
+msgstr "Ayer"
+
+#: autowhats-chats.js:58
+msgid "Unnamed Chat"
+msgstr "Chat sin nombre"
+
+#: autowhats-chats.js:68
+msgid "Could not load chats."
+msgstr "No se pudieron cargar los chats."
+
+#: autowhats-chats.js:71 autowhats-contacts.js:80
+#: autowhats-scheduler.js:107 autowhats-scheduler.js:192
+#: autowhats-scheduler.js:424 autowhats-debug-cron.js:52
+#: autowhats-debug-cron.js:80
+msgid "Server communication error."
+msgstr "Error de comunicación con el servidor."
+
+#: autowhats-chats.js:78
+msgid "No chats to display."
+msgstr "No hay chats para mostrar."
+
+#: autowhats-chats.js:87
+msgid "No recent messages"
+msgstr "No hay mensajes recientes"
+
+#: autowhats-chats.js:108
+msgid "Loading messages..."
+msgstr "Cargando mensajes..."
+
+#: autowhats-chats.js:115
+msgid "Could not load messages"
+msgstr "No se pudieron cargar los mensajes"
+
+#: autowhats-chats.js:119
+msgid "Connection error"
+msgstr "Error de conexión"
+
+#: autowhats-chats.js:125
+msgid "No messages in this chat"
+msgstr "No hay mensajes en este chat"
+
+#: autowhats-chats.js:143
+msgid "Image"
+msgstr "Imagen"
+
+#: autowhats-chats.js:154
+msgid "Download"
+msgstr "Descargar"
+
+#: autowhats-chats.js:155
+msgid "View"
+msgstr "Visualizar"
+
+#: autowhats-chats.js:192
+msgid "Error sending:"
+msgstr "Error al enviar:"
+
+#: autowhats-chats.js:192 autowhats-contacts.js:66
+msgid "Unknown"
+msgstr "Desconocido"
+
+#: autowhats-chats.js:195
+msgid "Connection error on send."
+msgstr "Error de conexión al enviar."
+
+#: autowhats-config-page.js:17
+msgid "Are you sure? Generating a new key will make the current URL stop working. You will need to update it in your cron service."
+msgstr "¿Estás seguro? Generar una nueva clave hará que la URL actual deje de funcionar. Deberás actualizarla en tu servicio de cron."
+
+#: autowhats-config-page.js:20
+msgid "Generating..."
+msgstr "Generando..."
+
+#: autowhats-config-page.js:28 autowhats.php:701
+msgid "Error:"
+msgstr "Error:"
+
+#: autowhats-config-page.js:28
+msgid "An unknown error occurred."
+msgstr "Ocurrió un error desconocido."
+
+#: autowhats-config-page.js:29
+msgid "Generate New Security Key"
+msgstr "Generar Nueva Clave de Seguridad"
+
+#: autowhats-config-page.js:32
+msgid "Error communicating with the server."
+msgstr "Error al comunicarse con el servidor."
+
+#: autowhats-config-page.js:41
+msgid "Could not copy the URL. Please copy it manually."
+msgstr "No se pudo copiar la URL. Por favor, cópiala manualmente."
+
+#: autowhats-contacts.js:67
+msgid "Could not load contacts:"
+msgstr "No se pudieron cargar los contactos:"
+
+#: autowhats-contacts.js:70
+msgid "Could not load groups:"
+msgstr "No se pudieron cargar los grupos:"
+
+#: autowhats-contacts.js:73
+msgid "%1$d contacts and %2$d groups loaded."
+msgstr "%1$d contactos y %2$d grupos cargados."
+
+#: autowhats-contacts.js:76
+msgid "Server communication error while loading data."
+msgstr "Error de comunicación con el servidor al cargar los datos."
+
+#: autowhats-contacts.js:108
+msgid "No results found."
+msgstr "No se encontraron resultados."
+
+#: autowhats-contacts.js:115 autowhats-contacts.js:147
+msgid "Previous"
+msgstr "Anterior"
+
+#: autowhats-contacts.js:147 autowhats-contacts.js:180
+msgid "Next"
+msgstr "Siguiente"
+
+#: autowhats-contacts.js:157
+msgid "%d participants"
+msgstr "%d participantes"
+
+#: autowhats-debug-cron.js:18
+msgid "Invalid date"
+msgstr "Fecha inválida"
+
+#: autowhats-debug-cron.js:39
+msgid "Executing..."
+msgstr "Ejecutando..."
+
+#: autowhats-debug-cron.js:40 autowhats-debug-cron.js:68
+msgid "Processing..."
+msgstr "Procesando..."
+
+#: autowhats-debug-cron.js:48 autowhats-debug-cron.js:76
+msgid "An error occurred."
+msgstr "Ocurrió un error."
+
+#: autowhats-debug-cron.js:56
+msgid "Run Task Manually"
+msgstr "Ejecutar Tarea Manualmente"
+
+#: autowhats-debug-cron.js:67
+msgid "Rescheduling..."
+msgstr "Re-agendando..."
+
+#: autowhats-debug-cron.js:84
+msgid "Force Reschedule Task"
+msgstr "Forzar Re-agendamiento de Tarea"
+
+#: autowhats-scheduler.js:104
+msgid "Communication error while loading recipients."
+msgstr "Error de comunicación al cargar destinatarios."
+
+#: autowhats-scheduler.js:171
+msgid "You must select at least one recipient."
+msgstr "Debes seleccionar al menos un destinatario."
+
+#: autowhats-scheduler.js:175
+msgid "You must write a message or attach a file."
+msgstr "Debes escribir un mensaje o adjuntar un archivo."
+
+#: autowhats-scheduler.js:275
+msgid "List:"
+msgstr "Lista:"
+
+#: autowhats-scheduler.js:278
+msgid "Sent"
+msgstr "Enviado"
+
+#: autowhats-scheduler.js:278
+msgid "Failed"
+msgstr "Fallido"
+
+#: autowhats-scheduler.js:287
+msgid "To:"
+msgstr "Para:"
+
+#: autowhats-scheduler.js:288
+msgid "Message:"
+msgstr "Mensaje:"
+
+#: autowhats-scheduler.js:288
+msgid "No text"
+msgstr "Sin texto"
+
+#: autowhats-scheduler.js:289
+msgid "Attachment:"
+msgstr "Adjunto:"
+
+#: autowhats-scheduler.js:290
+msgid "Scheduled for"
+msgstr "Programado para"
+
+#: autowhats-scheduler.js:290
+msgid "Date"
+msgstr "Fecha"
+
+#: autowhats-scheduler.js:272
+msgid "No pending sends."
+msgstr "No hay envíos pendientes."
+
+#: autowhats-scheduler.js:272
+msgid "No sends in history."
+msgstr "No hay envíos en el historial."
+
+#: autowhats-scheduler.js:308
+msgid "Are you sure?"
+msgstr "¿Estás seguro?"
+
+#: autowhats-scheduler.js:336
+msgid "Select a list..."
+msgstr "Selecciona una lista..."
+
+#: autowhats-scheduler.js:346
+msgid "List name is required."
+msgstr "El nombre de la lista es requerido."
+
+#: autowhats-scheduler.js:419
+msgid "An unknown error occurred while saving."
+msgstr "Ocurrió un error desconocido al guardar."
+
+#: autowhats-scheduler.js:431
+msgid "Are you sure you want to delete this list? This is irreversible."
+msgstr "¿Estás seguro de que quieres eliminar esta lista? Esto es irreversible."
+
+#: autowhats-admin-pages.php:408
+msgid "Clear History"
+msgstr "Borrar Historial"
+
+#: autowhats.php:1509
+msgid "Sending history has been cleared successfully."
+msgstr "El historial de envíos se ha limpiado correctamente."
+
+#: autowhats-scheduler.js:319
+msgid "Are you sure you want to clear the entire sending history? This action cannot be undone."
+msgstr "¿Estás seguro de que quieres borrar todo el historial de envíos? Esta acción no se puede deshacer."
+
+#: autowhats-admin-pages.php:211
+msgid "Message Sending Delay"
+msgstr "Retardo de Envío de Mensajes"
+
+#: autowhats-admin-pages.php:212
+msgid "Configure a random delay between messages to avoid WhatsApp blocking. This helps simulate human behavior."
+msgstr "Establece un retardo aleatorio entre cada mensaje para simular el comportamiento humano y reducir el riesgo de bloqueo."
+
+#: autowhats-admin-pages.php:219
+msgid "Minimum Delay (seconds)"
+msgstr "Retardo Mínimo (segundos)"
+
+#: autowhats-admin-pages.php:222
+msgid "Minimum time to wait between messages (recommended: 1-3 seconds)"
+msgstr "Tiempo de espera minimo entre mensajes (recomendado: 1 a 3 segundos)"
+
+#: autowhats-admin-pages.php:226
+msgid "Maximum Delay (seconds)"
+msgstr "Retardo Máximo (segundos)"
+
+#: autowhats-admin-pages.php:229
+msgid "Maximum time to wait between messages (recommended: 5-10 seconds)"
+msgstr "Tiempo de espera maximo entre mensajes (recomendado: 5 a 10 segundos)"
+
+#: autowhats-admin-pages.php:235
+msgid "Save Delay Settings"
+msgstr "Guardar configuración"

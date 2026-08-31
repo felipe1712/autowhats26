@@ -1,0 +1,19 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# Archives
+*.zip
+*.rar
+*.tar.gz
+*.backup.*
+
+# IDE / Editor Files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs and Environment
+*.log
+.env

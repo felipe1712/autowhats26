@@ -1,0 +1,493 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<head lang="en">
+	<meta http-equiv="content-type" content="text/html;charset=utf-8">
+	<title>Sabil -  Documentation Template</title>
+	<!-- Framework CSS -->
+	<link rel="stylesheet" href="assets/blueprint-css/screen.css" type="text/css" media="screen, projection">
+	<link rel="stylesheet" href="assets/blueprint-css/print.css" type="text/css" media="print">
+	<!--[if lt IE 8]><link rel="stylesheet" href="assets/blueprint-css/ie.css" type="text/css" media="screen, projection"><![endif]-->
+	<link rel="stylesheet" href="assets/blueprint-css/plugins/fancy-type/screen.css" type="text/css" media="screen, projection">
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500,400italic,300italic,700,900' rel='stylesheet' type='text/css'>
+
+	<link type="text/css" rel="stylesheet" href="styles/SyntaxHighlighter.css"></link>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,700,800' rel='stylesheet' type='text/css'>
+
+	<script language="javascript" src="script/shCore.js"></script>
+	<script language="javascript" src="script/shBrushCss.js"></script>
+	<script language="javascript" src="script/shBrushXml.js"></script>
+	<script language="javascript" src="script/shBrushJScript.js"></script>
+	<script language="javascript">
+	window.onload = function () {
+    dp.SyntaxHighlighter.ClipboardSwf = '/script/clipboard.swf';
+    dp.SyntaxHighlighter.HighlightAll('code');
+	}
+	</script>
+	<style type="text/css" media="screen">
+		body {font-family:Roboto;background:#fff;margin:0;padding:0}
+		.container {background:#fff;}
+		p, table, hr, .box { margin-bottom:25px; }
+		.box p { margin-bottom:10px; }
+		pre, code{ 
+		font-size: 14px;
+		margin:1.5em 0;
+		white-space:pre;
+		}
+
+.main-head {
+    text-transform: uppercase;
+    color: #fff !important;
+    font-size: 14px !important;
+    padding: 25px !important;
+    background: #111;
+    margin: 0;
+    border: none;
+    letter-spacing: 1px;
+}
+	</style>
+
+
+</head>
+
+
+<body>
+	<h3 class="center alt main-head"><b>Sabil</b> - Documentation</h3>
+
+	<div class="container">
+		
+		<h1 class="center">&ldquo;Sabil - Responsive Multipurpose landing page&rdquo;</h1>
+		
+		<div class="borderTop">
+			<div class="span-6 colborder info prepend-1">
+				<p class="prepend-top">
+					<strong>
+					Created: Sept 06, 2018<br>
+					By:<a href="https://themeforest.net/user/divine-store" target="new"> Divine-store</a><br>
+					</strong>
+				</p>
+			</div><!-- end div .span-6 -->		
+	
+
+		</div><!-- end div .borderTop -->
+		
+		<hr>
+		
+		<h2 id="toc" class="alt">Table of Contents</h2>
+		<ol class="alpha">
+			<li><a href="#htmlStructure">HTML Structure</a></li>
+			<li><a href="#cssFiles">CSS Files and Structure</a></li>
+			<li><a href="#javascript">JavaScript</a></li>
+			<li><a href="#Tutorial">Tutorial</a></li>
+			<li><a href="#credits">Sources and Credits</a></li>
+		</ol>
+		
+		<hr>
+		
+		<h3 id="htmlStructure"><strong>A) HTML Structure</strong> - <a href="#toc">top</a></h3>
+		<p>This theme is a Responsive layout with four column. Based on Bootstrap Framework. All of the information within the main content area is nested within a div with an id of "container". The sidebar's (column #2) content is within a div with an id of "secondaryContent". The general template structure is the same throughout the template. Here is the general structure.</p>
+		
+		<img src="assets/images/htmlstructure.png" alt="HTML Structure" />
+		
+		<p>If you would like to edit the color, font, or style of any elements in one of these columns, you would do the following:</p>
+
+<strong>For header</strong>
+<pre name="code" class="html">
+.overlay {
+	background: #151515;
+	opacity: 0.5;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	width: 100%;
+	height: 100%;
+}
+
+
+</pre>
+
+	<p>So, to ensure that your new styles are applied, make sure that they carry enough "weight" and that there isn't a style lower in the CSS file that is being applied after yours.</p> 
+
+		<hr>
+
+		<h3 id="cssFiles"><strong>B) CSS Files and Structure</strong> - <a href="#toc">top</a></h3>
+
+		<p>I'm using Five CSS files in this theme. The first one is the main source file for bootstrap framework</p> 
+
+		<p>The second file contains all of the specific stylings for the page. The file is separated into sections using:</p>  
+
+<pre name="code" class="html">
+
+1. GLOBAL STYLES
+	2. COMMON STYLES 
+	3. HEADER STYLES 
+	4. INTRO STYLES
+		4.1. Intro / 1 
+		4.2. Intro / 2 
+		4.3. Intro / 3 
+		4.4. Intro / 4 
+		4.5. Intro / 5 
+		4.6. Intro / 6 
+		4.7. Intro / 7 
+		4.8. Intro / 8 
+		4.9. Intro / 9 
+		4.10. Intro / 10 
+		4.11. Intro / 11 
+		4.12. Intro / 12 
+		4.13. Intro / 13 
+		4.14. Intro / 14 
+		4.15. Intro / 15 
+		4.16. Intro / 16 
+		4.17. Intro / 17 
+		4.18. Intro / 18 
+		4.19. Intro / 19 
+		4.20. Intro / 20 
+	5. ICON BOX / SERVICES STYLES 
+	6. INFO STYLES 
+	7. TESTIMONIAL STYLES 
+	8. ABOUT   
+	9. VIDEO BOX 
+css codes
+
+etc....
+</pre>
+		
+
+		<p>The fourth file contains all of the specific stylings for Slick Carousel.</p>  
+		<p>The fifth file contains all of the specific stylings for Font-Awesome Icons.</p>  
+
+		<p>Dont change anything in first(bootstrap.css) file.
+
+		<p>If you would like to edit a specific section of the site, simply find the appropriate label in the CSS file, and then scroll down until you find the appropriate style that needs to be edited.</p> 
+
+		<hr>
+		
+		<h3 id="javascript"><strong>C) JavaScript</strong> - <a href="#toc">top</a></h3>
+		
+		<p>This theme imports Thirteen Javascript files.</p>
+		
+		<ol>
+			<li>jQuery</li>
+		</ol>
+		  
+		<strong>Details</strong>
+		<ol>
+			<li>jquery.js</li>
+			<li>bootstrap.min.js</li>
+			<li>vendors/slick/slick</li>
+			<li>vendors/stellar.js</li>
+			<li>vendors/isotope/isotope.pkgd.js</li>
+			<li>vendors/swipebox/js/jquery.swipebox.min.js</li>
+			<li>main.js</li>
+			<li>vendors/mc/jquery.ketchup.all.min.js</li>
+			<li>vendors/mc/main.js</li>
+		</ol>
+		<!-- JAVASCRIPT =============================-->
+
+		<hr>
+
+		<h3 id="Tutorial"><strong>D) Tutorial</strong> - <a href="#toc">top</a></h3>
+
+		<p>Follow the steps below to change the demo contents with your own contents.</p>
+
+</br>
+</br>
+
+<p><strong>1. LOGO SECTION</strong></p>
+<p>To replace the logo name, find this code</p>
+
+<pre name="code" class="html">
+	<a href="intro.html" class="navbar-brand brand"><img src="images/logo.png" alt="Smiley face"></a>
+</pre>
+
+
+</br>
+<hr>
+
+<p><strong>2. NAVMENU</strong></p>
+
+<p>Open index.html file and find this code.</p>
+
+<pre name="code" class="html">
+	<ul class="nav navbar-nav navbar-right">
+						<li class="dropdown mm-menu">
+							<a href="index.html">Home</a>
+						</li>
+						<li class="dropdown">
+							<a href="about.html">About Us</a>
+						</li>
+						<li class="dropdown">
+							<a href="portfolio.html">Portfolio</a>
+						</li>
+						<li class="dropdown">
+							<a href="blog.html">Blog</a>
+						</li>
+						<li class="dropdown">
+							<a href="contact.html">Contact</a>
+						</li>						
+					</ul>
+</pre>
+
+</br>
+<p>Replace "Pricing", "About" with the menu name and "#" with the page link or anchor link.</br>
+</p>
+
+</br>
+</br>
+<hr>
+
+<p><strong>3. INTRO CONTENT</strong></p>
+
+<p><strong>Intro Content</strong></p>
+
+<p>Find this code</p>
+
+<pre name="code" class="html">
+					<!-- INFO CONTENT -->
+	<div class="info-content2">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<h3>Sabil is agency, for Business & development since 1995 based in Paris.</h3>
+                    <div class="space10"></div>
+					<p>At Sabil we care about every detail, our goal to make our clients satisfied with their projects.</p>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</pre>
+
+<p>replace the text between "&lt;h3&gt;" "&lt;/h3&gt;" and "&lt;p&gt;" "&lt;/p&gt;" with the intro title and description.</br>
+<p>replace "<strong>Purchase Now</strong>" and "<strong>Learn More</strong>" with the button name.</br>
+<p>replace "#" with the button links.</br>
+<p>Same for all intro pages</br>
+
+</br>
+</br>
+<hr>
+
+<p><strong>Intro Newsletter (mailchimp)</strong></p>
+<p>Open "subscribe.php" file from "PHP" folder and find this.</p>
+
+<pre name="code" class="html">
+$apiKey = 'YOUR_API_KEY';
+</pre>
+
+<p>Replace "YOUR_API_KEY" with your mailchimp API key - <a href="http://kb.mailchimp.com/accounts/management/about-api-keys#Find-or-Generate-Your-API-Key" target="_blank">How to get API key?</a></p>
+
+<br>
+
+<pre name="code" class="html">
+$listId = 'YOUR_LIST_ID';
+</pre>
+
+<p>Replace "YOUR_LIST_ID" with your mailchimp newsletter list id - <a href="http://kb.mailchimp.com/lists/managing-subscribers/find-your-list-id" target="_blank">How to get List ID?</a></p>
+
+<br>
+
+<pre name="code" class="html">
+$submit_url = "http://us3.api.mailchimp.com/1.3/?method=listSubscribe";
+</pre>
+
+<p>Replace "us3" with your actual data center (You can find the data center on the API key)</p>
+
+<br>
+
+</br>
+</br>
+<hr>
+
+<p><strong>4. SERVICES SECTION</strong></p>
+<p>Find this code.</p>
+
+<pre name="code" class="html">
+					<!-- SERVICES -->
+    <div class="container">
+	<div class="about-inline text-center">
+		<div class="container">
+        <p>- OUR SERVICES -</p>
+			<h3>See the benefits you can get by working  <br> with our experts. </h3>
+		</div>
+	</div>
+    
+    <div class="service3 icon-box-square">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="text-center">
+						<span><i class="fa fa-1x fa-magic"></i></span>
+						<div class="services-content">
+							<h2>Fully Customizable</h2>
+							<p>Lorem ipsum dolor sit amet adipiscing elit sed orci dictum sagittis libero vitae auctor elit. Praesent accumsan mauris eget tortor auctor efficitur nunc iaculis nunc.</p>
+						</div>
+					</div>
+				</div>
+</pre>
+
+</br>
+<p>To replace the icon, go to this <a href="http://fontawesome.io/icons" target=_blank">link</a> and choose your icon and replace "icon-box-square" with your icon name. or go to "css/icons" folder and open each folder and open .html file in browser and choose your icon</p>
+<p>Replace the text between "&lt;h4&gt;" "&lt;/h4&gt;" and "&lt;p&gt;" "&lt;/p&gt;" with the service title and description.</br>
+This will be the same for all service columns.</p>
+
+</br>
+</br>
+<hr>
+
+<p><strong>5. TESTIMONIALS </strong></p>
+<p>Find this code</p>
+
+<pre name="code" class="html">
+						<!-- TESTIMONIALS -->
+	<div class="testimonials-white">
+    
+    <div class="container">
+	<div class="about-inline text-center">
+		<div class="container">
+        <p>- REVIEWS  -</p>
+			<h3>See what our experts says about us. We have  <br> got over 1000s of positive reviews. </h3>
+		</div>
+	</div>
+    
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<div class="quote3">
+						<div>
+                        	<i class="icon2-Quote"></i>
+							<p>"Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live."</p>
+							<span class="author">- Jerry Doe -</span> <br />
+                            <span class="author-job">Web Designer @Google</span>
+						</div>
+						<div>
+</pre>
+
+<p>replace the text between "&lt;p&gt;" "&lt;/p&gt;" with the quote info.</br>
+<p>replace the text between "&lt;div class="author"&gt;" "&lt;/div&gt;" with the quote author info.</br>
+</br>
+</br>
+<hr>
+
+<p><strong>6. PRICING TABLE</strong></p>
+<p>Find this code</p>
+
+<pre name="code" class="html">
+					<!-- PRICING -->
+	<div class="pricing">
+		<div class="container">
+			
+			<div class="row">
+				<div class="col-md-12">
+
+					<!-- Pricing Plan - 1 -->
+					<div class="col-md-3 col-sm-3">
+						<div class="pricing__item">
+							<h3 class="pricing__title">BASIC</h3>
+							<div class="pricing__price"><span class="pricing__currency">$</span>56</div>
+							<ul class="pricing__feature-list">
+								<li class="pricing__feature">5 Projects</li>
+								<li class="pricing__feature">5 GB of Storage</li>
+								<li class="pricing__feature">Up to 100 Users</li>
+                                				<li class="pricing__feature">10 GB Bandwidth</li>
+								<li class="pricing__feature">Security Suite</li>
+								<li class="pricing__feature">500 GB</li>
+							</ul>
+							<button class="btn btn-default">Choose Plan</button>
+						</div>
+					</div>
+</pre>
+
+<p>replace "<strong>Startup</strong>" with the plan name.</br>
+replace the text between "&lt;div class="pricing__price"&gt;" "&lt;/div&gt;".</br>
+replace the text between "&lt;li&gt;" "&lt;/li&gt;" with the plan features.</br>
+replace the  "#" in "&lt;a href="#"&gt;" with the link to the plan page or checkout page.<br>
+</p>
+
+Do the same for all four.
+</br>
+</br>
+<hr>
+
+<p><strong>7. GOOGLEMAP </strong></p>
+
+<p>Open "contact.html" and find this.</p>
+
+<pre name="code" class="html">
+40.6700, -73.9400
+</pre>
+
+<p>Go to this <a href="http://itouchmap.com/latlong.html" target="_blank">link</a> and in the search bar update your location or address and press go.<br>
+Scroll down the page to see the lattitude and longitude of your location. Update those here in both places and save.</p>
+</ol>
+
+<br>
+<hr>
+
+
+<p><strong>8. CONTACT FORM</strong></p>
+
+<p>Open "contact.php" file from "PHP" folder and find this code.</p>
+
+<pre name="code" class="html">
+
+define( "RECIPIENT_NAME", "YOUR_NAME_HERE" );
+define( "RECIPIENT_EMAIL", "YOUR_EMAIL_HERE" );
+					
+</pre>
+
+</br>
+<p>
+Replace "YOUR_NAME_HERE" with your name</br>
+Replace "YOUR_EMAIL_HERE" with your email, where you want to receive the mails.</br>
+</p>
+
+</br>
+</br>
+<hr>
+
+<p><strong>9. COPYRIGHT</strong></p>
+
+<pre name="code" class="html">
+
+					<p>© 2017.  Sabil. All Rights Reserved. <br> Designed by Divine-store</p>
+					
+</pre>
+
+<p>Replace the Copyright contents with yours.</p>
+
+</br>
+</br>
+<hr>
+
+
+
+<h3>Thats it. You are done. Now your website is ready to launch.</h3>
+
+</br>
+</br>
+</br>
+<hr>
+
+		
+	
+		<h3 id="credits"><strong>E) Sources and Credits</strong> - <a href="#toc">top</a></h3>
+		
+		<p>I've used the following images, icons, plugins, fonts or other files as listed.
+		<div style="clear:both;"></div>
+		<ul>
+			<li>Fonticons by - <a href="http://fontawesome.io" target="_blank">fontawesome</a></li>
+			<li>Demo images from - <a href="http://photodune.net/" target="_blank">Photodune</a></li>
+			<li>Demo images from - <a href="http://pixabay.com/" target="_blank">Pixabay</a></li>
+		</ul>		
+		<hr>
+		<p> All images, Icons, Logos, Fonts used in this template are free for commercial use.</p>
+		
+
+		<p>Once again, thank you so much for purchasing this theme. As I said at the beginning, I'd be glad to help you if you have any questions relating to this theme. No guarantees, but I'll do my best to assist. If you have a more general question relating to the themes on ThemeForest, you might consider visiting the forums and asking your question in the "Item Discussion" section.</p> 
+		
+		<p class="append-bottom alt large"><strong>Author Name</strong></p>
+		<p><a href="#toc">Go To Table of Contents</a></p>
+		
+		<hr class="space">
+	</div><!-- end div .container -->
+</body>
+</html>

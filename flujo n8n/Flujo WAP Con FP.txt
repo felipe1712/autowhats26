@@ -1,0 +1,2332 @@
+{
+  "name": "Flujo WAP Con FP",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://landing.autowhats.com.mx/api/check-license.php",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "edd_action",
+              "value": "check_license"
+            },
+            {
+              "name": "license",
+              "value": "={{$json.body.license_key}}"
+            },
+            {
+              "name": "url",
+              "value": "={{$json.body.site_url}}"
+            },
+            {
+              "name": "item_name",
+              "value": "AutoWhats"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1264,
+        -32
+      ],
+      "id": "7eaf3fab-44ab-4234-b114-09c982b002ed",
+      "name": "Validar Licencia EDD1"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -1040,
+        48
+      ],
+      "id": "f2e2486e-8bd5-45ea-ac60-a7e64612eb0d",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d00bbe42-41b3-4cc3-a502-500c0724ef14",
+              "name": "session",
+              "value": "={{ \n  /* ¿Es metodo POST? */\n  ($node[\"Webhook\"].json.body.method_for_waha || $node[\"Webhook\"].json.body.payload?.method_for_waha) === \"POST\"\n  ? (\n      /* ENTRA AQUI PORQUE ES POST */\n      /* 1. Agregamos session aqui porque /sendText tambien es POST */\n      $node[\"Webhook\"].json.body.payload?.session || \n      $node[\"Webhook\"].json.body.payload?.name || \n      $node[\"Webhook\"].json.body.name\n    )\n  : (\n      /* ENTRA AQUI SI NO ES POST (GET, DELETE, ETC) */\n      $node[\"Webhook\"].json.body.target_endpoint?.match(/\\/sessions\\/([^/]+)/)?.[1]\n      || $node[\"Webhook\"].json.body.target_endpoint?.match(/^\\/?([^/]+)/)?.[1]\n      || $node[\"Webhook\"].json.body.payload?.session \n      || $node[\"Webhook\"].json.body.session \n      || $node[\"Webhook\"].json.body.query?.session \n      || $node[\"Webhook\"].json.body.payload?.name\n    ) \n}}",
+              "type": "string"
+            },
+            {
+              "id": "4aab8c28-df9c-47b5-a988-072090de6088",
+              "name": "waha_webhook_url",
+              "value": "=https://n8n.autowhats.com.mx/webhook/admin-sesiones",
+              "type": "string"
+            },
+            {
+              "id": "webhook_url",
+              "name": "webhook_url",
+              "value": "={{( ($json.body?.site_url || $json.site_url || $json.query?.site_url || \"\").trim().replace(/\\n/g,\"\").replace(/\\r/g,\"\").startsWith(\"http\") ? \"\" : \"https://\" ) + ($json.body?.site_url || $json.site_url || $json.query?.site_url || \"\").trim().replace(/\\n/g,\"\").replace(/\\r/g,\"\") + \"/wp-json/autowa/v1/status-update\"}}",
+              "type": "string"
+            },
+            {
+              "id": "daec203c-cc57-431e-b979-da542ffba141",
+              "name": "license_valid",
+              "value": "={{$json.license}}",
+              "type": "string"
+            },
+            {
+              "id": "92d57966-4a2a-48d1-a136-123fbf36a3bd",
+              "name": "site_url",
+              "value": "={{($json.body?.site_url || $json.site_url || $json.query?.site_url || \"\").trim().replace(/\\n/g,\"\").replace(/\\r/g,\"\")}}",
+              "type": "string"
+            },
+            {
+              "id": "bcb1088f-697a-4302-9f9f-3481e7e29b03",
+              "name": "executionMode",
+              "value": "={{$json.executionMode || $json.body.executionMode}}",
+              "type": "string"
+            },
+            {
+              "id": "709590ec-40ec-4f7f-8f83-20facaacd7cb",
+              "name": "method_for_waha",
+              "value": "={{$json.body?.method_for_waha || $input.item.json.body?.method_for_waha}}",
+              "type": "string"
+            },
+            {
+              "id": "77322b51-0293-47c5-9228-468b736e9efa",
+              "name": "target_endpoint",
+              "value": "={{$json.body?.target_endpoint || $input.item.json.body?.target_endpoint}}",
+              "type": "string"
+            },
+            {
+              "id": "764073c3-7714-4313-8ae4-1114a450e3fd",
+              "name": "ChatId",
+              "value": "={{ $json.body.payload.chatId}}",
+              "type": "string"
+            },
+            {
+              "id": "1f498fe5-62b7-46bf-b417-3ff33e5c8371",
+              "name": "wp_task_id",
+              "value": "={{ $json.body.payload.wp_task_id }}",
+              "type": "string"
+            },
+            {
+              "id": "fdc4c737-6dc9-4b18-bf46-9be497b40849",
+              "name": "message_text",
+              "value": "={{ $json.body.payload.message }}",
+              "type": "string"
+            },
+            {
+              "id": "1cf4063b-1a9a-440a-b7cf-665297644d4c",
+              "name": "recipients",
+              "value": "={{ JSON.stringify($json.body.payload.recipients) }}",
+              "type": "string"
+            },
+            {
+              "id": "55313500-68ec-4dd5-8069-b1e4f4ffade8",
+              "name": "scheduled_at",
+              "value": "={{ $json.body.payload.scheduled_at }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -816,
+        48
+      ],
+      "id": "2c91f584-6b31-46e2-bf05-c1958f1939eb",
+      "name": "Set de Datos1"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO waha.waha_sessions \n  (session, status, site_url, wp_callback_url, created_at, updated_at)\nVALUES \n  ('{{$json.session}}', 'pending', '{{$json.site_url}}', '{{$json.webhook_url}}', NOW(), NOW())\nON CONFLICT (session) DO UPDATE SET\n  status = 'pending',\n  site_url = EXCLUDED.site_url,\n  wp_callback_url = EXCLUDED.wp_callback_url,\n  updated_at = NOW()\nRETURNING xmax = 0 AS inserted;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        544,
+        -352
+      ],
+      "id": "285735f1-ea34-490b-b03d-b453d60f7b79",
+      "name": "Revisa Sesion1",
+      "alwaysOutputData": false,
+      "credentials": {
+        "postgres": {
+          "id": "okU87Xxb1ItIkDqS",
+          "name": "Waha Sessions"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT status FROM waha.waha_sessions WHERE session = '{{$json[\"session\"]}}';",
+        "additionalFields": {}
+      },
+      "name": "Check Session Status1",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        768,
+        -160
+      ],
+      "id": "ba81e1b9-20fe-4c1b-ad32-4914336836b3",
+      "credentials": {
+        "postgres": {
+          "id": "okU87Xxb1ItIkDqS",
+          "name": "Waha Sessions"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"status\"]}}",
+              "operation": "contains",
+              "value2": "FAILED"
+            }
+          ]
+        }
+      },
+      "name": "IF Failed Session1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        992,
+        -160
+      ],
+      "id": "80351d3f-f2ea-483f-b7b2-abee808202cb"
+    },
+    {
+      "parameters": {
+        "resource": "Sessions",
+        "operation": "Stop",
+        "session": "={{$json.session_name}}",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        1216,
+        -160
+      ],
+      "id": "df208afc-6f12-456d-a107-058621ca164c",
+      "name": "Stop the session1",
+      "credentials": {
+        "wahaApi": {
+          "id": "R7xYkhwe9D7Kc30e",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "84ccc3da-be97-4fc8-b9e1-7845b09e88a1",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1488,
+        48
+      ],
+      "id": "66ed385e-9f7b-46c0-85e4-f19bb423fbaf",
+      "name": "Webhook",
+      "webhookId": "a9788729-8970-42aa-bdc7-bd1b60ad7aa7"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $node[\"Webhook1\"].json.body.event }}",
+                    "rightValue": "session.status",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "12f1135b-dbfb-4a67-a835-13ce84432255"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Estatus Sesion"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "bc2d8b88-3159-4dd0-88d2-d6fac7f9d5a0",
+                    "leftValue": "={{ $node[\"Webhook1\"].json.body.event }}",
+                    "rightValue": "message",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Mensaje"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        544,
+        -1488
+      ],
+      "id": "fece2a2a-e094-43d2-862d-7cb85cbfe507",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "admin-sesiones",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -272,
+        -1712
+      ],
+      "id": "0a5b66b5-1c97-4e72-8b5b-f0d31d7d8cb9",
+      "name": "Webhook1",
+      "webhookId": "c6333f38-c314-4f0d-bda4-e898f93add5e"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$json.site_url}}/wp-json/autowa/v1/incoming-message",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "options": {},
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-AutoWA-Signature",
+              "value": "={{ $json.signature }}"
+            },
+            {
+              "name": "X-AutoWA-Timestamp",
+              "value": "={{ $json.timestamp }}"
+            }
+          ]
+        }
+      },
+      "id": "65dfb2e8-b2a6-41ba-bf6b-ad3c82de25da",
+      "name": "WP → Message",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        768,
+        -1392
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "g2ETgR7A40J62O0k",
+          "name": "Respuestas para WP"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n  COALESCE(\n    (SELECT site_url FROM waha.waha_sessions WHERE session = '{{$json.body.session}}' LIMIT 1),\n    'https://' || '{{$json.headers.host}}'\n  ) AS site_url,\n  COALESCE(\n    (SELECT wp_callback_url FROM waha.waha_sessions WHERE session = '{{$json.body.session}}' LIMIT 1),\n    'https://' || '{{$json.headers.host}}' || '/wp-json/autowa/v1/status-update'\n  ) AS wp_callback_url;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        96,
+        -1488
+      ],
+      "id": "81bea65b-2a38-43cd-98ae-773fdf8ecb8d",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "postgres": {
+          "id": "okU87Xxb1ItIkDqS",
+          "name": "Waha Sessions"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1979ba32-ae34-467d-b0c0-0d3072391aed",
+              "name": "site_url",
+              "value": "={{$input.item.json.site_url}}",
+              "type": "string"
+            },
+            {
+              "id": "3ad00387-777c-4dbd-8495-28ba2f6e5f62",
+              "name": "wp_callback_url",
+              "value": "={{$input.item.json.wp_callback_url}}",
+              "type": "string"
+            },
+            {
+              "id": "a151ffa8-6d3a-47fe-94c1-e0cc3f438095",
+              "name": "session",
+              "value": "={{$node[\"Webhook1\"].json.body.session}}",
+              "type": "string"
+            },
+            {
+              "id": "ec44983c-33fc-4888-af92-90df6017d1d5",
+              "name": "event",
+              "value": "={{$node[\"Webhook1\"].json.body.event}}",
+              "type": "string"
+            },
+            {
+              "id": "2bd384c6-3085-4fa2-a8eb-b0e3a893d1bd",
+              "name": "status_type",
+              "value": "={{$node[\"Webhook1\"].json.body.payload.status}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        320,
+        -1488
+      ],
+      "id": "7ccab06e-b139-4eca-be6b-742430ba9e6a",
+      "name": "Set Datos callback"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$node[\"Set Datos callback\"].json.wp_callback_url}}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"session_name\": \"{{ $json.session }}\",\n  \"status\": \"{{$node[\"Set Datos callback\"].json.status_type}}\",\n  \"message\": \"Status\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        96,
+        -1104
+      ],
+      "id": "ad99c7a5-11f7-4209-9f3b-986d92f7bd02",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "g2ETgR7A40J62O0k",
+          "name": "Respuestas para WP"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "Chats",
+        "operation": "Get Chats Overview",
+        "offset": null,
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        496,
+        -32
+      ],
+      "id": "e273140c-b3cd-4123-bd3f-74a675b576e1",
+      "name": "Get chats overview. Includes all necessary things to build UI \"your chats overview\" page - chat id, name, picture, last message. Sorting by last message timestamp",
+      "credentials": {
+        "wahaApi": {
+          "id": "R7xYkhwe9D7Kc30e",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "6ff73357-cbd7-46c4-9671-a67dc30dbac0",
+                    "leftValue": "={{ $json.target_endpoint }}",
+                    "rightValue": "proxy",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Proxy media"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "398b9447-6e7b-41b1-8331-de637e7da75e",
+                    "leftValue": "={{ $json.method_for_waha === 'POST' && ($json.target_endpoint === '/sessions' || $json.target_endpoint === '/sessions/') }}",
+                    "rightValue": "POST",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Incia Sesion"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "21716235-470b-4f1a-bf72-7ff62cefc06a",
+                    "leftValue": "={{ $json.target_endpoint }}",
+                    "rightValue": "chats",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Chats"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "64981a3a-f87f-40ab-9d0c-05ebc8ca0ab7",
+                    "leftValue": "={{ $json.target_endpoint }}",
+                    "rightValue": "contacts",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Contactos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "65be8afc-1be0-4ed3-834b-c73bd48e008d",
+                    "leftValue": "={{ $json.target_endpoint }}",
+                    "rightValue": "groups",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Grupos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "f2e35c81-b9b0-42d1-8007-556eaa7022ca",
+                    "leftValue": "={{ $json.method_for_waha === 'GET' && $json.target_endpoint.includes('/sessions/') }}",
+                    "rightValue": "GET ",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Estado Sesion"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "eaa1f64a-3018-47ba-9c88-e2a1fa85f872",
+                    "leftValue": "={{ $json.target_endpoint }}",
+                    "rightValue": "message",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Mensajes Chat"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "e605ba82-485f-4a4c-96de-704823209610",
+                    "leftValue": "={{ $json.target_endpoint }}",
+                    "rightValue": "send",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Envia Msj"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "59ddf299-8f6b-4196-8eb5-bdd8d71e0d5b",
+                    "leftValue": "={{ $json.target_endpoint }}",
+                    "rightValue": "schedule",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -240,
+        -64
+      ],
+      "id": "0245cb76-f517-4618-805b-3e35790e0b16",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "resource": "Sessions",
+        "operation": "Get",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        496,
+        544
+      ],
+      "id": "8d3c5472-d56c-437b-b5aa-b23ab9f1b67c",
+      "name": "Get session information",
+      "credentials": {
+        "wahaApi": {
+          "id": "R7xYkhwe9D7Kc30e",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "Contacts",
+        "operation": "Get All",
+        "session": "={{ $('Set de Datos1').item.json.session }}",
+        "limit": 500,
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        496,
+        160
+      ],
+      "id": "d5860403-7b65-47d7-aec5-36699467cdc8",
+      "name": "Get all contacts",
+      "credentials": {
+        "wahaApi": {
+          "id": "R7xYkhwe9D7Kc30e",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "Groups",
+        "operation": "Get Groups",
+        "session": "={{ $('Set de Datos1').item.json.session }}",
+        "limit": 200,
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        496,
+        352
+      ],
+      "id": "40c85ff8-4d5d-4d6b-90c2-5d94f8f11c65",
+      "name": "Get all groups.",
+      "credentials": {
+        "wahaApi": {
+          "id": "R7xYkhwe9D7Kc30e",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1632,
+        96
+      ],
+      "id": "123365a4-d809-4977-b4a0-b436d6d3787f",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "resource": "Chats",
+        "operation": "Get Chat Picture",
+        "session": "={{ $node[\"Set de Datos1\"].json.session }}",
+        "chatId": "={{ $node[\"Webhook\"].json.body.payload.chatId }}",
+        "refresh": true,
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        480,
+        -896
+      ],
+      "id": "3de30e41-58d0-46f4-a739-edeffacd3f9a",
+      "name": "Gets chat picture",
+      "credentials": {
+        "wahaApi": {
+          "id": "R7xYkhwe9D7Kc30e",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.profilePictureUrl || $json.url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "533f0cf1-f21a-4ffb-9247-7c7ece0c736d",
+      "name": "Descarga Profile P",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1088,
+        -1104
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "g2ETgR7A40J62O0k",
+          "name": "Respuestas para WP"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return {\n  \"data\": $input.all().map(item => item.json)\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1152,
+        64
+      ],
+      "id": "9cd49add-f4f3-4a02-b8a8-02fdec9df59d",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f6d3769d-a15b-4de8-8ea5-cbed381e9f7d",
+              "leftValue": "={{ $json.profilePictureUrl || $json.url }}",
+              "rightValue": {},
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        736,
+        -992
+      ],
+      "id": "af74257c-431d-4f49-abaf-a6bca30ae3bc",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "404 Not found",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1200,
+        -864
+      ],
+      "id": "74670c02-e264-4692-bd8b-de6c7cddec0b",
+      "name": "Envia Respuesta PP"
+    },
+    {
+      "parameters": {
+        "respondWith": "binary",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1424,
+        -1072
+      ],
+      "id": "129c031e-39d3-4c5f-914a-0343b91d9b3d",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "url": "=https://autowhats.com.mx/api/{{ $node[\"Set de Datos1\"].json.session }}/chats/{{ $node[\"Webhook\"].json.body.payload.chatId }}/messages?limit=70",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Api-Key",
+              "value": "redacted"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        752
+      ],
+      "id": "119dd366-b438-42e3-94f0-ebf80a2d5db1",
+      "name": "Trae Mensajes"
+    },
+    {
+      "parameters": {
+        "resource": "Chats",
+        "operation": "Get Chat Message",
+        "session": "={{ $node[\"Webhook\"].json.body.payload.name}}",
+        "chatId": "={{ $node[\"Webhook\"].json.body.payload.chatId }}",
+        "messageId": "={{ $node[\"Webhook\"].json.body.payload.messageId }}",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        496,
+        -672
+      ],
+      "id": "a1843b7d-8635-4691-8829-6ce1df4ac6d7",
+      "name": "Gets message by id",
+      "credentials": {
+        "wahaApi": {
+          "id": "R7xYkhwe9D7Kc30e",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "Chatting",
+        "operation": "Send Text",
+        "session": "={{$node[\"Set de Datos1\"].json.session}}",
+        "chatId": "={{$node[\"Set de Datos1\"].json.ChatId}}",
+        "text": "={{ $node[\"Webhook\"].json.body.payload.text }}",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        1040,
+        736
+      ],
+      "id": "8e6af247-7d55-4f3e-bd6f-a3dfa58c2182",
+      "name": "Send a text message",
+      "credentials": {
+        "wahaApi": {
+          "id": "R7xYkhwe9D7Kc30e",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.target_endpoint }}",
+                    "rightValue": "Text",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "baf5f8f7-8c59-45e4-ad19-b28f70f8341d"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Text"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "63d23d84-132a-4842-bef3-5489bbd27ef6",
+                    "leftValue": "={{ $json.target_endpoint }}",
+                    "rightValue": "Image",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Image"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "92bef5c6-30bf-400f-b3c3-93bb3a9237af",
+                    "leftValue": "={{ $json.target_endpoint }}",
+                    "rightValue": "File",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "File"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        608,
+        944
+      ],
+      "id": "5742b1f3-6acf-4216-87f0-7a7dfb10a7e6",
+      "name": "Switch2"
+    },
+    {
+      "parameters": {
+        "respondWith": "binary",
+        "responseDataSource": "set",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1088,
+        -688
+      ],
+      "id": "d982349d-4aca-4b8a-a7af-768294646286",
+      "name": "Respond to Media"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1488,
+        896
+      ],
+      "id": "c49fbb55-f4ae-4989-8b54-9359dff07af7",
+      "name": "Respond to Send"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://autowhats.com.mx/api/sessions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "name",
+              "value": "={{ $node[\"Set de Datos1\"].json.session }}"
+            },
+            {
+              "name": "engine",
+              "value": "NOWEB"
+            },
+            {
+              "name": "config.webhook.url",
+              "value": "https://n8n.autowhats.com.mx/webhook/admin-sesiones"
+            },
+            {
+              "name": "config.webhook.events",
+              "value": "[\"message\", \"session.status\", \"message.ack\"]"
+            },
+            {
+              "name": "config.webhook.hmac.key",
+              "value": "redacted"
+            },
+            {
+              "name": "config.webhook.retries.policy",
+              "value": "exponential"
+            },
+            {
+              "name": "config.webhook.retries.delaySeconds",
+              "value": "2"
+            },
+            {
+              "name": "config.webhook.retries.attempts",
+              "value": "5"
+            },
+            {
+              "name": "config.noweb.markOnline",
+              "value": "={{ true }}"
+            },
+            {
+              "name": "config.noweb.store.enabled",
+              "value": "={{ true }}"
+            },
+            {
+              "name": "config.noweb.store.fullSync",
+              "value": "={{ true }}"
+            },
+            {
+              "name": "config.proxy.server",
+              "value": "proxy.geonode.io:9000"
+            },
+            {
+              "name": "config.proxy.username",
+              "value": "redacted"
+            },
+            {
+              "name": "config.proxy.password",
+              "value": "redacted"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        832,
+        -448
+      ],
+      "id": "6c0298f0-9deb-4d10-a4a4-54aa80503732",
+      "name": "Crea Sesion",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "sJVI42XjOX1mwDWk",
+          "name": "Header Api"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.target_endpoint }}",
+                    "rightValue": "by-chat-id",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "3f6c1b3d-8f0a-47df-a0ef-ce56280b439e"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Imagen perfil"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "fb977f14-e35d-4311-999b-6811cf842107",
+                    "leftValue": "={{ $json.target_endpoint }}",
+                    "rightValue": "media",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Archivos Multimedia"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        -496
+      ],
+      "id": "cc91c2fe-7e96-4fbb-9d48-22335f41585a",
+      "name": "Media & Profile image"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "df0b658f-9a98-46f9-8964-67835bf0084a",
+              "leftValue": "={{$node[\"Webhook1\"].json.body.payload.body}}",
+              "rightValue": "!kpi",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "bf6fa7a3-d246-4e5e-98d8-8631bea67840",
+      "name": "Filtro !kpi",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        -1760
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extrae datos del mensaje de WAHA\nconst payload = $input.item.json.body?.payload || $input.item.json.payload;\nconst session = $input.item.json.body?.session || $input.item.json.session || 'default';\nconst msg = payload.body.replace(/^!kpi\\s*,?\\s*/i, '').trim(); \n\n// Ahora msg es limpio: \"gobgente, facebook\"\n\n// 2. Separación\nconst parts = msg.split(',');\n\n// Validación básica\nif (parts.length < 2) {\n  return { json: { error: true, msg: '⚠️ Formato incorrecto. Usa: !kpi, ID, red' } };\n}\n\nreturn {\n  json: {\n    // parts[0] ahora sí es \"gobgente\"\n    target_name: parts[0].trim(), \n    \n    // parts[1] ahora sí es \"facebook\" (y lo pasamos a minúsculas para la API)\n    target_network: parts[1].trim().toLowerCase(), \n    \n    chatId: payload.from,\n    session: session,\n    error: false\n  }\n};"
+      },
+      "id": "20d6e818-c5be-4f7f-8f17-3f04d8d33222",
+      "name": "Parsear Comando",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        144,
+        -1840
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://app.fanpagekarma.com/api/v1/{{ $('Parsear Comando').first().json.target_network }}/{{ $json.target_name }}/kpi?token=2a10XH3RNuORiFLN9NFeeMfEmONtrkMj4ybsuke6qmxbNglp70wAQfKce",
+        "options": {}
+      },
+      "id": "a6e1a6f7-8ddd-4866-a924-026962449e85",
+      "name": "Pedir KPIs (API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        416,
+        -1840
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Obtenemos los datos crudos de la API\nconst kpis = $input.item.json.data || {};\n\n// 2. CORRECCIÓN: Obtenemos el nombre/ID desde el nodo \"Parsear Comando\"\n// (Ya no usamos 'Encontrar ID' porque ese nodo no existe en tu ruta actual)\nlet name = \"Desconocido\";\ntry {\n    name = $('Parsear Comando').first().json.target_name;\n} catch (e) {\n    name = \"ID Proporcionado\";\n}\n\n// 3. Mapeo de métricas (La API usa claves técnicas como 'page_posts_count')\n// Usamos ?. para evitar errores si falta algún dato\n\n// Posts\nconst posts = kpis.page_posts_count?.formatted_value || kpis.page_posts_count?.value || 0;\n\n// Engagement (Total de reacciones, comentarios y compartidos)\nconst engagement = kpis.page_total_engagement_count?.formatted_value || kpis.page_total_engagement_count?.value || 0;\n\n// Likes en publicaciones\nconst likes = kpis.page_posts_likes_count?.formatted_value || kpis.page_posts_likes_count?.value || 0;\n\n// Comentarios\nconst comments = kpis.page_posts_comments_count?.formatted_value || kpis.page_posts_comments_count?.value || 0;\n\n// Fans (A veces la API lo llama 'fans' o 'page_fans' o 'pinner_follower_count' dependiendo la red)\n// Intentamos buscar varias opciones comunes\nconst fans = kpis.fans?.formatted_value || kpis.page_fans?.formatted_value || kpis.followers_count?.formatted_value || \"N/A\";\n\n\n// 4. Armamos el mensaje final\nconst mensaje = `📊 *Reporte Fanpage Karma: ${name}*\\n\\n` +\n`📝 Posts: ${posts}\\n` +\n`👍 Reacciones/Likes: ${likes}\\n` +\n`💬 Comentarios: ${comments}\\n` +\n`🔥 Engagement Total: ${engagement}\\n` +\n`👥 Fans/Seguidores: ${fans}\\n\\n` +\n`_Generado vía API_ 🚀`;\n\nreturn { json: { reply_text: mensaje } };"
+      },
+      "id": "2ec3c0ec-1702-4634-b5ec-cd5bd164ef15",
+      "name": "Formato Exito",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        608,
+        -1824
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://autowhats.com.mx/api/sendText",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "session",
+              "value": "={{ $('Parsear Comando').first().json.session }}"
+            },
+            {
+              "name": "chatId",
+              "value": "={{ $('Parsear Comando').first().json.chatId }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.reply_text }}"
+            },
+            {
+              "name": "sendSeen",
+              "value": "false"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        816,
+        -1824
+      ],
+      "id": "4c59ac0a-722a-4bf6-a0da-848e35693eef",
+      "name": "Envia KPIs",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "sJVI42XjOX1mwDWk",
+          "name": "Header Api"
+        },
+        "wahaApi": {
+          "id": "R7xYkhwe9D7Kc30e",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.media.url }}",
+        "authentication": "genericCredentialType",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Api-key",
+              "value": "redacted"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        784,
+        -688
+      ],
+      "id": "b7c8126a-187c-472d-8624-77a802be22e4",
+      "name": "Pide imagenes"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO n8n_wa_scheduler (\n    wp_task_id,\n    session_name,\n    recipients,\n    message_text,\n    media_url,\n    media_filename,\n    message_type,\n    scheduled_at,\n    status,\n    created_at,\n    updated_at\n) VALUES (\n    {{ $json.wp_task_id }}::int,\n    '{{ $json.session }}',\n    '{{ $json.recipients }}'::jsonb,\n    '{{ $json.message_text }}',\n    NULLIF('{{ $('Webhook').item.json.body.payload.media_url }}', ''),\n    NULLIF('{{ $('Webhook').item.json.body.payload.media_filename }}', ''),\n    '{{ $('Webhook').item.json.body.payload.message_type }}',  \n    '{{ $json.scheduled_at }}'::timestamptz,\n    'pending',\n    CURRENT_TIMESTAMP AT TIME ZONE 'UTC',\n    CURRENT_TIMESTAMP AT TIME ZONE 'UTC'\n);",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        592,
+        1360
+      ],
+      "id": "ed522a08-b649-4399-9b31-86ac9bec6a02",
+      "name": "Programador msjs",
+      "credentials": {
+        "postgres": {
+          "id": "JwoCvckLLpzxjlp5",
+          "name": "Postgresql Programador"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "{\"success\": true, \"message\": \"Mensaje Programado Exitosamente\"}.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        992,
+        1376
+      ],
+      "id": "edefab15-6746-4cc7-96a9-fec56d50bf39",
+      "name": "Responde Programador"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://autowhats.com.mx/api/sendImage",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Api-Key",
+              "value": "redacted"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"session\": \"{{$node[\"Set de Datos1\"].json.session}}\",\n  \"chatId\": \"{{$node[\"Set de Datos1\"].json.ChatId.trim()}}\",\n  \"file\": {\n    \"data\": \"{{$node[\"Webhook\"].json.body.payload.file.data}}\"\n  },\n  \"caption\": \"{{$node[\"Webhook\"].json.body.payload.caption || ''}}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1040,
+        960
+      ],
+      "id": "9448070b-227f-4928-9f7b-c6801b80f73d",
+      "name": "Enviar imagen"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://autowhats.com.mx/api/sendFile",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Api-Key",
+              "value": "redacted"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"session\": \"{{$node[\"Set de Datos1\"].json.session}}\",\n  \"chatId\": \"{{$node[\"Set de Datos1\"].json.ChatId.trim()}}\",\n  \"file\": {\n    \"url\": \"{{$node[\"Webhook\"].json.body.payload.file.url}}\",\n    \"mimetype\":\"{{ $node['Webhook'].json.body.payload.file.mimetype }}\",\n    \"filename\": \"{{$node[\"Webhook\"].json.body.payload.file.filename}}\"\n  },\n  \"caption\": \"{{$node[\"Webhook\"].json.body.payload.caption || ''}}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1040,
+        1184
+      ],
+      "id": "cee058c1-9545-448a-8dbd-3f2f0c101dd2",
+      "name": "Enviar imagen1"
+    },
+    {
+      "parameters": {
+        "resource": "Sessions",
+        "operation": "Start",
+        "session": "={{$node[\"Set de Datos1\"].json.session}}",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        1168,
+        -464
+      ],
+      "id": "430e724a-1317-4fe5-aebb-4e4cb2b0e863",
+      "name": "Inicia Sesion",
+      "retryOnFail": true,
+      "waitBetweenTries": 3000,
+      "credentials": {
+        "wahaApi": {
+          "id": "R7xYkhwe9D7Kc30e",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$json.wp_callback_url}}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "options": {},
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-AutoWA-Signature",
+              "value": "={{ $json.signature }}"
+            },
+            {
+              "name": "X-AutoWA-Timestamp",
+              "value": "={{ $json.timestamp }}"
+            }
+          ]
+        }
+      },
+      "id": "50cc9230-89d7-4f8a-97be-446457136ba4",
+      "name": "WP → QR CODE",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1296,
+        -1696
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "g2ETgR7A40J62O0k",
+          "name": "Respuestas para WP"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "Auth",
+        "operation": "Get QR",
+        "session": "={{$node[\"Webhook1\"].json.body.session}}",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        1104,
+        -1664
+      ],
+      "id": "533fd653-9b59-47ce-a719-d46b7e57a1a2",
+      "name": "Get QR code for pairing WhatsApp API.",
+      "credentials": {
+        "wahaApi": {
+          "id": "R7xYkhwe9D7Kc30e",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "1ad53555-55ef-43a7-8730-4108ef2c91d0",
+              "leftValue": "={{ $json.status_type }}",
+              "rightValue": "SCAN_QR",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        912,
+        -1536
+      ],
+      "id": "5df503a2-ae2f-4c62-8656-885641ada105",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$json.wp_callback_url}}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "options": {},
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-AutoWA-Signature",
+              "value": "={{ $json.signature }}"
+            },
+            {
+              "name": "X-AutoWA-Timestamp",
+              "value": "={{ $json.timestamp }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1232,
+        -1456
+      ],
+      "id": "02e03944-ddf2-4a10-b0fa-3c6c2493652c",
+      "name": "HTTP Request1",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "g2ETgR7A40J62O0k",
+          "name": "Respuestas para WP"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "Sessions",
+        "operation": "Create",
+        "name": "= {{$node[\"Set de Datos1\"].json.session}}",
+        "config": "={\n  \"engine\": \"noweb\",\n  \"config\": {\n    \"webhook\": {\n      \"url\": \"https://n8n.autowhats.com.mx/webhook/admin-sesiones\",\n      \"events\": [\"message\", \"session.status\", \"message.ack\"],\n      \"hmac\": { \"key\": \"lhnkdkpwq9bpda8441zbx094bwlkb284379a\" },\n      \"retries\": { \"policy\": \"exponential\", \"delaySeconds\": 2, \"attempts\": 10 }\n    },\n    \"noweb\": {\n      \"store\": {\n        \"enabled\": true,\n        \"fullSync\": true\n      }\n    }\n  }\n}",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        1840,
+        -480
+      ],
+      "id": "13244e3e-cbf0-4776-9f95-7308c27f929c",
+      "name": "Create a session",
+      "credentials": {
+        "wahaApi": {
+          "id": "R7xYkhwe9D7Kc30e",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\n\nconst webhook = $('Webhook1').item.json;\nconst session = webhook.body.session;\nconst payload = webhook.body.payload;\n\nconst bodyObj = {\n  session: session,\n  id: payload.id,\n  from: payload.from,\n  body: payload.body,\n  type: \"chat\",\n  timestamp: Number(payload.timestamp),\n  hasMedia: Boolean(payload.hasMedia)\n};\n\nconst bodyStr = JSON.stringify(bodyObj);\nconst SECRET = 'lhnkdkpwq9bpda8441zbx094bwlkb284379a';\n\nconst timestamp = Math.floor(Date.now() / 1000).toString();\nconst signature = crypto.createHmac('sha256', SECRET)\n                        .update(timestamp + '.' + bodyStr)\n                        .digest('hex');\n\nreturn {\n  json: {\n    body: bodyObj,\n    signature: signature,\n    timestamp: timestamp,\n    site_url: $input.item.json.site_url\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        620,
+        -1340
+      ],
+      "id": "autowa-calc-firma-mensaje",
+      "name": "Calcular Firma Mensaje"
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\n\nconst session = $('Set Datos callback').item.json.session;\nconst qr_data = $input.item.json.data;\n\nconst bodyObj = {\n  session_name: session,\n  status: \"SCAN_QR_CODE\",\n  qr_image: \"data:image/png;base64,\" + qr_data,\n  message: \"Escanea el código QR\"\n};\n\nconst bodyStr = JSON.stringify(bodyObj);\nconst SECRET = 'lhnkdkpwq9bpda8441zbx094bwlkb284379a';\n\nconst timestamp = Math.floor(Date.now() / 1000).toString();\nconst signature = crypto.createHmac('sha256', SECRET)\n                        .update(timestamp + '.' + bodyStr)\n                        .digest('hex');\n\nreturn {\n  json: {\n    body: bodyObj,\n    signature: signature,\n    timestamp: timestamp,\n    wp_callback_url: $('Set Datos callback').item.json.wp_callback_url\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        -1680
+      ],
+      "id": "autowa-calc-firma-qr",
+      "name": "Calcular Firma QR"
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\n\nconst session = $('Set Datos callback').item.json.session;\nconst status_type = $('Set Datos callback').item.json.status_type;\n\nconst bodyObj = {\n  session_name: session,\n  status: status_type,\n  message: \"Status\"\n};\n\nconst bodyStr = JSON.stringify(bodyObj);\nconst SECRET = 'lhnkdkpwq9bpda8441zbx094bwlkb284379a';\n\nconst timestamp = Math.floor(Date.now() / 1000).toString();\nconst signature = crypto.createHmac('sha256', SECRET)\n                        .update(timestamp + '.' + bodyStr)\n                        .digest('hex');\n\nreturn {\n  json: {\n    body: bodyObj,\n    signature: signature,\n    timestamp: timestamp,\n    wp_callback_url: $('Set Datos callback').item.json.wp_callback_url\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1080,
+        -1440
+      ],
+      "id": "autowa-calc-firma-estatus",
+      "name": "Calcular Firma Estatus"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Validar Licencia EDD1": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Set de Datos1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set de Datos1": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Revisa Sesion1": {
+      "main": [
+        [
+          {
+            "node": "Crea Sesion",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check Session Status1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Session Status1": {
+      "main": [
+        [
+          {
+            "node": "IF Failed Session1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Failed Session1": {
+      "main": [
+        [
+          {
+            "node": "Stop the session1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Validar Licencia EDD1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Calcular Firma Mensaje",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Filtro !kpi",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query": {
+      "main": [
+        [
+          {
+            "node": "Set Datos callback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Datos callback": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Media & Profile image",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Revisa Sesion1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get chats overview. Includes all necessary things to build UI \"your chats overview\" page - chat id, name, picture, last message. Sorting by last message timestamp",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get all contacts",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get all groups.",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get session information",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Trae Mensajes",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Switch2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Programador msjs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get session information": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get chats overview. Includes all necessary things to build UI \"your chats overview\" page - chat id, name, picture, last message. Sorting by last message timestamp": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get all contacts": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get all groups.": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stop the session1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gets chat picture": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Descarga Profile P": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Descarga Profile P",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Envia Respuesta PP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trae Mensajes": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gets message by id": {
+      "main": [
+        [
+          {
+            "node": "Pide imagenes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        [
+          {
+            "node": "Respond to Send",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch2": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Enviar imagen",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Enviar imagen1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Media": {
+      "main": [
+        []
+      ]
+    },
+    "Crea Sesion": {
+      "main": [
+        [
+          {
+            "node": "Inicia Sesion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Media & Profile image": {
+      "main": [
+        [
+          {
+            "node": "Gets chat picture",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gets message by id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtro !kpi": {
+      "main": [
+        [
+          {
+            "node": "Parsear Comando",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parsear Comando": {
+      "main": [
+        [
+          {
+            "node": "Pedir KPIs (API)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pedir KPIs (API)": {
+      "main": [
+        [
+          {
+            "node": "Formato Exito",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formato Exito": {
+      "main": [
+        [
+          {
+            "node": "Envia KPIs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pide imagenes": {
+      "main": [
+        [
+          {
+            "node": "Respond to Media",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Programador msjs": {
+      "main": [
+        [
+          {
+            "node": "Responde Programador",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Responde Programador": {
+      "main": [
+        []
+      ]
+    },
+    "Enviar imagen": {
+      "main": [
+        [
+          {
+            "node": "Respond to Send",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar imagen1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Send",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Inicia Sesion": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get QR code for pairing WhatsApp API.": {
+      "main": [
+        [
+          {
+            "node": "Calcular Firma QR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Get QR code for pairing WhatsApp API.",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Calcular Firma Estatus",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a session": {
+      "main": [
+        []
+      ]
+    },
+    "Calcular Firma Mensaje": {
+      "main": [
+        [
+          {
+            "node": "WP → Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calcular Firma QR": {
+      "main": [
+        [
+          {
+            "node": "WP → QR CODE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calcular Firma Estatus": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "timeSavedMode": "fixed",
+    "availableInMCP": false,
+    "timezone": "America/Mexico_City"
+  },
+  "versionId": "8d1e00e1-06b3-4326-bb9d-470dae5483de",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8497f14f07ae2af6e3dd1a4ef6270f20814ee7d82de084f68b24714d7deb2124"
+  },
+  "id": "LGivQTjktez0Q3yX",
+  "tags": []
+}
