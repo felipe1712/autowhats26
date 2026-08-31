@@ -3,6 +3,9 @@
  * AutoWhats License Manager - Login
  */
 
+ini_set('display_errors', 0);
+error_reporting(E_ALL);
+
 require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/db.php';
 
@@ -18,19 +21,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = trim($_POST['password'] ?? '');
 
     if (!empty($username) && !empty($password)) {
-        $pdo = get_db_connection();
-        $stmt = $pdo->prepare('SELECT id, username, password_hash FROM admins WHERE username = ? LIMIT 1');
-        $stmt->execute([$username]);
-        $admin = $stmt->fetch();
+        try {
+            $pdo = get_db_connection();
+            $stmt = $pdo->prepare('SELECT id, username, password_hash FROM admins WHERE username = ? LIMIT 1');
+            $stmt->execute([$username]);
+            $admin = $stmt->fetch();
 
-        if ($admin && password_verify($password, $admin['password_hash'])) {
-            $_SESSION['admin_logged_in'] = true;
-            $_SESSION['admin_username']  = $admin['username'];
-            $_SESSION['admin_id']        = $admin['id'];
-            header('Location: index.php');
-            exit;
-        } else {
-            $error = 'Usuario o contraseña incorrectos.';
+            if ($admin) {
+                $is_valid = false;
+
+                // 1. Verificación estándar con bcrypt / password_verify
+                if (password_verify($password, $admin['password_hash'])) {
+                    $is_valid = true;
+                }
+                // 2. Compatibilidad con hash MD5 o SHA-256 (y auto-migración a bcrypt)
+                elseif ($admin['password_hash'] === md5($password) || $admin['password_hash'] === hash('sha256', $password)) {
+                    $is_valid = true;
+                    // Auto-actualizar al hash seguro de PHP
+                    $new_hash = password_hash($password, PASSWORD_DEFAULT);
+                    $pdo->prepare('UPDATE admins SET password_hash = ? WHERE id = ?')->execute([$new_hash, $admin['id']]);
+                }
+                // 3. Fallback de texto plano temporal (si se insertó directamente en SQL)
+                elseif ($admin['password_hash'] === $password) {
+                    $is_valid = true;
+                    $new_hash = password_hash($password, PASSWORD_DEFAULT);
+                    $pdo->prepare('UPDATE admins SET password_hash = ? WHERE id = ?')->execute([$new_hash, $admin['id']]);
+                }
+
+                if ($is_valid) {
+                    $_SESSION['admin_logged_in'] = true;
+                    $_SESSION['admin_username']  = $admin['username'];
+                    $_SESSION['admin_id']        = $admin['id'];
+                    header('Location: index.php');
+                    exit;
+                } else {
+                    $error = 'Usuario o contraseña incorrectos.';
+                }
+            } else {
+                $error = 'Usuario o contraseña incorrectos.';
+            }
+        } catch (Exception $e) {
+            $error = 'Error de conexión a la base de datos: ' . $e->getMessage();
         }
     } else {
         $error = 'Por favor ingresa usuario y contraseña.';

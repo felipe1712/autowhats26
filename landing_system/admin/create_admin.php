@@ -1,38 +1,50 @@
 <?php
 /**
  * AutoWhats - Creador / Restablecedor de Usuario Administrador
- * Sube este archivo a /admin/ y ábrelo en tu navegador para crear o actualizar un usuario.
- * (Por seguridad, bórralo una vez que hayas creado tu usuario).
  */
 
-require_once __DIR__ . '/db.php';
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 $msg = '';
 $msg_type = 'info';
+
+require_once __DIR__ . '/config.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username'] ?? '');
     $password = trim($_POST['password'] ?? '');
 
     if (!empty($username) && !empty($password)) {
-        $pdo = get_db_connection();
-        $hash = password_hash($password, PASSWORD_DEFAULT);
+        try {
+            $dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=' . DB_CHARSET;
+            $pdo = new PDO($dsn, DB_USER, DB_PASS, [
+                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            ]);
 
-        // Verificar si el usuario ya existe para actualizarlo o insertarlo
-        $stmt = $pdo->prepare('SELECT id FROM admins WHERE username = ?');
-        $stmt->execute([$username]);
-        $exists = $stmt->fetch();
+            $hash = password_hash($password, PASSWORD_DEFAULT);
 
-        if ($exists) {
-            $update = $pdo->prepare('UPDATE admins SET password_hash = ? WHERE username = ?');
-            $update->execute([$hash, $username]);
-            $msg = "¡La contraseña del usuario <strong>$username</strong> ha sido actualizada con éxito!";
-            $msg_type = 'success';
-        } else {
-            $insert = $pdo->prepare('INSERT INTO admins (username, password_hash) VALUES (?, ?)');
-            $insert->execute([$username, $hash]);
-            $msg = "¡El usuario <strong>$username</strong> ha sido creado con éxito!";
-            $msg_type = 'success';
+            // Verificar si el usuario ya existe para actualizarlo o insertarlo
+            $stmt = $pdo->prepare('SELECT id FROM admins WHERE username = ?');
+            $stmt->execute([$username]);
+            $exists = $stmt->fetch();
+
+            if ($exists) {
+                $update = $pdo->prepare('UPDATE admins SET password_hash = ? WHERE username = ?');
+                $update->execute([$hash, $username]);
+                $msg = "¡La contraseña del usuario <strong>$username</strong> ha sido actualizada con éxito!";
+                $msg_type = 'success';
+            } else {
+                $insert = $pdo->prepare('INSERT INTO admins (username, password_hash) VALUES (?, ?)');
+                $insert->execute([$username, $hash]);
+                $msg = "¡El usuario <strong>$username</strong> ha sido creado con éxito!";
+                $msg_type = 'success';
+            }
+        } catch (PDOException $e) {
+            $msg = 'Error al conectar a MySQL: ' . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
+            $msg_type = 'danger';
         }
     } else {
         $msg = 'Por favor completa usuario y contraseña.';
