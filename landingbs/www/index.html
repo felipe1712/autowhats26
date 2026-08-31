@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
 
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
 
-	<title>Sabil - Responsive Multipurpose Landing Page</title>
+	<title>AutoWhats - Automatización de WhatsApp para WordPress y WooCommerce</title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="">
-	<meta name="keywords" content="">
-	<meta name="author" content="">
+	<meta name="description" content="Conecta WhatsApp a tu tienda WordPress y WooCommerce. Envíos masivos, notificaciones de pedidos, live chat y automatizaciones seguras sin costo por mensaje.">
+	<meta name="keywords" content="autowhats, whatsapp wordpress, whatsapp woocommerce, bot whatsapp, waha, n8n whatsapp, automatizar whatsapp">
+	<meta name="author" content="AutoWhats">
 
 	<!-- FAVICON -->
 	<link rel="shortcut icon" href="images/favicon.html">
@@ -29,8 +29,17 @@
 	<link rel="stylesheet" href="js/vendors/slick/slick.css">
 	<link rel="stylesheet" href="css/style.css">
     
+    <style>
+        .brand-text { font-size: 24px; font-weight: 800; color: #25d366 !important; text-decoration: none; display: inline-block; padding-top: 10px; }
+        .brand-text span { color: #ffffff; }
+        .badge-popular { background: #25d366; color: white; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .pricing__price_green { color: #25d366 !important; }
+        .feature-icon-box { background: rgba(37, 211, 102, 0.1); border-radius: 50%; width: 70px; height: 70px; line-height: 70px; margin: 0 auto 15px; color: #25d366; font-size: 28px; }
+        .check-list li { margin-bottom: 8px; font-size: 15px; }
+        .check-list li i { color: #25d366; margin-right: 8px; }
+    </style>
+
 	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 	<!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -45,7 +54,7 @@
 		<nav class="navbar-inverse navbar-lg navbar-fixed-top">
 			<div class="container">
 				<div class="navbar-header">
-					<a href="index.html" class="navbar-brand brand"><img src="images/logo.png" alt="Smiley face"></a>
+					<a href="index.html" class="brand-text"><i class="fa fa-whatsapp"></i> Auto<span>Whats</span></a>
 				</div>
 
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -58,545 +67,349 @@
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav navbar-right navbar-login">
 						<li>
-							<a href="#" class="btn btn-lg btn-primary"><span class="icon-unlock2"></span> Sign Up</a>
+							<a href="#precios" class="btn btn-lg btn-primary"><span class="icon-unlock2"></span> Comprar Licencia</a>
 						</li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
-						<li class="dropdown mm-menu">
-							<a href="index.html">Home</a>
-							<ul class="dropdown-menu mega-menu" role="menu">
-								<li class="col-md-3 col-sm-3">
-									<a href="index1.html">Header-1</a>
-									<a href="index2.html">Header-2</a>
-									<a href="index3.html">Header-3</a>
-									<a href="index4.html">Header-4</a>
-									<a href="index5.html">Header-5</a>
-								</li>
-							
-								<li class="col-md-3 col-sm-3">
-									<a href="index6.html">Header-6</a>
-									<a href="index7.html">Header-7</a>
-									<a href="index8.html">Header-8</a>
-									<a href="index9.html">Header-9</a>
-									<a href="index10.html">Header-10</a>
-								</li>
-							
-								<li class="col-md-3 col-sm-3">
-									<a href="index11.html">Header-11</a>
-									<a href="index12.html">Header-12</a>
-									<a href="index13.html">Header-13</a>
-									<a href="index14.html">Header-14</a>
-									<a href="index15.html">Header-15</a>
-								</li>
-								
-								<li class="col-md-3 col-sm-3">
-									<a href="index16.html">Header-16</a>
-									<a href="index17.html">Header-17</a>
-									<a href="index18.html">Header-18</a>
-								</li>
-								 
-							</ul>
-						</li>
-						
-						<li class="dropdown">
-							<a href="about.html">Who We Are</a>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="about.html">About</a></li>
-								<li><a href="faq.html">Faq</a></li>
-								<li><a href="404.html">404 Page</a></li>
-							</ul>
-						</li>
-						<li class="dropdown mm-menu">
-							<a href="elements-alerts.html">Elements</a>
-							<ul class="dropdown-menu mega-menu" role="menu">
-								<li class="col-md-3 col-sm-3">
-									<a href="elements-accordion.html">Accordion</a>
-									<a href="elements-alerts.html">Alerts</a>
-									<a href="elements-blockquotes.html">Blockquotes</a>
-									<a href="elements-cta.html">Call to Action</a>
-									<a href="elements-counters.html">Counters</a>
-									<a href="elements-clients.html">Clients</a>
-								</li>
-								<li class="col-md-3 col-sm-3">
-									<a href="elements-dropcaps.html">Dropcaps</a>
-									<a href="elements-eventcard.html">Event Card</a>
-									<a href="elements-flipbox.html">Flip Box</a>
-									<a href="elements-gallery.html">Gallery</a>
-									<a href="elements-grid.html">Grid Columns</a>
-									<a href="elements-iconbox.html">Icon Box</a>
-								</li>
-								<li class="col-md-3 col-sm-3">
-									<a href="elements-media.html">Media</a>
-									<a href="elements-parallax.html">Parallax</a>
-									<a href="elements-pricing.html">Pricing</a>
-									<a href="elements-process.html">Process Steps</a>
-									<a href="elements-progressbar.html">Progress Bar</a>
-									<a href="elements-tables.html">Tables</a>
-								</li>
-								<li class="col-md-3 col-sm-3">
-									<a href="elements-tabs.html">Tabs</a>
-									<a href="elements-team.html">Team</a>
-									<a href="elements-testimonials.html">Testimonials</a>
-									<a href="elements-timeline.html">Timeline</a>
-									<a href="elements-subscribe.html">Subscribe</a>
-									
-								</li>
-							</ul>
-						</li>
-						<li class="dropdown">
-							<a href="portfolio-2col.html">Portfolio</a>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="portfolio-2col.html">Portfolio - 2 col</a></li>
-								<li><a href="portfolio-3col.html">Portfolio - 3 col</a></li>
-								<li><a href="portfolio-4col.html">Portfolio - 4 col</a></li>
-							</ul>
-						</li>
-						<li class="dropdown">
-							<a href="blog-classic.html">Blog</a>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="blog-full.html">Blog - FullWidth</a></li>
-								<li><a href="blog-full-ls.html">Blog - Left Sidebar</a></li>
-								<li><a href="blog-full-rs.html">Blog - Right Sidebar</a></li>
-								<li><a href="blog-full-2col.html">Blog - 2 Col</a></li>
-								<li><a href="blog-full-3col.html">Blog - 3 Col</a></li>
-								<li><a href="blog-classic.html">Blog Classic</a></li>
-								<li><a href="blog-classic-ls.html">Blog Classic - Left Sidebar</a></li>
-								<li><a href="blog-classic-rs.html">Blog Classic - Right Sidebar</a></li>
-								<li><a href="blog-single.html">Blog Single</a></li>
-							</ul>
-						</li>
-						<li class="dropdown">
-							<a href="contact.html">Contact</a>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="contact2.html">Contact-2</a></li>
-								
-							</ul>
-						</li>						
+						<li><a href="#page-top">Inicio</a></li>
+						<li><a href="#caracteristicas">Características</a></li>
+						<li><a href="#beneficios">Beneficios</a></li>
+						<li><a href="#precios">Precios</a></li>
+						<li><a href="#faq">Preguntas</a></li>
+						<li><a href="#contacto">Contacto</a></li>
 					</ul>
 				</div>
 			</div>
 		</nav>
 	</header>
 
-	<!-- INTRO -->
+	<!-- INTRO / HERO -->
 	<div class="intro intro1">
-			<div class="overlay"></div>
-            <div class="container">
+		<div class="overlay"></div>
+        <div class="container">
 			<div class="row center-content">
-				<div class="col-sm-7">
-                	<p>the entire idea of the retina-ready technology</p>
-					<h2>the easiest way to start your startup business</h2>
+				<div class="col-sm-8">
+                	<p>POTENCIA TU NEGOCIO CON WHATSAPP & WORDPRESS</p>
+					<h2>Automatiza tus mensajes, ventas y alertas de WooCommerce en tiempo real</h2>
+                    <div class="space20"></div>
+                    <p class="text-white" style="font-size: 18px; color: #e2e8f0;">
+                    	La suite completa para conectar WhatsApp a tu WordPress. Envío de notificaciones automáticas de pedidos, difusiones programadas, chat en vivo y flujos de n8n sin pagar por cada mensaje enviado.
+                    </p>
                     <div class="space30"></div>
-					<a href="#" class="btn btn-lg btn-primary">Try for free <i class="ilmosys-arrow-right"></i></a>
-					<a href="#" class="btn btn-lg btn-default">See how it work <i class="ilmosys-arrow-right"></i></a>
-				</div>
-					</div>
-                    </div>
+					<a href="#precios" class="btn btn-lg btn-primary">Ver Planes y Precios <i class="ilmosys-arrow-right"></i></a>
+					<a href="#caracteristicas" class="btn btn-lg btn-default">Conocer Funciones <i class="ilmosys-arrow-right"></i></a>
 				</div>
 			</div>
+        </div>
+	</div>
 			
-			<!-- ELEMENTS-CLIENTS -->
-		<div class="elements-content bg-primary">
+	<!-- CLIENTS / HIGHLIGHTS -->
+	<div class="elements-content bg-primary" style="background-color: #25d366; padding: 25px 0;">
+		<div class="container">
+			<div class="row text-center text-white">
+				<div class="col-md-3 col-sm-6" style="padding: 10px 0;">
+					<h3 style="color: white; margin: 0; font-weight: 800;">100% Seguro</h3>
+					<small style="color: rgba(255,255,255,0.9);">Firmas Criptográficas HMAC</small>
+				</div>
+				<div class="col-md-3 col-sm-6" style="padding: 10px 0;">
+					<h3 style="color: white; margin: 0; font-weight: 800;">WooCommerce</h3>
+					<small style="color: rgba(255,255,255,0.9);">Alertas de Pedidos Automáticas</small>
+				</div>
+				<div class="col-md-3 col-sm-6" style="padding: 10px 0;">
+					<h3 style="color: white; margin: 0; font-weight: 800;">Sin Costo / Msj</h3>
+					<small style="color: rgba(255,255,255,0.9);">Usa tu propio WhatsApp y Servidor</small>
+				</div>
+				<div class="col-md-3 col-sm-6" style="padding: 10px 0;">
+					<h3 style="color: white; margin: 0; font-weight: 800;">Difusión y Chat</h3>
+					<small style="color: rgba(255,255,255,0.9);">Mensajería y Scheduler Integrado</small>
+				</div>
+			</div>
+		</div>
+	</div>
+    
+    <!-- ABOUT / OVERVIEW -->
+    <div class="container" id="caracteristicas">
+		<div class="about-inline text-center">
 			<div class="container">
-				<div class="row">
-					<ul class="clients no-padding text-center">
-						<li><img src="images/clients/1.png" class="img-responsive center-block" alt=""/></li>
-						<li><img src="images/clients/2.png" class="img-responsive center-block" alt=""/></li>
-						<li><img src="images/clients/3.png" class="img-responsive center-block" alt=""/></li>
-						<li><img src="images/clients/4.png" class="img-responsive center-block" alt=""/></li>
-						<li><img src="images/clients/5.png" class="img-responsive center-block" alt=""/></li>
-					</ul>
-				</div>
+	        	<p>- ¿POR QUÉ AUTOWHATS? -</p>
+				<h3>Todo lo que necesitas para comunicarte con tus clientes directamente en WhatsApp</h3>
 			</div>
 		</div>
     
-    <!-- ABOUT -->
-    <div class="container">
-	<div class="about-inline text-center">
-		<div class="container">
-        <p>- WHAT WE DO -</p>
-			<h3>We make your business gain more <br>revenue at a glance</h3>
-		</div>
-	</div>
-    
-	<!-- INFO CONTENT -->
-	<div class="info-content">
-		<div class="container">
-			<div class="row center-content">
-				<div class="col-md-6">
-					<h3 class="keysize">
-                
-                 <i class="icon2-Key"></i>Sabil is Key for Success..</h3>
-					<p><b>Lorem ipsum dolor </b> sit amet, consectetur adipiscing elit. Etiam et purus a odio finibus bibendum in sit amet leo. Mauris feugiat erat tellus.Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. <b><u><span style="color:#e2574c">Separated they live in Bookmarksgrove.</span></u></b> Lorem ipsum dolor sit amet  consectetur adipiscing elit.  Etiam et purus a odio finibus bibendum in sit amet leo. Mauris feugiat erat tellus.</p>
-					<ul class="list">
-						<li><i class="icon-check"></i> Etiam sed dolor ac diam volutpat</li>
-						<li><i class="icon-check"></i> Erat volutpat aliquet imperdiet</li>
-					</ul>
-					<div class="space30"></div>
-					<a href="#" class="btn btn-lg btn-dark">Get in Touch<i class="icon-arrow-right"></i></a>
-				</div>
+		<!-- INFO CONTENT -->
+		<div class="info-content">
+			<div class="container">
+				<div class="row center-content">
+					<div class="col-md-6">
+						<h3 class="keysize"><i class="fa fa-bolt" style="color: #25d366;"></i> Comunicación Inmediata y Mayor Conversión</h3>
+						<p><b>AutoWhats</b> transforma la interacción con tus clientes eliminando los correos electrónicos ignorados. Tus clientes abren más del <b>95% de los mensajes de WhatsApp</b> en los primeros 3 minutos.</p>
+						<ul class="list check-list">
+							<li><i class="icon-check"></i> Notificaciones automáticas de pedidos nuevos, completados o pendientes en WooCommerce.</li>
+							<li><i class="icon-check"></i> Bandeja de entrada de chat integrada en tu panel de administración de WordPress.</li>
+							<li><i class="icon-check"></i> Programador inteligente de envíos para campañas y recordatorios de pago.</li>
+							<li><i class="icon-check"></i> Cero comisiones por mensaje: utiliza tu propia infraestructura con WAHA y n8n.</li>
+						</ul>
+						<div class="space30"></div>
+						<a href="#precios" class="btn btn-lg btn-dark">Adquirir Licencia <i class="icon-arrow-right"></i></a>
+					</div>
 
-				<div class="col-md-6 text-center">
-					<img src="images/1.png" class="pull-right img-responsive" alt="">
+					<div class="col-md-6 text-center">
+						<img src="images/1.png" class="pull-right img-responsive" alt="AutoWhats WhatsApp WordPress">
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
 	
     <div class="space100"></div>
 	
-    <!-- PARALLAX -->
+    <!-- PARALLAX CALL TO ACTION -->
 	<section class="parallax-content parallax1 text-center" data-stellar-background-ratio="0.4">
 		<div class="overlay"></div>
 		<div class="container">
-        <div class="row">
-		<div class="col-md-8">
-			<h4>Looking for exclusive digital services?</h4>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam dictum mattis velit liquam hendrerit lorem at elit.</p>
-		</div>
-        <div class="row">
-        <div class="col-md-4">
-			<a href="#" class="btn btn-lg btn-dark">Get in Touch<i class="icon-arrow-right"></i></a>
-		</div>
-        </div>
-        </div>
+	        <div class="row">
+				<div class="col-md-8 text-left">
+					<h4>¿Cansado de pagar mensajería por suscripción costosa?</h4>
+					<p>Con AutoWhats tienes una solución profesional y segura sin límites de envío y con control absoluto de tus datos.</p>
+				</div>
+		        <div class="col-md-4 text-center">
+					<a href="#precios" class="btn btn-lg btn-primary">Empieza Ahora <i class="icon-arrow-right"></i></a>
+				</div>
+	        </div>
         </div>
 	</section>
     
-    
-     <!-- SERVICES -->
-    <div class="container">
-	<div class="about-inline text-center">
-		<div class="container">
-        <p>- OUR SERVICES -</p>
-			<h3>See the benefits you can get by working  <br> with our experts. </h3>
+    <!-- SERVICES / FEATURES -->
+    <div class="container" id="beneficios">
+		<div class="about-inline text-center">
+			<div class="container">
+	        	<p>- CARACTERÍSTICAS PRINCIPALES -</p>
+				<h3>Diseñado para optimizar tus ventas, soporte y seguridad</h3>
+			</div>
 		</div>
-	</div>
     
-    <div class="service3 icon-box-square">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-4">
-					<div class="text-center">
-						<span><i class="fa fa-1x fa-magic"></i></span>
-						<div class="services-content">
-							<h2>Fully Customizable</h2>
-							<p>Lorem ipsum dolor sit amet adipiscing elit sed orci dictum sagittis libero vitae auctor elit. Praesent accumsan mauris eget tortor auctor efficitur nunc iaculis nunc.</p>
+	    <div class="service3 icon-box-square">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="text-center">
+							<div class="feature-icon-box"><i class="fa fa-shopping-cart"></i></div>
+							<div class="services-content">
+								<h2>Integración WooCommerce</h2>
+								<p>Envía mensajes personalizados con variables dinámicas del cliente, número de pedido, total y enlace de seguimiento tras cada compra.</p>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="col-md-4">
-					<div class="text-center">
-						<span><i class="fa fa-1x fa-codepen"></i></span>
-						<div class="services-content">
-							<h2>Clean Coded</h2>
-							<p>Lorem ipsum dolor sit amet adipiscing elit sed orci dictum sagittis libero vitae auctor elit. Praesent accumsan mauris eget tortor auctor efficitur nunc iaculis nunc.</p>
+					<div class="col-md-4">
+						<div class="text-center">
+							<div class="feature-icon-box"><i class="fa fa-calendar-check-o"></i></div>
+							<div class="services-content">
+								<h2>Programador de Mensajes</h2>
+								<p>Planifica difusiones masivas o recordatorios de vencimiento con fecha y hora programada, respetando los límites de envío.</p>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="col-md-4">
-					<div class="text-center">
-						<span><i class="fa fa-1x fa-delicious"></i></span>
-						<div class="services-content">
-							<h2>High Resolution</h2>
-							<p>Lorem ipsum dolor sit amet adipiscing elit sed orci dictum sagittis libero vitae auctor elit. Praesent accumsan mauris eget tortor auctor efficitur nunc iaculis nunc.</p>
+					<div class="col-md-4">
+						<div class="text-center">
+							<div class="feature-icon-box"><i class="fa fa-shield"></i></div>
+							<div class="services-content">
+								<h2>Seguridad Blindada (HMAC)</h2>
+								<p>Verificación criptográfica HMAC-SHA256 con protección anti-replay. Ningún atacante puede falsificar mensajes hacia tu servidor.</p>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-        <div class="service3 icon-box-square">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-4">
-					<div class="text-center">
-						<span><i class="fa fa-1x fa-magic"></i></span>
-						<div class="services-content">
-							<h2>Fully Customizable</h2>
-							<p>Lorem ipsum dolor sit amet adipiscing elit sed orci dictum sagittis libero vitae auctor elit. Praesent accumsan mauris eget tortor auctor efficitur nunc iaculis nunc.</p>
+	        <div class="service3 icon-box-square">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="text-center">
+								<div class="feature-icon-box"><i class="fa fa-comments"></i></div>
+								<div class="services-content">
+									<h2>Live Chat en WordPress</h2>
+									<p>Responde a tus prospectos y clientes desde el panel de WordPress con soporte para texto, imágenes y documentos adjuntos.</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="text-center">
+								<div class="feature-icon-box"><i class="fa fa-users"></i></div>
+								<div class="services-content">
+									<h2>Listas de Destinatarios</h2>
+									<p>Crea segmentos de clientes y listas de difusión organizadas para enviar promociones exclusivas con un solo clic.</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="text-center">
+								<div class="feature-icon-box"><i class="fa fa-lock"></i></div>
+								<div class="services-content">
+									<h2>Control de Roles de Usuario</h2>
+									<p>Permite que tu equipo de ventas atienda mensajes asignando permisos específicos sin otorgar acceso de administrador total.</p>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="col-md-4">
-					<div class="text-center">
-						<span><i class="fa fa-1x fa-codepen"></i></span>
-						<div class="services-content">
-							<h2>Clean Coded</h2>
-							<p>Lorem ipsum dolor sit amet adipiscing elit sed orci dictum sagittis libero vitae auctor elit. Praesent accumsan mauris eget tortor auctor efficitur nunc iaculis nunc.</p>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-4">
-					<div class="text-center">
-						<span><i class="fa fa-1x fa-delicious"></i></span>
-						<div class="services-content">
-							<h2>High Resolution</h2>
-							<p>Lorem ipsum dolor sit amet adipiscing elit sed orci dictum sagittis libero vitae auctor elit. Praesent accumsan mauris eget tortor auctor efficitur nunc iaculis nunc.</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	 </div>
-   </div>
- </div>
-   
+		 	</div>
+	   	</div>
+ 	</div>
     
-<!-- benifits 1 -->
+	<!-- BENEFITS 1 -->
 	<div class="intro intro-benifits">
-		
-			<div class="row center-content" >
-            	<div class="col-md-6">
-					<img src="images/bg/benifits.jpg" class="pull-left" alt=""/>
-				</div>
-             
+		<div class="row center-content">
+           	<div class="col-md-6">
+				<img src="images/bg/benifits.jpg" class="pull-left img-responsive" alt="Beneficios AutoWhats"/>
+			</div>
             <div class="container">
-            
 				<div class="col-md-9 benifits col-md-push-1">
-					<h3>Sabil Landing page comes with lots of benifits!</h3> <br />
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam et purus a odio finibus bibendum in sit amet leo.</p>
+					<h3>Automatizaciones Flexibles con n8n y WAHA</h3> <br />
+					<p>AutoWhats se conecta de forma nativa a tus flujos de automatización de n8n para brindarte posibilidades infinitas:</p>
                     <br />
-                    <p><span>=</span> Lorem ipsum dolor sit amet</p>
-                    <p><span>=</span> Incididunt ut labore</p>
-                    <p><span>=</span> Elit sed do eiusmod tempor</p>
-                    <p><span>=</span> Incididunt ut labore</p>
+                    <p><span>✔</span> Respuestas automáticas con Inteligencia Artificial (OpenAI / Claude).</p>
+                    <p><span>✔</span> Registro de clientes y sincronización con tu CRM favorito.</p>
+                    <p><span>✔</span> Disparo de alertas ante eventos de seguridad críticos en tu WordPress.</p>
+                    <p><span>✔</span> Soporte para imágenes, audios, PDFs y notas de voz.</p>
 				</div>					
 			</div>
 		</div>
 	</div>
 
-<!-- benifits 2 -->
-	<div class="intro intro-benifits2">
-		<div class="container">
-			<div class="row center-content">
-				<div class="col-md-6">
-					<h3>Sabil is Onepage & Multipurspose Landing page</h3>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam et purus a odio finibus bibendum in sit amet leo. Mauris feugiat erat tellus.Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.  Separated they live in Bookmarksgrove. Lorem ipsum dolor sit amet  consectetur adipiscing elit.  Etiam et purus a odio finibus bibendum in sit amet leo. Mauris feugiat erat tellus.</p>
-					<a href="#" class="btn btn-lg btn-dark space20">Learn More!</a>
-				</div>
-
-				<div class="col-md-6 col-md-push-1">
-					<img src="images/bg/benifits2.jpg" class="pull-left img-responsive" alt=""/>
-				</div>					
-			</div>
-		</div>
-	</div>
- 
-	<!-- TESTIMONIALS -->
-	<div class="testimonials-white">
-    
-    <div class="container">
-	<div class="about-inline text-center">
-		<div class="container">
-        <p>- REVIEWS  -</p>
-			<h3>See what our experts says about us. We have  <br> got over 1000s of positive reviews. </h3>
-		</div>
-	</div>
-    
-		<div class="container">
-			<div class="row">
-				<div class="col-md-12 text-center">
-					<div class="quote3">
-						<div>
-                        	<i class="img1"><img src="images/quote/1.jpg" alt="quote"></i>
-							<p>"Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live."</p>
-							<span class="author">- Jerry Doe -</span> <br />
-                            <span class="author-job">Web Designer @Google</span>
-						</div>
-						<div>
-                        	<i class="img1"><img src="images/quote/2.jpg" alt="quote"></i>
-							<p>"Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live."</p>
-                            <span class="author">- Kevin Steve -</span> <br />
-                            <span class="author-job">Product Designer @Google</span>
-						</div>
-						<div>
-                        	<i class="img1"><img src="images/quote/3.jpg" alt="quote"></i>
-							<p>"Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live."</p>
-                             <span class="author">- Ross Standford -</span> <br />
-                            <span class="author-job">Front End Designer @Google</span>
-						</div>
-						<div>
-                        	<i class="img1"><img src="images/quote/4.jpg" alt="quote"></i>
-							<p>"Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live."</p>
-                             <span class="author">- Willsam Doe -</span> <br />
-                            <span class="author-job">Back End Developer @Google</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
 	<!-- PRICING -->
-    <div class="container" id="pricing">
-	<div class="about-inline text-center">
-        <p>- PRICING TABLE  -</p>
-			<h3>Select the plan that suits you, <br> Upgrade, downgrade, or cancel anytime. </h3>
+    <div class="container" id="precios">
+		<div class="about-inline text-center">
+        	<p>- PLANES Y PRECIOS -</p>
+			<h3>Elige el plan ideal para tu negocio. <br> Sin costos ocultos ni cobros por mensaje.</h3>
 		</div>
 	</div>
 
-	<!-- PRICING -->
+	<!-- PRICING TABLE -->
 	<div class="pricing">
 		<div class="container">
-			
 			<div class="row">
 				<div class="col-md-12">
 
-					<!-- Pricing Plan - 1 -->
-					<div class="col-md-3 col-sm-3">
+					<!-- Pricing Plan 1: Mensual -->
+					<div class="col-md-4 col-sm-4">
 						<div class="pricing__item">
-							<h3 class="pricing__title">BASIC</h3>
-							<div class="pricing__price"><span class="pricing__currency">$</span>56</div>
+							<h3 class="pricing__title">PRO MENSUAL</h3>
+							<div class="pricing__price"><span class="pricing__currency">$</span>19<span style="font-size: 14px; color: #94a3b8;">/mes</span></div>
 							<ul class="pricing__feature-list">
-								<li class="pricing__feature">5 Projects</li>
-								<li class="pricing__feature">5 GB of Storage</li>
-								<li class="pricing__feature">Up to 100 Users</li>
-                                				<li class="pricing__feature">10 GB Bandwidth</li>
-								<li class="pricing__feature">Security Suite</li>
-								<li class="pricing__feature">500 GB</li>
+								<li class="pricing__feature"><b>1 Dominio / Sitio Web</b></li>
+								<li class="pricing__feature">Mensajes Ilimitados</li>
+								<li class="pricing__feature">Integración WooCommerce</li>
+								<li class="pricing__feature">Live Chat y Scheduler</li>
+								<li class="pricing__feature">Actualizaciones Continuas</li>
+								<li class="pricing__feature">Soporte por Email</li>
 							</ul>
-							<button class="btn btn-primary-pricing">Choose Plan</button>
+							<a href="https://buy.stripe.com/TU_LINK_MENSUAL" class="btn btn-primary-pricing" target="_blank">Comprar Plan Mensual</a>
 						</div>
 					</div>
                     
-                    <!-- Pricing Plan - 2 -->
-					<div class="col-md-3 col-sm-3">
-						<div class="pricing__item">
-							<h3 class="pricing__title">ADVANCED</h3>
-							<div class="pricing__price"><span class="pricing__currency">$</span>66</div>
+                    <!-- Pricing Plan 2: Anual (POPULAR) -->
+					<div class="col-md-4 col-sm-4">
+						<div class="pricing__item pricing__item__popular" style="border: 2px solid #25d366;">
+							<span class="badge-popular">Más Recomendado - Ahorra 78%</span>
+							<h3 class="pricing__title" style="margin-top: 10px;">PRO ANUAL</h3>
+							<div class="pricing__price pricing__price_green"><span class="pricing__currency">$</span>49<span style="font-size: 14px; color: #94a3b8;">/año</span></div>
 							<ul class="pricing__feature-list">
-								<li class="pricing__feature">5 Projects</li>
-								<li class="pricing__feature">5 GB of Storage</li>
-								<li class="pricing__feature">Up to 100 Users</li>
-                                				<li class="pricing__feature">10 GB Bandwidth</li>
-								<li class="pricing__feature">Security Suite</li>
-								<li class="pricing__feature">500 GB</li>
+								<li class="pricing__feature"><b>1 Dominio / Sitio Web</b></li>
+								<li class="pricing__feature">Mensajes Ilimitados</li>
+								<li class="pricing__feature">Integración WooCommerce Completa</li>
+								<li class="pricing__feature">Live Chat, Difusiones y Scheduler</li>
+								<li class="pricing__feature">1 Año Completo de Actualizaciones</li>
+								<li class="pricing__feature"><b>Soporte Prioritario VIP</b></li>
 							</ul>
-							<button class="btn btn-primary-pricing">Choose Plan</button>
+							<a href="https://buy.stripe.com/TU_LINK_ANUAL" class="btn btn-primary-pricing" style="background-color: #25d366; color: white;" target="_blank">Comprar Plan Anual</a>
 						</div>
 					</div>
 
-					<!-- Pricing Plan - 2 -->
-					<div class="col-md-3 col-sm-3">
-						<div class="pricing__item pricing__item__popular">
-							<h3 class="pricing__title">PREMIUM</h3>
-							<div class=" pricing__price_blue pricing__price"><span class="pricing__currency_blue pricing__currency">$</span>999</div>
+					<!-- Pricing Plan 3: Lifetime -->
+					<div class="col-md-4 col-sm-4">
+						<div class="pricing__item">
+							<h3 class="pricing__title">DE POR VIDA (LIFETIME)</h3>
+							<div class="pricing__price"><span class="pricing__currency">$</span>99<span style="font-size: 14px; color: #94a3b8;"> pago único</span></div>
 							<ul class="pricing__feature-list">
-								<li class="pricing__feature"> <b>5 Projects </li>
-								<li class="pricing__feature">5 GB of Storage</li>
-								<li class="pricing__feature">Up to 100 Users</li>
-                                				<li class="pricing__feature">10 GB Bandwidth</li>
-								<li class="pricing__feature">Security Suite</li>
-								<li class="pricing__feature">500 GB </b> </li>
+								<li class="pricing__feature"><b>1 Dominio / Sitio Web</b></li>
+								<li class="pricing__feature">Mensajes Ilimitados de por vida</li>
+								<li class="pricing__feature">Todas las Funciones Incluidas</li>
+								<li class="pricing__feature">Actualizaciones De Por Vida</li>
+								<li class="pricing__feature">Sin Pagos Recurrentes Jamás</li>
+								<li class="pricing__feature">Soporte Continuo</li>
 							</ul>
-							<button class="btn btn-primary-pricing">Choose Plan</button>
+							<a href="https://buy.stripe.com/TU_LINK_LIFETIME" class="btn btn-primary-pricing" target="_blank">Comprar Lifetime</a>
 						</div>
 					</div>
 
-					<!-- Pricing Plan - 4 -->
-					<div class="col-md-3 col-sm-3">
-						<div class="pricing__item">
-							<h3 class="pricing__title">ULTIMATE</h3>
-							<div class="pricing__price"><span class="pricing__currency">$</span>89</div>
-							<ul class="pricing__feature-list">
-								<li class="pricing__feature">5 Projects</li>
-								<li class="pricing__feature">5 GB of Storage</li>
-								<li class="pricing__feature">Up to 100 Users</li>
-                                				<li class="pricing__feature">10 GB Bandwidth</li>
-								<li class="pricing__feature">Security Suite</li>
-								<li class="pricing__feature">500 GB</li>
-							</ul>
-							<button class="btn btn-primary-pricing">Choose Plan</button>
-						</div>
-					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
 	<div class="clearfix space90"></div>
-	<!-- INFO CONTENT -->
-	<div class="info-content2">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-12">
-					<h3>Sabil is agency, for Business & development since 1995 based in Paris.</h3>
-                    <div class="space10"></div>
-					<p>At Sabil we care about every detail, our goal to make our clients satisfied with their projects.</p>
-					
-				</div>
-			</div>
-		</div>
-	</div>	
-
 
 	<!-- FREQUENTLY ASKED QUESTIONS -->
-    <div class="container" id="pricing">
-	<div class="about-inline text-center">
-        <p>- FREQUENTLY ASKED QUESTIONS  -</p>
-			<h3>Got questions? We’ve got answers. send us <br>  email to hello@Sabil.com </h3>
+    <div class="container" id="faq">
+		<div class="about-inline text-center">
+        	<p>- PREGUNTAS FRECUENTES -</p>
+			<h3>¿Tienes dudas? Aquí te respondemos</h3>
 		</div>
 	</div>
 
 	<div class="container">
-			<div class="row">
-				<div class="col-md-6 col-sm-6">
-                	<div class="faq">
-					<h4> <span>=</span> What is Sabil?</h4>
-					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language.</p>
-                    </div>
+		<div class="row">
+			<div class="col-md-6 col-sm-6">
+            	<div class="faq">
+					<h4> <span>?</span> ¿Qué necesito para que funcione AutoWhats?</h4>
+					<p>Necesitas un sitio WordPress con PHP 7.4 o superior, tu número de WhatsApp y una instancia conectada a WAHA / n8n para procesar los envíos y recepciones.</p>
                 </div>
-                
-                <div class="col-md-6 col-sm-6">
-                	<div class="faq">
-					<h4> <span>=</span> What is Sabil?</h4>
-					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language.</p>
-                    </div>
+            </div>
+            
+            <div class="col-md-6 col-sm-6">
+            	<div class="faq">
+					<h4> <span>?</span> ¿Tengo que pagar por cada mensaje enviado?</h4>
+					<p>No. A diferencia de las APIs tradicionales que cobran tarifas por mensaje o por conversación, con AutoWhats puedes enviar todos los mensajes que necesites sin costo por mensaje.</p>
                 </div>
-                
-                <div class="col-md-6 col-sm-6">
-                	<div class="faq">
-					<h4> <span>=</span> What is Sabil?</h4>
-					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language.</p>
-                    </div>
+            </div>
+            
+            <div class="col-md-6 col-sm-6">
+            	<div class="faq">
+					<h4> <span>?</span> ¿Cómo recibo mi licencia tras realizar el pago?</h4>
+					<p>Al completar tu compra en Stripe, nuestro sistema genera automáticamente tu clave de licencia y te la envía al instante por correo electrónico junto con el enlace de descarga del plugin.</p>
                 </div>
-                
-                <div class="col-md-6 col-sm-6">
-                	<div class="faq">
-					<h4> <span>=</span> What is Sabil?</h4>
-					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language.</p>
-                    </div>
+            </div>
+            
+            <div class="col-md-6 col-sm-6">
+            	<div class="faq">
+					<h4> <span>?</span> ¿Puedo cambiar el dominio de mi licencia en el futuro?</h4>
+					<p>Sí. Si rediseñas tu sitio web o cambias de dominio, puedes solicitar la desvinculación para activar tu licencia en tu nueva URL sin costo extra.</p>
                 </div>
-                
-			</div>
-		</div>		
+            </div>
+		</div>
+	</div>		
 
-		
-     <div class="space100"></div>
+    <div class="space100"></div>
 	
-    <!-- PARALLAX -->
+    <!-- PARALLAX FINAL CTA -->
 	<section class="parallax-content parallax2 text-center" data-stellar-background-ratio="0.4">
 		<div class="overlay"></div>
-			<div class="container">
-       			<div class="row">
-				<div class="col-md-12 tc text-center ">
-					<h4>Still confused choosing the right plan?</h4>
-					<p>Register now and get free access to all of our premium services for 7 days.</p>
-           			 <a href="#" class="btn btn-lg btn-primary">Register Now! </a>
-            		<p>*no credit card required</p>
+		<div class="container">
+       		<div class="row">
+				<div class="col-md-12 tc text-center">
+					<h4>¿Listo para automatizar tu negocio por WhatsApp?</h4>
+					<p>Obtén tu licencia hoy mismo y empieza a incrementar tus ventas y la satisfacción de tus clientes.</p>
+           			<a href="#precios" class="btn btn-lg btn-primary">Comprar Licencia Ahora <i class="ilmosys-arrow-right"></i></a>
 				</div>
-       		 </div>
+       		</div>
         </div>
 	</section>
-   
 
-   <!-- CONTACT US -->
-    <div class="container" id="pricing">
-	<div class="about-inline text-center">
-        <p>- CONTACT US -</p>
-			<h3>Customer satisfaction is our top priority,  <br>  Don’t hesitate to contact us </h3>
+   	<!-- CONTACT US -->
+    <div class="container" id="contacto">
+		<div class="about-inline text-center">
+        	<p>- CONTACTO Y SOPORTE -</p>
+			<h3>Estamos listos para ayudarte en cualquier momento</h3>
 		</div>
 	</div>
 	
@@ -604,95 +417,59 @@
 	<div id="contact-info">
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-3 col-sm-6">
-					<div class="c-info">
-						<i class="icon-phone"></i>
-						<h5><b>Call Us</b></h5>
-						<p>(080) 123 456 7890</p>
-					</div>
-				</div>
-
-				<div class="col-lg-3 col-sm-6">
+				<div class="col-lg-4 col-sm-6 text-center">
 					<div class="c-info">
 						<i class="icon-envelope"></i>
-						<h5><b>Email</b></h5>
-						<p><a href="">hello@Sabil.com</a></p>
+						<h5><b>Correo Electrónico</b></h5>
+						<p><a href="mailto:soporte@autowhats.com.mx">soporte@autowhats.com.mx</a></p>
 					</div>
 				</div>
 				
-				<div class="col-lg-3 col-sm-6">
+				<div class="col-lg-4 col-sm-6 text-center">
 					<div class="c-info">
-						<i class="icon-map-marker"></i>
-						<h5><b>Address</b></h5>
-						<p>72, Wallstreet, NY 20110</p>
+						<i class="icon-phone"></i>
+						<h5><b>WhatsApp Soporte</b></h5>
+						<p>Atención directa a clientes</p>
 					</div>
 				</div>
                 
-                <div class="col-lg-3 col-sm-6">
+                <div class="col-lg-4 col-sm-6 text-center">
 					<div class="c-info">
 						<i class="icon-lifesaver"></i>
-						<h5><b>WEBSITE</b></h5>
-						<p><a href="" > www.Sabil.com</a></p>
+						<h5><b>Sitio Web Oficial</b></h5>
+						<p><a href="https://landing.autowhats.com.mx/">landing.autowhats.com.mx</a></p>
 					</div>
 				</div>
-
-				
 			</div>
 		</div>
 	</div>
-
-	<!-- GOOGLE MAP -->
-	<div class="google-map">
-		<div class="container-fluid no-padding">
-	        <div id="map"></div>
-		</div>		
-	</div>
-
-	
 
 	<!-- FOOTER -->
 	<footer class="footer2" id="footer2">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-3">
-					<a href="index-2.html" class="footer-logo"><img src="images/logo.png"></a>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam et purus a odio finibus bibendum in sit amet leo. Mauris feugiat erat tellus.</p>
-					<div class="space20"></div>
-					<div class="footer-social space30">
-						<a href="#" class="fa fa-linkedin"></a>
-						<a href="#" class="fa fa-facebook"></a>
-						<a href="#" class="fa fa-twitter"></a>
-						<a href="#" class="fa fa-dribbble"></a>
-						<a href="#" class="fa fa-google-plus"></a>
-						<a href="#" class="fa fa-instagram"></a>
-					</div>
+				<div class="col-md-4">
+					<a href="index.html" class="brand-text"><i class="fa fa-whatsapp"></i> Auto<span>Whats</span></a>
+					<p style="margin-top: 15px;">La solución más robusta y económica para automatizar la comunicación y ventas por WhatsApp en tiendas WordPress y WooCommerce.</p>
 				</div>
 
-				<div class="col-md-2 footerP">
-					<h5>RELATED LINKS</h5><ul>
-					<li><a href="#"><p>About Us</p></a></li>
-                    <li><a href="#"><p>Why Buy With Us?</p></a></li>
-                    <li><a href="#"><p>Our Team</p></a></li>
-                    <li><a href="#"><p>Contact Us</p></a></li></ul>
-				</div>
-                
-                <div class="col-md-2 footerP">
-					<h5>OTHER LINKS</h5><ul>
-					<li><a href="#"><p>Register</p></a></li>
-                    <li><a href="#"><p>Forum</p></a></li>
-                    <li><a href="#"><p>Affiliate</p></a></li>
-                    <li><a href="#"><p>FAQ</p></a></li></ul>
+				<div class="col-md-4 footerP">
+					<h5>ENLACES RÁPIDOS</h5>
+					<ul>
+						<li><a href="#page-top"><p>Inicio</p></a></li>
+						<li><a href="#caracteristicas"><p>Características</p></a></li>
+						<li><a href="#precios"><p>Planes y Precios</p></a></li>
+						<li><a href="#faq"><p>Preguntas Frecuentes</p></a></li>
+					</ul>
 				</div>
 
-				<div class="col-md-5">
-               	 <h5>PAYMENT METHODS</h5>
-                 	<img src="images/payment/1.png" alt="logo"> &nbsp;
-                    <img src="images/payment/2.png" alt="logo"> &nbsp;
-                     <img src="images/payment/3.png" alt="logo"> &nbsp;
-                      <img src="images/payment/4.png" alt="logo">
-					<p>© 2018.  Sabil. All Rights Reserved. <br> Designed by Divine-store 
-</p>
-                    
+				<div class="col-md-4">
+               	 	<h5>MÉTODOS DE PAGO SEGUROS</h5>
+                 	<img src="images/payment/1.png" alt="Visa"> &nbsp;
+                    <img src="images/payment/2.png" alt="Mastercard"> &nbsp;
+                    <img src="images/payment/3.png" alt="American Express"> &nbsp;
+                    <img src="images/payment/4.png" alt="PayPal / Stripe">
+					<p style="margin-top: 15px;">Procesamiento seguro cifrado mediante Stripe. Aceptamos tarjetas de débito y crédito internacionales.</p>
 				</div>
 			</div>
 		</div>
@@ -700,12 +477,11 @@
 
 	<!-- COPYRIGHT -->
 	<div class="footer-copy">
-		<div class="container">
-			&copy; 2018. Sabil. All rights reserved. 
+		<div class="container text-center">
+			&copy; 2026 AutoWhats. Todos los derechos reservados.
 		</div>
 	</div>
 </div>
-
 
 <!-- JAVASCRIPT =============================-->
 <script src="js/jquery.js"></script>
@@ -716,12 +492,6 @@
 <script src="js/vendors/isotope/isotope.pkgd.js"></script>
 <script src="js/vendors/swipebox/js/jquery.swipebox.min.js"></script>
 <script src="js/main.js"></script>
-<script src="js/vendors/mc/jquery.ketchup.all.min.js"></script>
-<script src="js/vendors/mc/main.js"></script>
-
-<script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
-<script src="js/vendors/gmap.js"></script>
 
 </body>
-
 </html>
