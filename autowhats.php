@@ -24,6 +24,7 @@ define('AUTWA_PLUGIN_VERSION', '1.5.3');
 define('AUTWA_PLUGIN_PATH', plugin_dir_path(__FILE__));
 define('AUTWA_PLUGIN_URL', plugin_dir_url(__FILE__));
 
+require_once(AUTWA_PLUGIN_PATH . 'autowhats-kapso.php');
 require_once(AUTWA_PLUGIN_PATH . 'autowhats-admin-pages.php');
 require_once(AUTWA_PLUGIN_PATH . 'autowhats-api-updates.php');
 require_once(AUTWA_PLUGIN_PATH . 'autowhats-security.php');
@@ -209,17 +210,8 @@ class AutoWAWhatsAppPlugin {
             return new WP_Error('missing_data', __('Phone or message empty.', 'autowa-whatsapp'));
         }
 
-        $session_name = get_option('autwa_session_name', 'default');
-        
-        // Construimos el payload directo para el endpoint /sendText de WAHA
-        $payload = [
-            'chatId'  => $phone . '@c.us',
-            'text'    => $message,
-            'session' => $session_name
-        ];
-
-        // Usamos el proxy existente para n8n
-        return $this->call_n8n_proxy('/sendText', $payload, 'POST');
+        $kapso = AutoWA_Kapso_Client::get_instance();
+        return $kapso->send_text_message($phone, $message);
     }
 
     public function load_textdomain() {
@@ -1173,94 +1165,43 @@ private function normalize_groups_response($raw) {
         check_ajax_referer('autwa_nonce', 'nonce'); 
         if (!current_user_can('manage_autowhats')) { wp_die(); } 
 
-        $session_name = get_option('autwa_session_name', 'default');
-        $force = isset($_POST['force_refresh']) && $_POST['force_refresh'] === 'true';
-        $transient_key = 'autwa_chats_overview_' . md5($session_name);
-        
-        if (!$force && ($cached = get_transient($transient_key)) !== false) {
-            wp_send_json_success(array('chats' => $cached, 'source' => 'cache'));
-            return;
-        }
+        global $wpdb;
+        $table_chats = $wpdb->prefix . 'autwa_chats';
+        $chats = $wpdb->get_results("SELECT chat_id as id, name, last_message, timestamp, unread_count FROM $table_chats ORDER BY timestamp DESC LIMIT 100", ARRAY_A);
 
-        $response = $this->call_n8n_proxy('/' . $session_name . '/chats/overview', [], 'GET');
-        
-        if (is_wp_error($response)) { 
-            wp_send_json_error(array('message' => $response->get_error_message())); 
-            return; 
-        } 
-        
-        $body = wp_remote_retrieve_body($response);
-        $raw_data = json_decode($body, true);
-        
-        // Detectar si los datos vienen en la llave 'data' (n8n Code Node) o directo
-        $chats_data = (isset($raw_data['data']) && is_array($raw_data['data'])) ? $raw_data['data'] : (is_array($raw_data) ? $raw_data : []);
-
-        $filtered = [];
-        foreach ($chats_data as $chat) {
-            // Normalizar ID (String o _serialized)
-            $chat_id = $chat['id']['_serialized'] ?? ($chat['id'] ?? null);
-            if (!$chat_id || strpos($chat_id, '@status') !== false || strpos($chat_id, '@broadcast') !== false) continue;
-            
-            $chat['id'] = $chat_id;
-            // Asegurar nombre
-            if (empty($chat['name']) && !empty($chat['pushname'])) {
-                $chat['name'] = $chat['pushname'];
-            }
-            $filtered[] = $chat;
-        }
-
-        set_transient($transient_key, $filtered, 300);
-        wp_send_json_success(array('chats' => $filtered, 'source' => 'api'));
+        wp_send_json_success(array('chats' => $chats ?: [], 'source' => 'db'));
     }
     
 public function ajax_get_chat_messages() {
     check_ajax_referer('autwa_nonce', 'nonce');
     if (!current_user_can('manage_autowhats')) {
-        wp_send_json_error(array('message' => __('You do not have permission to do this.', 'autowa-whatsapp')));
+        wp_send_json_error(array('message' => __('No tienes permisos para ver mensajes.', 'autowa-whatsapp')));
         return;
     }
-    $chat_id = sanitize_text_field($_POST['chat_id']);
-    $session_name = get_option('autwa_session_name', 'default');
+    $chat_id = sanitize_text_field($_POST['chat_id'] ?? '');
 
-    // CORRECCIÓN: Se agrega 'downloadMedia' => true para que WAHA procese los archivos
-    // Se aumenta el límite a 50 para una mejor experiencia de usuario
-    $payload = [
-        'chatId' => $chat_id,
-        'limit' => 50,
-        'downloadMedia' => true
-    ];
-
-    $response = $this->call_n8n_proxy('/' . $session_name . '/chat-messages', $payload, 'GET');
-
-    if (is_wp_error($response)) {
-        wp_send_json_error(['message' => $response->get_error_message()]);
-        return;
-    }
-
-    $body = json_decode(wp_remote_retrieve_body($response), true);
-    $messages = (isset($body['data'])) ? $body['data'] : (is_array($body) ? $body : []);
-
+    $buffer_key = 'autwa_msg_buffer_default';
+    $messages = get_transient($buffer_key);
     $clean = [];
-    foreach ($messages as $m) {
-        $type = $m['type'] ?? 'chat';
-        
-        // Extracción robusta de metadatos de media
-        $mimetype = $m['mimetype'] ?? ($m['_data']['mimetype'] ?? ($m['media']['mimetype'] ?? null));
-        $filename = $m['filename'] ?? ($m['_data']['filename'] ?? ($m['media']['filename'] ?? null));
 
-        $clean[] = [
-            'id' => $m['id']['_serialized'] ?? ($m['id'] ?? uniqid()),
-            'fromMe' => $m['fromMe'] ?? false,
-            'body' => $m['body'] ?? '',
-            'timestamp' => floor(($m['timestamp'] ?? time()) / ($m['timestamp'] > 10000000000 ? 1000 : 1)),
-            'hasMedia' => ($m['hasMedia'] || !in_array($type, ['chat', 'vcard', 'location'])),
-            'type' => $type,
-            'mimetype' => $mimetype,
-            'filename' => $filename
-        ];
+    if (is_array($messages)) {
+        $chat_clean = str_replace('@c.us', '', $chat_id);
+        foreach ($messages as $m) {
+            $from = str_replace('@c.us', '', $m['from'] ?? '');
+            if (strpos($from, $chat_clean) !== false || (!empty($m['isOutbound']) && ($m['to'] ?? '') === $chat_id)) {
+                $clean[] = [
+                    'id'        => $m['id'] ?? uniqid(),
+                    'fromMe'    => !empty($m['isOutbound']),
+                    'body'      => $m['body'] ?? '',
+                    'timestamp' => $m['timestamp'] ?? time(),
+                    'hasMedia'  => !empty($m['hasMedia']),
+                    'mediaUrl'  => $m['mediaUrl'] ?? ''
+                ];
+            }
+        }
     }
-    
-    wp_send_json_success(['messages' => $clean]);
+
+    wp_send_json_success(['messages' => array_reverse($clean)]);
 }
 
 public function ajax_send_message() {
@@ -1269,116 +1210,70 @@ public function ajax_send_message() {
         wp_send_json_error(['message' => 'Sin permisos']);
     }
 
-    $chat_id      = sanitize_text_field($_POST['chat_id'] ?? '');
-    $text         = isset($_POST['message']) ? wp_unslash($_POST['message']) : '';
-    $session_name = get_option('autwa_session_name', 'default');
+    $chat_id = sanitize_text_field($_POST['chat_id'] ?? '');
+    $text    = isset($_POST['message']) ? wp_unslash($_POST['message']) : '';
 
     if (empty($chat_id)) {
         wp_send_json_error(['message' => 'chat_id requerido']);
     }
 
+    $kapso = AutoWA_Kapso_Client::get_instance();
     $has_file = !empty($_FILES['file']) && !empty($_FILES['file']['tmp_name']) && $_FILES['file']['error'] === UPLOAD_ERR_OK;
 
     if ($has_file) {
-        $file = $_FILES['file'];
+        require_once(ABSPATH . 'wp-admin/includes/file.php');
+        require_once(ABSPATH . 'wp-admin/includes/image.php');
+        require_once(ABSPATH . 'wp-admin/includes/media.php');
 
-        // Validación básica de tamaño (16 MB)
-        if ($file['size'] > 16 * 1024 * 1024) {
-            wp_send_json_error(['message' => 'El archivo supera 16 MB']);
+        $upload = wp_handle_upload($_FILES['file'], ['test_form' => false]);
+        if (isset($upload['error'])) {
+            wp_send_json_error(['message' => 'Error al subir archivo: ' . $upload['error']]);
         }
 
-        $file_contents = @file_get_contents($file['tmp_name']);
-        if ($file_contents === false) {
-            wp_send_json_error(['message' => 'No se pudo leer el archivo temporal']);
-        }
+        $media_url = $upload['url'];
+        $mime_type = $upload['type'];
+        $type = 'document';
+        if (strpos($mime_type, 'image/') === 0) $type = 'image';
+        elseif (strpos($mime_type, 'audio/') === 0) $type = 'audio';
+        elseif (strpos($mime_type, 'video/') === 0) $type = 'video';
 
-        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-        $mime = 'application/octet-stream';
-        if (function_exists('mime_content_type')) {
-            $mime = mime_content_type($file['tmp_name']);
-        } elseif (function_exists('finfo_open')) {
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $mime = finfo_file($finfo, $file['tmp_name']);
-            finfo_close($finfo);
-        }
-
-        $whitelist = [
-            'jpg'  => ['image/jpeg', 'image/pjpeg'],
-            'jpeg' => ['image/jpeg', 'image/pjpeg'],
-            'png'  => ['image/png'],
-            'gif'  => ['image/gif'],
-            'webp' => ['image/webp'],
-            'mp3'  => ['audio/mpeg', 'audio/mp3', 'audio/x-mpeg', 'audio/x-mp3'],
-            'ogg'  => ['audio/ogg', 'video/ogg', 'application/ogg'],
-            'opus' => ['audio/ogg', 'audio/ogg; codecs=opus', 'application/ogg'],
-            'wav'  => ['audio/wav', 'audio/x-wav'],
-            'aac'  => ['audio/aac', 'audio/x-aac'],
-            'mp4'  => ['video/mp4'],
-            'webm' => ['video/webm'],
-            '3gp'  => ['video/3gpp', 'video/3gp'],
-            'pdf'  => ['application/pdf'],
-            'doc'  => ['application/msword'],
-            'docx' => ['application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
-            'xls'  => ['application/vnd.ms-excel'],
-            'xlsx' => ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
-            'ppt'  => ['application/vnd.ms-powerpoint'],
-            'pptx' => ['application/vnd.openxmlformats-officedocument.presentationml.presentation'],
-            'txt'  => ['text/plain'],
-        ];
-
-        if (!isset($whitelist[$ext]) || !in_array($mime, $whitelist[$ext])) {
-            wp_send_json_error(['message' => 'Tipo de archivo no permitido o extensión inválida.']);
-            return;
-        }
-
-        // Decidir endpoint según el tipo
-        if (strpos($mime, 'image/') === 0) {
-            $endpoint = '/sendImage';
-        } elseif (strpos($mime, 'video/') === 0) {
-            $endpoint = '/sendVideo';
-        } elseif (strpos($mime, 'audio/') === 0) {
-            $endpoint = '/sendVoice';
-        } else {
-            $endpoint = '/sendFile';
-        }
-
-        $payload = [
-            'chatId'   => $chat_id,
-            'session'  => $session_name,
-            'caption'  => $text,
-            'file'     => [
-                'mimetype' => $mime,
-                'filename' => sanitize_file_name($file['name']),
-                'data'     => base64_encode($file_contents),
-            ],
-        ];
+        $response = $kapso->send_media_message($chat_id, $media_url, $text, $type, $_FILES['file']['name']);
     } else {
-        $endpoint = '/sendText';
-        $payload  = [
-            'chatId'  => $chat_id,
-            'session' => $session_name,
-            'text'    => $text,
-        ];
+        $response = $kapso->send_text_message($chat_id, $text);
     }
-
-    $response = $this->call_n8n_proxy($endpoint, $payload, 'POST');
 
     if (is_wp_error($response)) {
         wp_send_json_error(['message' => $response->get_error_message()]);
     }
 
-    $http_code = wp_remote_retrieve_response_code($response);
-    $body      = wp_remote_retrieve_body($response);
-    $decoded   = json_decode($body, true);
+    // Guardar mensaje saliente en buffer local
+    $buffer_key = 'autwa_msg_buffer_default';
+    $buffer = get_transient($buffer_key);
+    if (!is_array($buffer)) $buffer = [];
 
-    if ($http_code < 200 || $http_code >= 300) {
-        wp_send_json_error([
-            'message'   => 'n8n devolvió HTTP ' . $http_code,
-            'response'  => $decoded ?: $body,
-        ]);
-    }
+    $out_msg = [
+        'id'         => 'out_' . uniqid(),
+        'from'       => 'me',
+        'to'         => $chat_id,
+        'body'       => $text,
+        'timestamp'  => time(),
+        'hasMedia'   => $has_file,
+        'isOutbound' => true
+    ];
+    array_unshift($buffer, $out_msg);
+    set_transient($buffer_key, $buffer, 2 * HOUR_IN_SECONDS);
 
-    wp_send_json_success($decoded ?: ['raw' => $body]);
+    // Actualizar tabla local de chats
+    global $wpdb;
+    $table_chats = $wpdb->prefix . 'autwa_chats';
+    $wpdb->query($wpdb->prepare(
+        "UPDATE $table_chats SET last_message = %s, timestamp = %d WHERE chat_id = %s",
+        $text,
+        time(),
+        $chat_id
+    ));
+
+    wp_send_json_success(['message' => 'Mensaje enviado', 'response' => $response]);
 }
 
 private function fix_media_urls($data) {
@@ -1810,26 +1705,21 @@ public function ajax_get_picture() {
 
 public function send_scheduled_messages() {
     global $wpdb;
-    $session_name = get_option('autwa_session_name');
+    $kapso = AutoWA_Kapso_Client::get_instance();
 
-    // ⭐ CONFIGURACIÓN DE REINTENTOS Y EXPIRACIÓN
-    $max_retries     = 3;                          // máximo de reintentos
-    $expiration_hrs  = 6;                          // si lleva más de X horas en pending, expira
+    $max_retries     = 3;
+    $expiration_hrs  = 6;
     $expiration_cut  = gmdate('Y-m-d H:i:s', strtotime("-{$expiration_hrs} hours"));
+    $processed_count = 0;
 
-    // ==========================================
-    // 0. EXPIRAR mensajes demasiado viejos
-    // ==========================================
+    // 0. Expirar mensajes viejos en cola
     $table_individual = $wpdb->prefix . 'autwa_scheduled_messages';
-    $expired_count = $wpdb->query($wpdb->prepare(
+    $wpdb->query($wpdb->prepare(
         "UPDATE $table_individual 
          SET status = 'expired', api_response = 'Expired: pending more than {$expiration_hrs}h' 
          WHERE status = 'pending' AND scheduled_at < %s",
         $expiration_cut
     ));
-    if ($expired_count > 0) {
-        error_log("AutoWA Scheduler: expirados {$expired_count} mensajes individuales viejos.");
-    }
 
     $table_broadcast = $wpdb->prefix . 'autwa_broadcast_schedules';
     $wpdb->query($wpdb->prepare(
@@ -1839,9 +1729,7 @@ public function send_scheduled_messages() {
         $expiration_cut
     ));
 
-    // ==========================================
-    // 1. PROCESAR MENSAJES INDIVIDUALES
-    // ==========================================
+    // 1. Procesar mensajes individuales
     $messages = $wpdb->get_results($wpdb->prepare(
         "SELECT * FROM $table_individual 
          WHERE status = 'pending' 
@@ -1855,74 +1743,46 @@ public function send_scheduled_messages() {
 
     if (!empty($messages)) {
         foreach ($messages as $job) {
-            // ⭐ BLOQUEO: marcar como 'processing' ANTES de mandar a n8n
-            // así, si el cron se vuelve a disparar mientras esta llamada
-            // está en vuelo, no agarra el mismo job dos veces.
             $locked = $wpdb->update(
                 $table_individual,
                 [
                     'status'      => 'processing',
                     'retry_count' => (int) $job->retry_count + 1,
                 ],
-                ['id' => $job->id, 'status' => 'pending'] // WHERE clause de seguridad
+                ['id' => $job->id, 'status' => 'pending']
             );
-            if (!$locked) {
-                // Otro proceso ya lo tomó
-                continue;
-            }
+            if (!$locked) continue;
 
-            if (empty($session_name)) {
-                $wpdb->update($table_individual, [
-                    'status'       => 'failed',
-                    'api_response' => 'Error: No active Session configured',
-                ], ['id' => $job->id]);
-                continue;
-            }
-
-            $recipients_data = json_decode($job->recipients, true);
-            if (!is_array($recipients_data) || empty($recipients_data)) {
-                if (!empty($job->phone) && $job->phone !== 'bulk_task') {
-                    $recipients_data = [[
-                        'id'   => $job->phone,
-                        'text' => 'Recovered Contact',
-                        'type' => (strpos($job->phone, '@g.us') !== false) ? 'group' : 'contact',
-                    ]];
-                } else {
-                    $wpdb->update($table_individual, [
-                        'status'       => 'failed',
-                        'api_response' => 'Error: Invalid Recipients JSON',
-                    ], ['id' => $job->id]);
-                    continue;
-                }
-            }
-
+            $phone          = $job->phone;
+            $msg_type       = $job->message_type ?: 'text';
             $media_url      = ($job->media_url === 'undefined' || $job->media_url === 'null') ? '' : $job->media_url;
             $media_filename = ($job->media_filename === 'undefined' || $job->media_filename === 'null') ? '' : $job->media_filename;
-            $msg_type       = $job->message_type ?: 'text';
 
-            $payload = [
-                'wp_task_id'     => (int) $job->id,
-                'session'        => $session_name,
-                'recipients'     => $recipients_data,
-                'message'        => $job->message,
-                'media_url'      => $media_url,
-                'media_filename' => $media_filename,
-                'message_type'   => $msg_type,
-                'scheduled_at'   => $job->scheduled_at,
-                'source'         => 'scheduler_individual',
-                'callback_url'   => get_rest_url(null, 'autowa/v1/update-task-status'),
-                'attempt'        => (int) $job->retry_count + 1,
-            ];
+            if ($msg_type !== 'text' && !empty($media_url)) {
+                $res = $kapso->send_media_message($phone, $media_url, $job->message, $msg_type, $media_filename);
+            } else {
+                $res = $kapso->send_text_message($phone, $job->message);
+            }
 
-            $this->process_n8n_dispatch($table_individual, $job->id, $payload, $max_retries);
+            if (!is_wp_error($res)) {
+                $wpdb->update($table_individual, [
+                    'status'       => 'sent',
+                    'sent_at'      => current_time('mysql', 1),
+                    'api_response' => json_encode($res)
+                ], ['id' => $job->id]);
+                $processed_count++;
+            } else {
+                $new_status = ((int)$job->retry_count + 1 >= $max_retries) ? 'failed' : 'pending';
+                $wpdb->update($table_individual, [
+                    'status'       => $new_status,
+                    'api_response' => $res->get_error_message()
+                ], ['id' => $job->id]);
+            }
         }
     }
 
-    // ==========================================
-    // 2. PROCESAR LISTAS DE DIFUSIÓN (mismo patrón)
-    // ==========================================
+    // 2. Procesar listas de difusión
     $table_recipients = $wpdb->prefix . 'autwa_broadcast_recipients';
-
     $broadcasts = $wpdb->get_results($wpdb->prepare(
         "SELECT * FROM $table_broadcast 
          WHERE status = 'pending' 
@@ -1943,23 +1803,15 @@ public function send_scheduled_messages() {
             );
             if (!$locked) continue;
 
-            if (empty($session_name)) {
-                $wpdb->update($table_broadcast, [
-                    'status' => 'failed',
-                    'api_response' => 'Error: No active Session',
-                ], ['id' => $job->id]);
-                continue;
-            }
-
             $raw_recipients = $wpdb->get_results($wpdb->prepare(
-                "SELECT recipient_id as id, recipient_name as text, recipient_type as type 
+                "SELECT recipient_id as id, recipient_name as text 
                  FROM $table_recipients WHERE list_id = %d",
                 $job->list_id
             ), ARRAY_A);
 
             if (empty($raw_recipients)) {
                 $wpdb->update($table_broadcast, [
-                    'status' => 'failed',
+                    'status'       => 'failed',
                     'api_response' => 'Error: Empty Broadcast List',
                 ], ['id' => $job->id]);
                 continue;
@@ -1967,24 +1819,31 @@ public function send_scheduled_messages() {
 
             $media_url      = ($job->media_url === 'undefined' || $job->media_url === 'null') ? '' : $job->media_url;
             $media_filename = ($job->media_filename === 'undefined' || $job->media_filename === 'null') ? '' : $job->media_filename;
+            $msg_type       = $job->message_type ?: 'text';
+            $all_ok         = true;
 
-            $payload = [
-                'wp_task_id'     => (int) $job->id,
-                'session'        => $session_name,
-                'recipients'     => $raw_recipients,
-                'message'        => $job->message,
-                'media_url'      => $media_url,
-                'media_filename' => $media_filename,
-                'message_type'   => $job->message_type ?: 'text',
-                'scheduled_at'   => $job->scheduled_at,
-                'source'         => 'scheduler_broadcast',
-                'callback_url'   => get_rest_url(null, 'autowa/v1/update-task-status'),
-                'attempt'        => (int) $job->retry_count + 1,
-            ];
+            foreach ($raw_recipients as $recipient) {
+                $r_phone = $recipient['id'];
+                if ($msg_type !== 'text' && !empty($media_url)) {
+                    $res = $kapso->send_media_message($r_phone, $media_url, $job->message, $msg_type, $media_filename);
+                } else {
+                    $res = $kapso->send_text_message($r_phone, $job->message);
+                }
+                if (is_wp_error($res)) {
+                    $all_ok = false;
+                }
+                $processed_count++;
+            }
 
-            $this->process_n8n_dispatch($table_broadcast, $job->id, $payload, $max_retries);
+            $wpdb->update($table_broadcast, [
+                'status'       => $all_ok ? 'sent' : 'partially_sent',
+                'sent_at'      => current_time('mysql', 1),
+                'api_response' => 'Processed ' . count($raw_recipients) . ' recipients via Kapso'
+            ], ['id' => $job->id]);
         }
     }
+
+    return $processed_count;
 }
 
     
