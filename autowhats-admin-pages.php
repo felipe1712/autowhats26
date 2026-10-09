@@ -140,58 +140,140 @@ class AutoWA_Admin_Pages {
         <div class="autwa-card" style="background: #fff; padding: 25px; border-radius: 8px; border: 1px solid #e2e8f0; margin-top: 20px;">
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px;">
                 <h2 style="margin: 0; font-size: 18px;">
-                    <span class="dashicons dashicons-cloud" style="color: #0284c7;"></span> 
-                    <?php esc_html_e('Estado de la Conexión Oficial Meta Cloud API', 'autowa-whatsapp'); ?>
+                    <span class="dashicons dashicons-whatsapp" style="color: #25d366;"></span> 
+                    <?php esc_html_e('Conexión Oficial WhatsApp Cloud API', 'autowa-whatsapp'); ?>
                 </h2>
                 <div>
                     <?php if ($is_connected): ?>
                         <span style="background: #22c55e; color: #fff; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 13px;">
-                            ✓ <?php esc_html_e('CONECTADO (Kapso 24/7)', 'autowa-whatsapp'); ?>
+                            ✓ <?php esc_html_e('CONECTADO (Cloud API 24/7)', 'autowa-whatsapp'); ?>
                         </span>
                     <?php else: ?>
                         <span style="background: #f59e0b; color: #fff; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 13px;">
-                            ⚠ <?php esc_html_e('CONFIGURACIÓN PENDIENTE', 'autowa-whatsapp'); ?>
+                            ⚠ <?php esc_html_e('WHATSAPP NO VINCULADO', 'autowa-whatsapp'); ?>
                         </span>
                     <?php endif; ?>
                 </div>
             </div>
 
-            <form method="post" action="">
+            <!-- 1. Formulario de Licencia -->
+            <form method="post" action="" style="margin-bottom: 25px;">
                 <?php wp_nonce_field('autwa_settings_nonce'); ?>
                 <table class="form-table">
                     <tr>
                         <th scope="row"><strong><?php esc_html_e('Clave de Licencia AutoWhats', 'autowa-whatsapp'); ?> *</strong></th>
                         <td>
-                            <input type="text" name="autwa_edd_license_key" value="<?php echo esc_attr($license_key); ?>" class="regular-text" placeholder="AW-XXXX-XXXX-XXXX" required <?php echo $disabled; ?> />
-                            <p class="description"><?php esc_html_e('Tu clave de activación de AutoWhats.', 'autowa-whatsapp'); ?></p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><strong><?php esc_html_e('Kapso API Key (Bearer Token)', 'autowa-whatsapp'); ?> *</strong></th>
-                        <td>
-                            <input type="password" name="autwa_kapso_api_key" value="<?php echo esc_attr($kapso_api_key); ?>" class="large-text" placeholder="kap_live_xxxxxxxxxxxxxxxx" required <?php echo $disabled; ?> />
-                            <p class="description"><?php esc_html_e('Obtenla desde tu panel de Kapso.ai (Configuración > API Keys).', 'autowa-whatsapp'); ?></p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><strong><?php esc_html_e('WhatsApp Phone Number ID', 'autowa-whatsapp'); ?> *</strong></th>
-                        <td>
-                            <input type="text" name="autwa_kapso_phone_number_id" value="<?php echo esc_attr($phone_number_id); ?>" class="regular-text" placeholder="Ej: 105948372615243" required <?php echo $disabled; ?> />
-                            <p class="description"><?php esc_html_e('El identificador del número de teléfono asignado por Meta en Kapso.', 'autowa-whatsapp'); ?></p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><?php esc_html_e('Webhook Endpoint para Kapso', 'autowa-whatsapp'); ?></th>
-                        <td>
-                            <input type="text" value="<?php echo esc_url(get_rest_url(null, 'autowa/v1/kapso-webhook')); ?>" class="large-text" readonly onclick="this.select();" />
-                            <p class="description"><?php esc_html_e('Pega esta URL en tu panel de Kapso.ai (Webhooks) para recibir mensajes y estados en tiempo real.', 'autowa-whatsapp'); ?></p>
+                            <div style="display: flex; gap: 10px; max-width: 500px;">
+                                <input type="text" name="autwa_edd_license_key" id="autwa_license_input" value="<?php echo esc_attr($license_key); ?>" class="regular-text" placeholder="AW-XXXX-XXXX-XXXX" required <?php echo $disabled; ?> style="flex: 1;" />
+                                <button type="submit" class="button button-primary" <?php echo $disabled; ?>><?php esc_html_e('Guardar Licencia', 'autowa-whatsapp'); ?></button>
+                            </div>
+                            <p class="description"><?php esc_html_e('Ingresa la clave recibida en tu compra para habilitar la vinculación automática de WhatsApp.', 'autowa-whatsapp'); ?></p>
                         </td>
                     </tr>
                 </table>
-
-                <?php submit_button(__('Guardar Configuración de Conexión', 'autowa-whatsapp'), 'primary', 'submit', true, $disabled); ?>
             </form>
+
+            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 25px 0;">
+
+            <!-- 2. Tarjeta de Vinculación de WhatsApp (Cero Fricción) -->
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 25px;">
+                <?php if ($is_connected): ?>
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                        <div>
+                            <h3 style="color: #22c55e; margin: 0 0 5px 0;"><span class="dashicons dashicons-yes-alt"></span> <?php esc_html_e('WhatsApp Vinculado con Éxito', 'autowa-whatsapp'); ?></h3>
+                            <p style="margin: 0; color: #64748b;">
+                                <?php esc_html_e('Phone Number ID asignado:', 'autowa-whatsapp'); ?> <code><?php echo esc_html($phone_number_id); ?></code>
+                            </p>
+                            <small style="color: #94a3b8;"><?php esc_html_e('Tus notificaciones de WooCommerce, Live Chat y mensajes programados están activos 24/7 en la nube.', 'autowa-whatsapp'); ?></small>
+                        </div>
+                        <div>
+                            <button type="button" id="autwa-disconnect-btn" class="button button-secondary" style="color: #ef4444;" <?php echo $disabled; ?>>
+                                <span class="dashicons dashicons-dismiss"></span> <?php esc_html_e('Desconectar / Cambiar Número', 'autowa-whatsapp'); ?>
+                            </button>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <div style="text-align: center; padding: 20px 0;">
+                        <span class="dashicons dashicons-smartphone" style="font-size: 48px; width: 48px; height: 48px; color: #25d366; margin-bottom: 10px;"></span>
+                        <h3 style="margin: 0 0 10px 0; font-size: 18px;"><?php esc_html_e('Vincula tu WhatsApp en 1 Clic', 'autowa-whatsapp'); ?></h3>
+                        <p style="color: #64748b; max-width: 500px; margin: 0 auto 20px auto;">
+                            <?php esc_html_e('Haz clic en el botón inferior para abrir la ventana oficial de Meta y emparejar tu número mediante Código QR (WhatsApp Business) o verificación SMS.', 'autowa-whatsapp'); ?>
+                        </p>
+                        <button type="button" id="autwa-meta-connect-btn" class="button button-primary" style="background: #25d366; border-color: #22c55e; font-size: 15px; padding: 6px 20px; height: auto;" <?php echo empty($license_key) ? 'disabled' : ''; ?> <?php echo $disabled; ?>>
+                            <span class="dashicons dashicons-admin-links"></span> <?php esc_html_e('Conectar mi WhatsApp (Escanear QR o SMS)', 'autowa-whatsapp'); ?>
+                        </button>
+                        <?php if (empty($license_key)): ?>
+                            <p style="color: #f59e0b; margin-top: 10px; font-size: 12px;"><?php esc_html_e('* Guarda tu Clave de Licencia arriba para activar este botón.', 'autowa-whatsapp'); ?></p>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+            <!-- 3. Configuración Avanzada Opcional (Colapsable) -->
+            <details style="margin-top: 25px; border-top: 1px solid #f1f5f9; padding-top: 15px;">
+                <summary style="cursor: pointer; color: #64748b; font-weight: 500;">
+                    <?php esc_html_e('Opciones Avanzadas / Credenciales Propias (Opcional para Desarrolladores)', 'autowa-whatsapp'); ?>
+                </summary>
+                <form method="post" action="" style="margin-top: 15px;">
+                    <?php wp_nonce_field('autwa_settings_nonce'); ?>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><?php esc_html_e('Kapso API Key Personal', 'autowa-whatsapp'); ?></th>
+                            <td>
+                                <input type="password" name="autwa_kapso_api_key" value="<?php echo esc_attr($kapso_api_key); ?>" class="large-text" placeholder="kap_live_xxxxxxxxxxxxxxxx" <?php echo $disabled; ?> />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><?php esc_html_e('Phone Number ID Manual', 'autowa-whatsapp'); ?></th>
+                            <td>
+                                <input type="text" name="autwa_kapso_phone_number_id" value="<?php echo esc_attr($phone_number_id); ?>" class="regular-text" placeholder="Ej: 105948372615243" <?php echo $disabled; ?> />
+                            </td>
+                        </tr>
+                    </table>
+                    <?php submit_button(__('Guardar Credenciales Manuales', 'autowa-whatsapp'), 'secondary', 'submit', true, $disabled); ?>
+                </form>
+            </details>
         </div>
+
+        <script>
+        jQuery(document).ready(function($) {
+            // Botón de Vinculación en 1 Clic con Meta / Kapso
+            $('#autwa-meta-connect-btn').on('click', function(e) {
+                e.preventDefault();
+                var btn = $(this);
+                btn.prop('disabled', true).text('Generando enlace de conexión...');
+
+                $.post(ajaxurl, {
+                    action: 'autwa_get_meta_setup_link',
+                    nonce: '<?php echo wp_create_nonce("autwa_nonce"); ?>',
+                    license_key: $('#autwa_license_input').val()
+                }, function(resp) {
+                    btn.prop('disabled', false).html('<span class="dashicons dashicons-admin-links"></span> Conectar mi WhatsApp (Escanear QR o SMS)');
+                    if (resp.success && resp.data.setup_link) {
+                        // Abrir popup de Meta
+                        var width = 600, height = 750;
+                        var left = (screen.width - width) / 2, top = (screen.height - height) / 2;
+                        window.open(resp.data.setup_link, 'MetaEmbeddedSignup', 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left + ',scrollbars=yes');
+                    } else {
+                        alert(resp.data && resp.data.message ? resp.data.message : 'Error al conectar con el servidor.');
+                    }
+                });
+            });
+
+            // Botón Desconectar
+            $('#autwa-disconnect-btn').on('click', function(e) {
+                e.preventDefault();
+                if (confirm('¿Seguro que deseas desconectar este WhatsApp? Las alertas se detendrán hasta que vuelvas a vincular un número.')) {
+                    $.post(ajaxurl, {
+                        action: 'autwa_disconnect_whatsapp',
+                        nonce: '<?php echo wp_create_nonce("autwa_nonce"); ?>'
+                    }, function(resp) {
+                        location.reload();
+                    });
+                }
+            });
+        });
+        </script>
         <?php
     }
 

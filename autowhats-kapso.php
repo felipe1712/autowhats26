@@ -16,6 +16,7 @@ class AutoWA_Kapso_Client {
     private $api_key;
     private $phone_number_id;
     private $base_url = 'https://api.kapso.ai/v1';
+    private $central_api_url = 'https://landing.autowhats.com.mx/api/provision-kapso.php';
 
     public static function get_instance() {
         if (self::$instance === null) {
@@ -25,7 +26,7 @@ class AutoWA_Kapso_Client {
     }
 
     private function __construct() {
-        $this->api_key = get_option('autwa_kapso_api_key', '');
+        $this->api_key         = get_option('autwa_kapso_api_key', '');
         $this->phone_number_id = get_option('autwa_kapso_phone_number_id', '');
         
         $custom_base = get_option('autwa_kapso_base_url', '');
@@ -35,10 +36,10 @@ class AutoWA_Kapso_Client {
     }
 
     /**
-     * Verifica si la integración con Kapso está configurada.
+     * Verifica si la integración con Kapso está configurada y lista para enviar.
      */
     public function is_configured() {
-        return !empty($this->api_key) && !empty($this->phone_number_id);
+        return !empty($this->phone_number_id);
     }
 
     /**
@@ -46,7 +47,6 @@ class AutoWA_Kapso_Client {
      */
     public function clean_phone_number($phone) {
         $phone = preg_replace('/[^0-9]/', '', $phone);
-        // Quitar @c.us o @s.whatsapp.net si vienen incluidos
         $phone = str_replace(['@c.us', '@s.whatsapp.net'], '', $phone);
         return $phone;
     }
@@ -80,13 +80,6 @@ class AutoWA_Kapso_Client {
 
     /**
      * Envía un archivo multimedia (imagen, documento, audio, video).
-     *
-     * @param string $phone      Número de destino
-     * @param string $media_url  URL pública del archivo
-     * @param string $caption    Texto explicativo o pie de foto (opcional)
-     * @param string $media_type 'image', 'document', 'audio', 'video'
-     * @param string $filename   Nombre del archivo (para documentos)
-     * @return array|WP_Error
      */
     public function send_media_message($phone, $media_url, $caption = '', $media_type = 'image', $filename = '') {
         $phone = $this->clean_phone_number($phone);
@@ -119,13 +112,6 @@ class AutoWA_Kapso_Client {
 
     /**
      * Envía una plantilla oficial de WhatsApp (Template Message).
-     * Obligatoria para mensajes iniciados por el negocio fuera de la ventana de 24 horas.
-     *
-     * @param string $phone         Número de destino
-     * @param string $template_name Nombre de la plantilla aprobada en Meta
-     * @param string $language_code Código de idioma (ej. 'es', 'es_MX', 'en_US')
-     * @param array  $components    Parámetros dinámicos (variables de plantilla)
-     * @return array|WP_Error
      */
     public function send_template_message($phone, $template_name, $language_code = 'es', $components = []) {
         $phone = $this->clean_phone_number($phone);
@@ -151,86 +137,66 @@ class AutoWA_Kapso_Client {
     }
 
     /**
-     * Consulta el estado del número de WhatsApp y la conexión en Kapso.
+     * Consulta el estado de la conexión en Kapso.
      */
     public function check_connection() {
         if (!$this->is_configured()) {
             return [
                 'connected' => false,
-                'message'   => __('Faltan credenciales de Kapso (API Key o Phone Number ID).', 'autowa-whatsapp')
-            ];
-        }
-
-        $response = $this->request('/phone_numbers/' . $this->phone_number_id, [], 'GET');
-
-        if (is_wp_error($response)) {
-            return [
-                'connected' => false,
-                'message'   => $response->get_error_message()
+                'message'   => __('WhatsApp aún no está vinculado. Haz clic en "Conectar mi WhatsApp".', 'autowa-whatsapp')
             ];
         }
 
         return [
-            'connected' => true,
-            'data'      => $response
+            'connected'       => true,
+            'phone_number_id' => $this->phone_number_id,
+            'message'         => __('WhatsApp Cloud API Conectado y Activo 24/7.', 'autowa-whatsapp')
         ];
     }
 
     /**
-     * Genera un enlace de Meta Embedded Signup para que el cliente vincule su propio WhatsApp (Multi-Tenant).
+     * Solicita al servidor central de AutoWhats el enlace único de Meta Embedded Signup (Multi-Tenant).
      *
-     * @param string $customer_name Nombre del cliente o negocio
-     * @param string $external_id   ID único (ej. Clave de Licencia o ID de WordPress)
-     * @return string|WP_Error     URL de onboarding para el cliente
+     * @param string $license_key Clave de licencia del cliente
+     * @return array|WP_Error
      */
-    public function create_setup_link($customer_name, $external_id) {
-        if (empty($this->api_key)) {
-            return new WP_Error('missing_api_key', __('API Key de Kapso no configurada.', 'autowa-whatsapp'));
+    public function fetch_meta_setup_link($license_key) {
+        if (empty($license_key)) {
+            return new WP_Error('missing_license', __('Ingresa una clave de licencia válida primero.', 'autowa-whatsapp'));
         }
 
-        // 1. Crear o sincronizar cliente en Kapso
-        $customer_payload = [
-            'customer' => [
-                'name'                 => sanitize_text_field($customer_name),
-                'external_customer_id' => sanitize_text_field($external_id)
-            ]
-        ];
+        $response = wp_remote_post($this->central_api_url, [
+            'body'    => [
+                'license_key' => $license_key,
+                'site_url'    => get_site_url(),
+                'action'      => 'get_setup_link'
+            ],
+            'timeout' => 15,
+        ]);
 
-        $customer_resp = $this->request('/customers', $customer_payload, 'POST');
-        if (is_wp_error($customer_resp)) {
-            return $customer_resp;
+        if (is_wp_error($response)) {
+            return $response;
         }
 
-        $customer_id = $customer_resp['id'] ?? $customer_resp['customer']['id'] ?? null;
-        if (!$customer_id) {
-            return new WP_Error('customer_failed', __('No se pudo obtener el ID de cliente en Kapso.', 'autowa-whatsapp'));
+        $body = json_decode(wp_remote_retrieve_body($response), true);
+        if (empty($body) || empty($body['success'])) {
+            $msg = $body['message'] ?? __('No se pudo generar el enlace de conexión.', 'autowa-whatsapp');
+            return new WP_Error('provision_error', $msg);
         }
 
-        // 2. Generar Setup Link
-        $setup_payload = [
-            'redirect_url' => admin_url('admin.php?page=autowa-settings&kapso_connected=1')
-        ];
-
-        $link_resp = $this->request("/customers/{$customer_id}/setup_links", $setup_payload, 'POST');
-        if (is_wp_error($link_resp)) {
-            return $link_resp;
-        }
-
-        return $link_resp['url'] ?? $link_resp['setup_link']['url'] ?? null;
+        return $body;
     }
 
     /**
      * Ejecuta una llamada HTTP autenticada hacia la API de Kapso.ai.
      */
     private function request($endpoint, $body = [], $method = 'POST') {
-        if (empty($this->api_key)) {
-            return new WP_Error('missing_api_key', __('API Key de Kapso no configurada.', 'autowa-whatsapp'));
-        }
-
+        $api_key = !empty($this->api_key) ? $this->api_key : get_option('autwa_kapso_api_key', '');
+        
         $url = $this->base_url . $endpoint;
 
         $headers = [
-            'Authorization' => 'Bearer ' . $this->api_key,
+            'Authorization' => 'Bearer ' . $api_key,
             'Content-Type'  => 'application/json',
             'Accept'        => 'application/json',
             'User-Agent'    => 'AutoWhats-WordPress-Plugin/2.0'
@@ -260,10 +226,37 @@ class AutoWA_Kapso_Client {
 
         if ($code < 200 || $code >= 300) {
             $err_msg = $data['error']['message'] ?? $data['message'] ?? "Error HTTP $code de Kapso API";
-            error_log("AutoWhats Kapso API Error ($code): $raw_body");
             return new WP_Error('kapso_api_error', $err_msg, ['status_code' => $code, 'response' => $data]);
         }
 
         return $data;
     }
 }
+
+// Registrar Hooks AJAX para la vinculación en 1 clic
+add_action('wp_ajax_autwa_get_meta_setup_link', function() {
+    check_ajax_referer('autwa_nonce', 'nonce');
+    if (!current_user_can('manage_options')) {
+        wp_send_json_error(['message' => 'Sin permisos']);
+    }
+
+    $license_key = sanitize_text_field($_POST['license_key'] ?? get_option('autwa_edd_license_key', ''));
+    $client = AutoWA_Kapso_Client::get_instance();
+    $result = $client->fetch_meta_setup_link($license_key);
+
+    if (is_wp_error($result)) {
+        wp_send_json_error(['message' => $result->get_error_message()]);
+    }
+
+    wp_send_json_success($result);
+});
+
+add_action('wp_ajax_autwa_disconnect_whatsapp', function() {
+    check_ajax_referer('autwa_nonce', 'nonce');
+    if (!current_user_can('manage_options')) {
+        wp_send_json_error(['message' => 'Sin permisos']);
+    }
+
+    delete_option('autwa_kapso_phone_number_id');
+    wp_send_json_success(['message' => 'WhatsApp desconectado correctamente.']);
+});
